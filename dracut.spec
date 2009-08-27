@@ -1,11 +1,12 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	0.7
-Release:	%mkrel 1
+Release:	%mkrel 2
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
 Source0:	http://downloads.sourceforge.net/project/dracut/%{name}-%{version}.tar.bz2
+Patch0:		dracut-0.7-mdv.patch
 Requires:	udev
 Requires:	util-linux-ng
 Requires:	module-init-tools
@@ -18,7 +19,7 @@ Requires:	mktemp
 Requires:	mount
 Requires:	bash
 Requires:	initscripts
-#BuildArch:	noarch
+BuildArch:	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
@@ -26,6 +27,7 @@ Event driven initrd image generator based around udev.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 export CFLAGS="%{optflags}"
@@ -35,15 +37,37 @@ export CFLAGS="%{optflags}"
 rm -rf %{buildroot}
 %makeinstall_std sbindir=/sbin sysconfdir=%{_sysconfdir} mandir=%{_mandir}
 
+# (tpg) conflicts with util-linux-ng
+rm -rf %{buildroot}/sbin/switch_root
+
 mkdir -p %{buildroot}/boot/dracut
 mkdir -p %{buildroot}%{_var}/lib/dracut/overlay
+
+cat > README.urpmi << EOF
+
+This ia a mkinitrd replacement.
+Consider this software as experimental!
+
+How to use:
+
+dracut -v /boot/initrd-dracut-$(uname -r).img $(uname -r)
+
+then run
+
+bootloader-config --action add-kernel /boot/vmlinuz-$(uname -r)
+--initrd /boot/initrd-dracut-$(uname -r).img --kernel-version `uname -r`
+--label dracut
+
+and reboot.
+EOF
 
 %clean
 rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root)
-%doc README* HACKING TODO AUTHORS
+%doc README.generic README.modules README.kernel HACKING TODO AUTHORS 
+%doc README.urpmi
 %dir /boot/dracut
 %dir %{_datadir}/dracut
 %dir %{_var}/lib/dracut
@@ -52,7 +76,6 @@ rm -rf %{buildroot}
 /sbin/dracut
 /sbin/dracut-gencmdline
 /sbin/dracut-catimages
-/sbin/switch_root
 %{_datadir}/dracut/dracut-functions
 %{_datadir}/dracut/modules.d
 %{_mandir}/man8/dracut.8*
