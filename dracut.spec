@@ -1,15 +1,17 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	0.7
-Release:	%mkrel 2
+Version:	0.9
+Release:	%mkrel 1
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
 Source0:	http://downloads.sourceforge.net/project/dracut/%{name}-%{version}.tar.bz2
-Patch0:		dracut-0.7-mdv.patch
+Patch0:		dracut-0.9-mdv.patch
+Requires:	filesystem
 Requires:	udev
 Requires:	util-linux-ng
 Requires:	module-init-tools
+Requires:	e2fsprogs
 Requires:	cpio
 Requires:	coreutils
 Requires:	findutils
@@ -18,7 +20,18 @@ Requires:	grep
 Requires:	mktemp
 Requires:	mount
 Requires:	bash
+Requires:	dash
+Requires:	kbd
+Requires:	tar
+Requires:	gzip
+Requires:	bzip2
+Requires:	file
+Requires:	module-init-tools
+Requires:	bridge-utils
 Requires:	initscripts
+Requires:	plymouth
+Requires:	plymouth-theme-mdv
+Requires:	bootloader-utils
 BuildArch:	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
