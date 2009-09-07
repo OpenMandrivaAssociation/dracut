@@ -6,7 +6,10 @@ Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
 Source0:	http://downloads.sourceforge.net/project/dracut/%{name}-%{version}.tar.bz2
-Patch0:		dracut-0.9-mdv.patch
+Patch0:		dracut-001-mdv.patch
+Patch1:		0005-mdraid-add-grep-for-convenience.patch
+Patch2:		0006-crypt-dmraid-lvm-mdraid-cleanup-with-pre-pivot-30.patch
+Patch3:		0007-95udev-rules-fixed-c-p-bug-which-did-not-install-61.patch
 Requires:	filesystem
 Requires:	udev
 Requires:	util-linux-ng
@@ -41,6 +44,9 @@ Event driven initrd image generator based around udev.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
 
 %build
 export CFLAGS="%{optflags}"
