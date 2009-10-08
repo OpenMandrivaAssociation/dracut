@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	002
-Release:	%mkrel 1
+Release:	%mkrel 2
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
@@ -30,7 +30,7 @@ Requires:	module-init-tools
 Requires:	bridge-utils
 Requires:	initscripts
 Requires:	plymouth
-Requires:	plymouth-theme-mdv
+Requires:	plymouth(system-theme)
 Requires:	bootloader-utils
 BuildArch:	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
