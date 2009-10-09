@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	002
-Release:	%mkrel 2
+Release:	%mkrel 3
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
@@ -63,13 +63,11 @@ Consider this software as experimental!
 
 How to use:
 
-dracut -v /boot/initrd-dracut-$(uname -r).img $(uname -r)
+dracut -v /boot/initrd-dracut-\$(uname -r).img \$(uname -r)
 
 then run
 
-bootloader-config --action add-kernel /boot/vmlinuz-$(uname -r)
---initrd /boot/initrd-dracut-$(uname -r).img --kernel-version `uname -r`
---label dracut
+bootloader-config --action add-kernel /boot/vmlinuz-\$(uname -r) --initrd /boot/initrd-dracut-\$(uname -r).img --kernel-version `uname -r` --label dracut
 
 and reboot.
 EOF
