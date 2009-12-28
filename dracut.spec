@@ -6,6 +6,7 @@ Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
 Source0:	http://downloads.sourceforge.net/project/dracut/%{name}-%{version}.tar.bz2
+Source1:	mkinitrd-dracut.sh
 Patch0:		dracut-003-mdv.patch
 Patch1:		dracut-003-kogz.patch
 Patch2:		dracut-003-addmod.patch
@@ -61,6 +62,8 @@ rm -rf %{buildroot}/sbin/switch_root
 mkdir -p %{buildroot}/boot/dracut
 mkdir -p %{buildroot}%{_var}/lib/dracut/overlay
 
+install -m 755 %{SOURCE1} %{buildroot}/sbin/mkinitrd-dracut
+
 cat > README.urpmi << EOF
 
 This ia a mkinitrd replacement.
@@ -92,6 +95,7 @@ rm -rf %{buildroot}
 /sbin/dracut
 /sbin/dracut-gencmdline
 /sbin/dracut-catimages
+/sbin/mkinitrd-dracut
 %{_datadir}/dracut/dracut-functions
 %{_datadir}/dracut/modules.d
 %{_mandir}/man8/dracut.8*
