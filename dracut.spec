@@ -7,6 +7,7 @@ License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
 Source0:	http://downloads.sourceforge.net/project/dracut/%{name}-%{version}.tar.bz2
 Patch0:		dracut-003-mdv.patch
+Patch1:		dracut-003-kogz.patch
 Requires:	filesystem
 Requires:	udev
 Requires:	util-linux-ng
@@ -42,6 +43,7 @@ Event driven initrd image generator based around udev.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 export CFLAGS="%{optflags}"
