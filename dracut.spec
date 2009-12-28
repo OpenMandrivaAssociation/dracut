@@ -6,7 +6,7 @@ Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
 Source0:	http://downloads.sourceforge.net/project/dracut/%{name}-%{version}.tar.bz2
-Patch0:		dracut-001-mdv.patch
+Patch0:		dracut-003-mdv.patch
 Requires:	filesystem
 Requires:	udev
 Requires:	util-linux-ng
@@ -91,3 +91,4 @@ rm -rf %{buildroot}
 %{_datadir}/dracut/dracut-functions
 %{_datadir}/dracut/modules.d
 %{_mandir}/man8/dracut.8*
+%{_mandir}/man5/dracut.conf.5*
