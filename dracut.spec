@@ -1,15 +1,23 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	003
-Release:	%mkrel 1
+Release:	%mkrel 2
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
 Source0:	http://downloads.sourceforge.net/project/dracut/%{name}-%{version}.tar.bz2
 Source1:	mkinitrd-dracut.sh
 Patch0:		dracut-003-mdv.patch
-Patch1:		dracut-003-kogz.patch
-Patch2:		dracut-003-addmod.patch
+Patch1:		dracut-003-kbd.patch
+Patch2:		dracut-003-terminfo.patch
+Patch3:		dracut-003-kogz.patch
+Patch4:		dracut-003-addmod.patch
+Patch5:		dracut-003-umount.patch
+Patch6:		dracut-003-rdshell.patch
+Patch7:		dracut-003-selinux.patch
+Patch8:		dracut-003-multipath.patch
+Patch9:		dracut-003-luks.patch
+Patch10:	dracut-003-console.patch
 Requires:	filesystem
 Requires:	udev
 Requires:	util-linux-ng
@@ -44,9 +52,17 @@ Event driven initrd image generator based around udev.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%patch0 -p1 -b .mdv.orig
+%patch1 -p1 -b .kbd.orig
+%patch2 -p1 -b .terminfo.orig
+%patch3 -p1 -b .kogz.orig
+%patch4 -p1 -b .addmod.orig
+%patch5 -p1 -b .umount.orig
+%patch6 -p1 -b .rdshell.orig
+%patch7 -p1 -b .selinux.orig
+%patch8 -p1 -b .multipath.orig
+%patch9 -p1 -b .luks.orig
+%patch10 -p1 -b .console.orig
 
 %build
 export CFLAGS="%{optflags}"
@@ -56,8 +72,8 @@ export CFLAGS="%{optflags}"
 rm -rf %{buildroot}
 %makeinstall_std sbindir=/sbin sysconfdir=%{_sysconfdir} mandir=%{_mandir}
 
-# (tpg) conflicts with util-linux-ng
-rm -rf %{buildroot}/sbin/switch_root
+# bluca remove patch backup files
+find %{buildroot} -name \*.\*.orig -exec rm {} \;
 
 mkdir -p %{buildroot}/boot/dracut
 mkdir -p %{buildroot}%{_var}/lib/dracut/overlay
