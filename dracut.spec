@@ -56,7 +56,6 @@ Event driven initrd image generator based around udev.
 %prep
 %setup -q
 %patch0 -p1 -b .mdv.orig
-exit -1
 %patch1 -p1 -b .kbd.orig
 %patch2 -p1 -b .terminfo.orig
 %patch3 -p1 -b .kogz.orig
@@ -67,7 +66,7 @@ exit -1
 %patch8 -p1 -b .multipath.orig
 %patch9 -p1 -b .luks.orig
 %patch10 -p1 -b .console.orig
-%patch10 -p1 -b .unicode.orig
+%patch11 -p1 -b .unicode.orig
 
 %build
 export CFLAGS="%{optflags}"
