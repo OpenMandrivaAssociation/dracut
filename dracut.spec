@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	003
-Release:	%mkrel 2
+Release:	%mkrel 3
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
@@ -18,6 +18,7 @@ Patch7:		dracut-003-selinux.patch
 Patch8:		dracut-003-multipath.patch
 Patch9:		dracut-003-luks.patch
 Patch10:	dracut-003-console.patch
+Patch11:	dracut-003-unicode.patch
 Requires:	filesystem
 Requires:	udev
 Requires:	util-linux-ng
@@ -44,6 +45,8 @@ Requires(pre):	plymouth
 Requires:	plymouth
 Requires:	plymouth(system-theme)
 Requires:	bootloader-utils
+Requires(post,postun):	update-alternatives
+Conflicts:	mkinitrd < 6.0.93-%manbo_mkrel 10
 BuildArch:	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
@@ -53,6 +56,7 @@ Event driven initrd image generator based around udev.
 %prep
 %setup -q
 %patch0 -p1 -b .mdv.orig
+exit -1
 %patch1 -p1 -b .kbd.orig
 %patch2 -p1 -b .terminfo.orig
 %patch3 -p1 -b .kogz.orig
@@ -63,6 +67,7 @@ Event driven initrd image generator based around udev.
 %patch8 -p1 -b .multipath.orig
 %patch9 -p1 -b .luks.orig
 %patch10 -p1 -b .console.orig
+%patch10 -p1 -b .unicode.orig
 
 %build
 export CFLAGS="%{optflags}"
@@ -94,10 +99,19 @@ then run
 bootloader-config --action add-kernel /boot/vmlinuz-\$(uname -r) --initrd /boot/initrd-dracut-\$(uname -r).img --kernel-version `uname -r` --label dracut
 
 and reboot.
+
+If you want to set dracut as an mkinitrd replacement run
+update-alternatives --set mkinitrd /sbin/mkinitrd-dracut
 EOF
 
 %clean
 rm -rf %{buildroot}
+
+%post
+update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-dracut 90 || :
+
+%postun
+[[ "$1" = "0" ]] && update-alternatives --remove mkinitrd /sbin/mkinitrd-dracut || :
 
 %files
 %defattr(-,root,root)
