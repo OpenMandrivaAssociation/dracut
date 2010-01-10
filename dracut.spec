@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	003
-Release:	%mkrel 3
+Release:	%mkrel 4
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
@@ -19,6 +19,7 @@ Patch8:		dracut-003-multipath.patch
 Patch9:		dracut-003-luks.patch
 Patch10:	dracut-003-console.patch
 Patch11:	dracut-003-unicode.patch
+Patch12:	dracut-003-uswsusp.patch
 Requires:	filesystem
 Requires:	udev
 Requires:	util-linux-ng
@@ -67,6 +68,7 @@ Event driven initrd image generator based around udev.
 %patch9 -p1 -b .luks.orig
 %patch10 -p1 -b .console.orig
 %patch11 -p1 -b .unicode.orig
+%patch12 -p1 -b .uswsusp.orig
 
 %build
 export CFLAGS="%{optflags}"
@@ -78,6 +80,11 @@ rm -rf %{buildroot}
 
 # bluca remove patch backup files
 find %{buildroot} -name \*.\*.orig -exec rm {} \;
+
+# fix permission of module files
+chmod +x %{buildroot}%{_datadir}/dracut/modules.d/*/install
+chmod +x %{buildroot}%{_datadir}/dracut/modules.d/*/installkernel
+chmod +x %{buildroot}%{_datadir}/dracut/modules.d/*/check
 
 mkdir -p %{buildroot}/boot/dracut
 mkdir -p %{buildroot}%{_var}/lib/dracut/overlay
