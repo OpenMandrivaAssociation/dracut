@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	003
-Release:	%mkrel 4
+Release:	%mkrel 5
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
@@ -20,6 +20,7 @@ Patch9:		dracut-003-luks.patch
 Patch10:	dracut-003-console.patch
 Patch11:	dracut-003-unicode.patch
 Patch12:	dracut-003-uswsusp.patch
+Patch13:	dracut-003-firmware_sh.patch
 Requires:	filesystem
 Requires:	udev
 Requires:	util-linux-ng
@@ -69,6 +70,7 @@ Event driven initrd image generator based around udev.
 %patch10 -p1 -b .console.orig
 %patch11 -p1 -b .unicode.orig
 %patch12 -p1 -b .uswsusp.orig
+%patch13 -p1 -b .firmware.orig
 
 %build
 export CFLAGS="%{optflags}"
