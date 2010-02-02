@@ -84,7 +84,7 @@ dracut -v /boot/initrd-dracut-\$(uname -r).img \$(uname -r)
 
 then run
 
-bootloader-config --action add-kernel /boot/vmlinuz-\$(uname -r) --initrd /boot/initrd-dracut-\$(uname -r).img --kernel-version `uname -r` --label dracut
+bootloader-config --action add-kernel /boot/vmlinuz-\$(uname -r) --initrd /boot/initrd-dracut-\$(uname -r).img --kernel-version \$(uname -r) --label dracut
 
 and reboot.
 
