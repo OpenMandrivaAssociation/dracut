@@ -6,10 +6,10 @@ Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
 Source0:	http://downloads.sourceforge.net/project/dracut/%{name}-%{version}.tar.bz2
-Source1:	mkinitrd-dracut.sh
 Patch0:		dracut-003-mdv.patch
 Patch13:	dracut-003-firmware_sh.patch
 Patch14:	dracut-003-initargs.patch
+Patch15:	dracut-004-mkinitrd.patch
 Requires:	filesystem
 Requires:	udev
 Requires:	util-linux-ng
@@ -49,6 +49,7 @@ Event driven initrd image generator based around udev.
 %patch0 -p1 -b .mdv.orig
 %patch13 -p1 -b .firmware.orig
 %patch14 -p1 -b .initargs.orig
+%patch15 -p1 -b .mkinitrd.orig
 
 %build
 export CFLAGS="%{optflags}"
@@ -69,7 +70,7 @@ chmod +x %{buildroot}%{_datadir}/dracut/modules.d/*/check
 mkdir -p %{buildroot}/boot/dracut
 mkdir -p %{buildroot}%{_var}/lib/dracut/overlay
 
-install -m 755 %{SOURCE1} %{buildroot}/sbin/mkinitrd-dracut
+mv %{buildroot}/sbin/mkinitrd %{buildroot}/sbin/mkinitrd-dracut
 
 cat > README.urpmi << EOF
 
