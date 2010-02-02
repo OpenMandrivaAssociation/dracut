@@ -70,6 +70,7 @@ chmod +x %{buildroot}%{_datadir}/dracut/modules.d/*/check
 mkdir -p %{buildroot}/boot/dracut
 mkdir -p %{buildroot}%{_var}/lib/dracut/overlay
 
+mv %{buildroot}/sbin/lsinitrd %{buildroot}/sbin/lsinitrd-dracut
 mv %{buildroot}/sbin/mkinitrd %{buildroot}/sbin/mkinitrd-dracut
 
 cat > README.urpmi << EOF
@@ -112,8 +113,9 @@ update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-dracut 90 |
 /sbin/dracut
 /sbin/dracut-gencmdline
 /sbin/dracut-catimages
+/sbin/lsinitrd-dracut
 /sbin/mkinitrd-dracut
 %{_datadir}/dracut/dracut-functions
 %{_datadir}/dracut/modules.d
-%{_mandir}/man8/dracut.8*
+%{_mandir}/man8/dracut*.8*
 %{_mandir}/man5/dracut.conf.5*
