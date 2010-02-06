@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	004
-Release:	%mkrel 1
+Release:	%mkrel 2
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
@@ -38,6 +38,7 @@ Requires:	plymouth(system-theme)
 Requires:	bootloader-utils
 Requires(post,postun):	update-alternatives
 Conflicts:	mkinitrd < 6.0.93-%manbo_mkrel 10
+Conflicts:	nash < 6.0.93-%manbo_mkrel 11
 BuildArch:	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
@@ -97,9 +98,11 @@ rm -rf %{buildroot}
 
 %post
 update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-dracut 90 || :
+update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-dracut 90 || :
 
 %postun
 [[ "$1" = "0" ]] && update-alternatives --remove mkinitrd /sbin/mkinitrd-dracut || :
+[[ "$1" = "0" ]] && update-alternatives --remove lsinitrd /sbin/lsinitrd-dracut || :
 
 %files
 %defattr(-,root,root)
