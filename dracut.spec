@@ -101,8 +101,8 @@ update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-dracut 90 |
 update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-dracut 90 || :
 
 %postun
-[[ "$1" = "0" ]] && update-alternatives --remove mkinitrd /sbin/mkinitrd-dracut || :
-[[ "$1" = "0" ]] && update-alternatives --remove lsinitrd /sbin/lsinitrd-dracut || :
+[ ! -e /sbin/mkinitrd-dracut ] && update-alternatives --remove mkinitrd /sbin/mkinitrd-dracut || :
+[ ! -e /sbin/lsinitrd-dracut ] && update-alternatives --remove lsinitrd /sbin/lsinitrd-dracut || :
 
 %files
 %defattr(-,root,root)
