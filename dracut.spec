@@ -1,17 +1,16 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	004
-Release:	%mkrel 4
+Release:	%mkrel 5
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
 Source0:	http://downloads.sourceforge.net/project/dracut/%{name}-%{version}.tar.bz2
-Patch0:		dracut-003-mdv.patch
-Patch13:	dracut-003-firmware_sh.patch
-Patch14:	dracut-003-initargs.patch
+Patch999:	dracut-004-git-16add2a.diff	
+Patch0:		dracut-004-mdv.patch
+Patch1:		dracut-004-conf_d.patch
+Patch2:		dracut-004-xen-detect.patch
 Patch15:	dracut-004-mkinitrd.patch
-Patch16:	dracut-004-multipath-check.patch
-Patch17:	dracut-004-empty-resume.patch
 Requires:	filesystem
 Requires:	udev
 Requires:	util-linux-ng
@@ -49,12 +48,11 @@ Event driven initrd image generator based around udev.
 
 %prep
 %setup -q
+%patch999 -p1 -b .git.orig
 %patch0 -p1 -b .mdv.orig
-%patch13 -p1 -b .firmware.orig
-%patch14 -p1 -b .initargs.orig
+%patch1 -p1 -b .conf_d.orig
+%patch2 -p1 -b .xen.orig
 %patch15 -p1 -b .mkinitrd.orig
-%patch16 -p1 -b .multipath.orig
-%patch17 -p1 -b .resume.orig
 
 %build
 export CFLAGS="%{optflags}"
@@ -117,6 +115,7 @@ update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-dracut 90 |
 %dir %{_var}/lib/dracut
 %dir %{_var}/lib/dracut/overlay
 %config(noreplace) %{_sysconfdir}/dracut.conf
+%dir %{_sysconfdir}/dracut.conf.d
 /sbin/dracut
 /sbin/dracut-gencmdline
 /sbin/dracut-catimages
