@@ -1,11 +1,13 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	004
-Release:	%mkrel 5
+Release:	%mkrel 6
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
 Source0:	http://downloads.sourceforge.net/project/dracut/%{name}-%{version}.tar.bz2
+Source1:	bootchartd-check
+Source2:	bootchartd-install
 Patch999:	dracut-004-git-16add2a.diff	
 Patch0:		dracut-004-mdv.patch
 Patch1:		dracut-004-conf_d.patch
@@ -61,6 +63,10 @@ export CFLAGS="%{optflags}"
 %install
 rm -rf %{buildroot}
 %makeinstall_std sbindir=/sbin sysconfdir=%{_sysconfdir} mandir=%{_mandir}
+
+mkdir -p %{buildroot}%{_datadir}/dracut/modules.d/00bootchartd
+install -m 755 %{SOURCE1} %{buildroot}%{_datadir}/dracut/modules.d/00bootchartd/check
+install -m 755 %{SOURCE2} %{buildroot}%{_datadir}/dracut/modules.d/00bootchartd/install
 
 # bluca remove patch backup files
 find %{buildroot} -name \*.\*.orig -exec rm {} \;
