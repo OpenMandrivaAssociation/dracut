@@ -8,10 +8,8 @@ URL:		http://apps.sourceforge.net/trac/dracut/wiki
 Source0:	http://downloads.sourceforge.net/project/dracut/%{name}-%{version}.tar.bz2
 Source1:	bootchartd-check
 Source2:	bootchartd-install
-Patch999:	dracut-004-git-16add2a.diff	
 Patch0:		dracut-004-mdv.patch
 Patch1:		dracut-004-conf_d.patch
-Patch2:		dracut-004-xen-detect.patch
 Patch15:	dracut-004-mkinitrd.patch
 Requires:	filesystem
 Requires:	udev
@@ -50,10 +48,8 @@ Event driven initrd image generator based around udev.
 
 %prep
 %setup -q
-%patch999 -p1 -b .git.orig
 %patch0 -p1 -b .mdv.orig
 %patch1 -p1 -b .conf_d.orig
-%patch2 -p1 -b .xen.orig
 %patch15 -p1 -b .mkinitrd.orig
 
 %build
