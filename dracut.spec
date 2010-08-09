@@ -41,6 +41,8 @@ Conflicts:	mkinitrd < 6.0.93-%manbo_mkrel 10
 Conflicts:	nash < 6.0.93-%manbo_mkrel 11
 BuildArch:	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+BuildRequires:	docbook-dtd45-xml
+BuildRequires:	xsltproc
 
 %description
 Event driven initrd image generator based around udev.
