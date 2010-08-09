@@ -9,10 +9,7 @@ Source0:	http://downloads.sourceforge.net/project/dracut/%{name}-%{version}.tar.
 Source1:	bootchartd-check
 Source2:	bootchartd-install
 Patch0:		dracut-004-mdv.patch
-Patch1:		dracut-004-conf_d.patch
 Patch15:	dracut-004-mkinitrd.patch
-Patch16:	dracut-006-module_check.patch
-Patch17:	dracut-006-fix_2.6.35_ahci_detection.patch
 Requires:	filesystem
 Requires:	udev
 Requires:	util-linux-ng
@@ -51,10 +48,7 @@ Event driven initrd image generator based around udev.
 %prep
 %setup -q
 %patch0 -p1 -b .mdv.orig
-%patch1 -p1 -b .conf_d.orig
 %patch15 -p1 -b .mkinitrd.orig
-%patch16 -p1 -b .module_check.orig
-%patch17 -p1 -b .ahci.orig
 
 %build
 export CFLAGS="%{optflags}"
