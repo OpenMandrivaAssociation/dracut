@@ -126,4 +126,5 @@ update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-dracut 90 |
 %{_datadir}/dracut/dracut-functions
 %{_datadir}/dracut/modules.d
 %{_mandir}/man8/dracut*.8*
+%{_mandir}/man7/dracut.kernel.7*
 %{_mandir}/man5/dracut.conf.5*
