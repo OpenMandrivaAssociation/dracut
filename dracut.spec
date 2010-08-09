@@ -42,6 +42,7 @@ Conflicts:	nash < 6.0.93-%manbo_mkrel 11
 BuildArch:	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	docbook-dtd45-xml
+BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
 
 %description
