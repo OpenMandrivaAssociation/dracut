@@ -6,6 +6,7 @@ Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
 Source0:	http://downloads.sourceforge.net/project/dracut/%{name}-%{version}.tar.bz2
+Source3:	50-dracut-mandriva.conf
 Patch0:		dracut-004-mdv.patch
 Patch15:	dracut-004-mkinitrd.patch
 Requires:	filesystem
@@ -58,6 +59,8 @@ export CFLAGS="%{optflags}"
 %install
 rm -rf %{buildroot}
 %makeinstall_std sbindir=/sbin sysconfdir=%{_sysconfdir} mandir=%{_mandir}
+
+install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/dracut.conf.d
 
 # bluca remove patch backup files
 find %{buildroot} -name \*.\*.orig -exec rm {} \;
@@ -113,6 +116,7 @@ update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-dracut 90 |
 %dir %{_var}/lib/dracut/overlay
 %config(noreplace) %{_sysconfdir}/dracut.conf
 %dir %{_sysconfdir}/dracut.conf.d
+%{_sysconfdir}/dracut.conf.d/50-dracut-mandriva.conf
 /sbin/dracut
 /sbin/dracut-gencmdline
 /sbin/dracut-catimages
