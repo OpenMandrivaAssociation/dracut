@@ -8,6 +8,7 @@ URL:		http://apps.sourceforge.net/trac/dracut/wiki
 Source0:	http://downloads.sourceforge.net/project/dracut/%{name}-%{version}.tar.bz2
 Source3:	50-dracut-mandriva.conf
 Patch0:		dracut-004-mdv.patch
+Patch1:		dracut-007-undisable_bootchart.patch
 Patch15:	dracut-004-mkinitrd.patch
 Requires:	filesystem
 Requires:	udev
@@ -50,6 +51,7 @@ Event driven initrd image generator based around udev.
 %prep
 %setup -q
 %patch0 -p1 -b .mdv.orig
+%patch1 -p1 -b .undisable_bootchart.orig
 %patch15 -p1 -b .mkinitrd.orig
 
 %build
