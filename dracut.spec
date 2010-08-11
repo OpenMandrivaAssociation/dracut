@@ -10,6 +10,7 @@ Source3:	50-dracut-mandriva.conf
 Patch0:		dracut-004-mdv.patch
 Patch1:		dracut-007-undisable_bootchart.patch
 Patch15:	dracut-004-mkinitrd.patch
+Patch18:	dracut-007-bootchart_fix_initdir.patch
 Requires:	filesystem
 Requires:	udev
 Requires:	util-linux-ng
@@ -53,6 +54,7 @@ Event driven initrd image generator based around udev.
 %patch0 -p1 -b .mdv.orig
 %patch1 -p1 -b .undisable_bootchart.orig
 %patch15 -p1 -b .mkinitrd.orig
+%patch18 -p1 -b .bootchart_fix_initrd.orig
 
 %build
 export CFLAGS="%{optflags}"
