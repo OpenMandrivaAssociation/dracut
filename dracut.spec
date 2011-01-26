@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	007
-Release:	%mkrel 3
+Release:	%mkrel 6
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
@@ -13,6 +13,8 @@ Patch15:	dracut-004-mkinitrd.patch
 Patch18:	dracut-007-bootchart_fix_initdir.patch
 Patch19:	dracut-007-fix_unicode_keytable.patch
 Patch20:	dracut-007-add-rsyslog-library-patch-check.patch
+Patch21:	dracut-007-aufs-mount.patch
+Patch100:	rosa-livecdfix.patch
 Requires:	filesystem
 Requires:	udev
 Requires:	util-linux-ng
@@ -59,6 +61,8 @@ Event driven initrd image generator based around udev.
 %patch18 -p1 -b .bootchart_fix_initrd.orig
 %patch19 -p1 -b .fix_unicode_keytable.orig
 %patch20 -p1 -b .rsyslogd
+%patch21 -p1 
+%patch100 -p1
 
 %build
 export CFLAGS="%{optflags}"
