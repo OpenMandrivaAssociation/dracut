@@ -1,18 +1,20 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	007
-Release:	%mkrel 6
+Version:	008
+Release:	%mkrel 1
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
 Source0:	http://downloads.sourceforge.net/project/dracut/%{name}-%{version}.tar.bz2
 Source3:	50-dracut-mandriva.conf
+# (bor) mdv-specific fixes
 Patch0:		dracut-004-mdv.patch
+# (bor) Restore original Mandriva behaviour of adding bootchart if RPM is installed.
 Patch1:		dracut-007-undisable_bootchart.patch
+# (bor) compatibility with mkinitrd
 Patch15:	dracut-004-mkinitrd.patch
-Patch18:	dracut-007-bootchart_fix_initdir.patch
+# (bor) Add support for KEYTABLE to dynamically determine whether to install UNICODE or non-UNICODE keymap version.
 Patch19:	dracut-007-fix_unicode_keytable.patch
-Patch20:	dracut-007-add-rsyslog-library-patch-check.patch
 Patch21:	dracut-007-aufs-mount.patch
 Patch100:	rosa-livecdfix.patch
 Requires:	filesystem
@@ -58,9 +60,7 @@ Event driven initrd image generator based around udev.
 %patch0 -p1 -b .mdv.orig
 %patch1 -p1 -b .undisable_bootchart.orig
 %patch15 -p1 -b .mkinitrd.orig
-%patch18 -p1 -b .bootchart_fix_initrd.orig
 %patch19 -p1 -b .fix_unicode_keytable.orig
-%patch20 -p1 -b .rsyslogd
 %patch21 -p1 
 %patch100 -p1
 
@@ -78,9 +78,7 @@ install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/dracut.conf.d
 find %{buildroot} -name \*.\*.orig -exec rm {} \;
 
 # fix permission of module files
-chmod +x %{buildroot}%{_datadir}/dracut/modules.d/*/install
-chmod +x %{buildroot}%{_datadir}/dracut/modules.d/*/installkernel
-chmod +x %{buildroot}%{_datadir}/dracut/modules.d/*/check
+chmod +x %{buildroot}%{_datadir}/dracut/modules.d/*/*.sh
 
 mkdir -p %{buildroot}/boot/dracut
 mkdir -p %{buildroot}%{_var}/lib/dracut/overlay
