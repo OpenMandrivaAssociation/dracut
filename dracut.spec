@@ -14,7 +14,7 @@ Patch1:		dracut-007-undisable_bootchart.patch
 # (bor) compatibility with mkinitrd
 Patch15:	dracut-008-mkinitrd.patch
 # (bor) Add support for KEYTABLE to dynamically determine whether to install UNICODE or non-UNICODE keymap version.
-Patch19:	dracut-007-fix_unicode_keytable.patch
+Patch19:	dracut-008-fix_unicode_keytable.patch
 Patch21:	dracut-007-aufs-mount.patch
 Patch100:	rosa-livecdfix.patch
 Requires:	filesystem
