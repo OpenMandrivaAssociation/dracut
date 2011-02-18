@@ -20,6 +20,8 @@ Patch21:	dracut-007-aufs-mount.patch
 Patch22:	dracut-008-plymouth-touch-dev-systemd-plymouth
 # (bor) fix i18n parsing in hostonly mode (GIT)
 Patch23:	dracut-008-i18n-fixed-config-file-parsing
+# (bor) default to UTF-8 for console unless disabled (GIT)
+Patch24:	dracut-008-i18n-default-to-vconsole-font.patch
 Patch100:	rosa-livecdfix.patch
 Requires:	filesystem
 Requires:	udev
@@ -68,6 +70,7 @@ Event driven initrd image generator based around udev.
 %patch21 -p1 
 %patch22 -p1 
 %patch23 -p1 
+%patch24 -p1 
 %patch100 -p1
 
 %build
