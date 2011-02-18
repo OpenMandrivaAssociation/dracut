@@ -17,9 +17,9 @@ Patch15:	dracut-008-mkinitrd.patch
 Patch19:	dracut-008-fix_unicode_keytable.patch
 Patch21:	dracut-007-aufs-mount.patch
 # (bor) pass flag that dracut was started to systemd (GIT)
-Patch22:	dracut-008-plymouth-touch-dev-systemd-plymouth
+Patch22:	dracut-008-plymouth-touch-dev-systemd-plymouth.patch
 # (bor) fix i18n parsing in hostonly mode (GIT)
-Patch23:	dracut-008-i18n-fixed-config-file-parsing
+Patch23:	dracut-008-i18n-fixed-config-file-parsing.patch
 # (bor) default to UTF-8 for console unless disabled (GIT)
 Patch24:	dracut-008-i18n-default-to-vconsole-font.patch
 Patch100:	rosa-livecdfix.patch
