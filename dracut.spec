@@ -16,6 +16,8 @@ Patch15:	dracut-008-mkinitrd.patch
 # (bor) Add support for KEYTABLE to dynamically determine whether to install UNICODE or non-UNICODE keymap version.
 Patch19:	dracut-008-fix_unicode_keytable.patch
 Patch21:	dracut-007-aufs-mount.patch
+# (bor) pass flag that dracut was started to systemd (GIT)
+Patch22:	dracut-008-plymouth-touch-dev-systemd-plymouth
 Patch100:	rosa-livecdfix.patch
 Requires:	filesystem
 Requires:	udev
@@ -62,6 +64,7 @@ Event driven initrd image generator based around udev.
 %patch15 -p1 -b .mkinitrd.orig
 %patch19 -p1 -b .fix_unicode_keytable.orig
 %patch21 -p1 
+%patch22 -p1 
 %patch100 -p1
 
 %build
