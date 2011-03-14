@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	008
-Release:	%mkrel 4
+Release:	%mkrel 5
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
@@ -91,6 +91,7 @@ find %{buildroot} -name \*.\*.orig -exec rm {} \;
 
 # fix permission of module files
 chmod +x %{buildroot}%{_datadir}/dracut/modules.d/*/*.sh
+chmod +x %{buildroot}%{_datadir}/dracut/modules.d/99aufs-mount/install
 
 mkdir -p %{buildroot}/boot/dracut
 mkdir -p %{buildroot}%{_var}/lib/dracut/overlay
