@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	008
-Release:	%mkrel 6
+Version:	010
+Release:	%mkrel 1
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
@@ -12,21 +12,15 @@ Patch0:		dracut-004-mdv.patch
 # (bor) Restore original Mandriva behaviour of adding bootchart if RPM is installed.
 Patch1:		dracut-007-undisable_bootchart.patch
 # (bor) compatibility with mkinitrd
-Patch15:	dracut-008-mkinitrd.patch
+Patch15:	dracut-010-mkinitrd.patch
 # (bor) Add support for KEYTABLE to dynamically determine whether to install UNICODE or non-UNICODE keymap version.
 Patch19:	dracut-008-fix_unicode_keytable.patch
 Patch21:	dracut-007-aufs-mount.patch
 # (bor) pass flag that dracut was started to systemd (GIT)
-Patch22:	dracut-008-plymouth-touch-dev-systemd-plymouth.patch
-# (bor) fix i18n parsing in hostonly mode (GIT)
-Patch23:	dracut-008-i18n-fixed-config-file-parsing.patch
-# (bor) default to UTF-8 for console unless disabled (GIT)
-Patch24:	dracut-008-i18n-default-to-vconsole-font.patch
-# (bor) fix for P24 (upstream)
-Patch25:	dracut-008-i18n-default-to-vconsole-font-fix.patch
+Patch22:	dracut-010-plymouth-touch-dev-systemd-plymouth.patch
 # (anssi) handle gzip compressed KMS kernel modules
-Patch26:	dracut-008-plymouth-compressed-kmod.patch
-Patch100:	rosa-livecdfix.patch
+Patch26:	dracut-010-plymouth-compressed-kmod.patch
+Patch100:	dracut-010-rosa-livecdfix.patch
 Requires:	filesystem
 Requires:	udev
 Requires:	util-linux-ng
@@ -73,9 +67,6 @@ Event driven initrd image generator based around udev.
 %patch19 -p1 -b .fix_unicode_keytable.orig
 %patch21 -p1 
 %patch22 -p1 
-%patch23 -p1 
-%patch24 -p1 
-%patch25 -p1 
 %patch26 -p1
 %patch100 -p1
 
@@ -150,6 +141,7 @@ update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-dracut 90 |
 /sbin/mkinitrd-dracut
 %{_datadir}/dracut/dracut-functions
 %{_datadir}/dracut/modules.d
+%{_datadir}/dracut/dracut-logger
 %{_mandir}/man8/dracut*.8*
 %{_mandir}/man7/dracut.kernel.7*
 %{_mandir}/man5/dracut.conf.5*
