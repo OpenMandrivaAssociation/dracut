@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	008
-Release:	%mkrel 5
+Release:	%mkrel 6
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
@@ -24,6 +24,8 @@ Patch23:	dracut-008-i18n-fixed-config-file-parsing.patch
 Patch24:	dracut-008-i18n-default-to-vconsole-font.patch
 # (bor) fix for P24 (upstream)
 Patch25:	dracut-008-i18n-default-to-vconsole-font-fix.patch
+# (anssi) handle gzip compressed KMS kernel modules
+Patch26:	dracut-008-plymouth-compressed-kmod.patch
 Patch100:	rosa-livecdfix.patch
 Requires:	filesystem
 Requires:	udev
@@ -74,6 +76,7 @@ Event driven initrd image generator based around udev.
 %patch23 -p1 
 %patch24 -p1 
 %patch25 -p1 
+%patch26 -p1
 %patch100 -p1
 
 %build
