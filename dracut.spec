@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	010
-Release:	%mkrel 4
+Release:	%mkrel 5
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
@@ -20,7 +20,6 @@ Patch21:	dracut-007-aufs-mount.patch
 Patch22:	dracut-010-plymouth-touch-dev-systemd-plymouth.patch
 # (anssi) handle gzip compressed KMS kernel modules
 Patch26:	dracut-010-plymouth-compressed-kmod.patch
-Patch100:	dracut-010-rosa-livecdfix.patch
 Patch101:       dracut.error.workaround.patch
 Requires:	filesystem
 Requires:	udev
@@ -69,7 +68,6 @@ Event driven initrd image generator based around udev.
 %patch21 -p1 
 %patch22 -p1 
 %patch26 -p1
-%patch100 -p1
 %patch101 -p1
 %build
 export CFLAGS="%{optflags}"
@@ -95,30 +93,18 @@ mv %{buildroot}/sbin/lsinitrd %{buildroot}/sbin/lsinitrd-dracut
 mv %{buildroot}/sbin/mkinitrd %{buildroot}/sbin/mkinitrd-dracut
 
 cat > README.urpmi << EOF
+dracut is the default mkinitrd replacement in mandriva
 
-This ia a mkinitrd replacement.
-Consider this software as experimental!
-
-How to use:
-
-dracut -v /boot/initrd-dracut-\$(uname -r).img \$(uname -r)
-
-then run
-
-bootloader-config --action add-kernel /boot/vmlinuz-\$(uname -r) --initrd /boot/initrd-dracut-\$(uname -r).img --kernel-version \$(uname -r) --label dracut
-
-and reboot.
-
-If you want to set dracut as an mkinitrd replacement run
-update-alternatives --set mkinitrd /sbin/mkinitrd-dracut
+If you relly want to use old mkinitrd instead of dracut run
+update-alternatives --set mkinitrd /sbin/mkinitrd-mkinitrd
 EOF
 
 %clean
 rm -rf %{buildroot}
 
 %post
-update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-dracut 90 || :
-update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-dracut 90 || :
+update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-dracut 110 || :
+update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-dracut 110 || :
 
 %postun
 [ ! -e /sbin/mkinitrd-dracut ] && update-alternatives --remove mkinitrd /sbin/mkinitrd-dracut || :
