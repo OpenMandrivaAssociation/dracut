@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	010
-Release:	%mkrel 5
+Release:	%mkrel 6
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
@@ -20,6 +20,7 @@ Patch21:	dracut-007-aufs-mount.patch
 Patch22:	dracut-010-plymouth-touch-dev-systemd-plymouth.patch
 # (anssi) handle gzip compressed KMS kernel modules
 Patch26:	dracut-010-plymouth-compressed-kmod.patch
+Patch100:       dracut-010-rosa-livecdfix.patch
 Patch101:       dracut.error.workaround.patch
 Requires:	filesystem
 Requires:	udev
@@ -68,6 +69,7 @@ Event driven initrd image generator based around udev.
 %patch21 -p1 
 %patch22 -p1 
 %patch26 -p1
+%patch100 -p1
 %patch101 -p1
 %build
 export CFLAGS="%{optflags}"
