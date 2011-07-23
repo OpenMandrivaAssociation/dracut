@@ -1,14 +1,14 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	010
-Release:	%mkrel 6
+Version:	011
+Release:	%mkrel 1
 Group:		System/Base
 License:	GPLv2+
 URL:		http://apps.sourceforge.net/trac/dracut/wiki
 Source0:	http://downloads.sourceforge.net/project/dracut/%{name}-%{version}.tar.bz2
 Source3:	50-dracut-mandriva.conf
 # (bor) mdv-specific fixes
-Patch0:		dracut-004-mdv.patch
+Patch0:		dracut-011-mdv.patch
 # (bor) Restore original Mandriva behaviour of adding bootchart if RPM is installed.
 Patch1:		dracut-007-undisable_bootchart.patch
 # (bor) compatibility with mkinitrd
@@ -19,8 +19,8 @@ Patch21:	dracut-007-aufs-mount.patch
 # (bor) pass flag that dracut was started to systemd (GIT)
 Patch22:	dracut-010-plymouth-touch-dev-systemd-plymouth.patch
 # (anssi) handle gzip compressed KMS kernel modules
-Patch26:	dracut-010-plymouth-compressed-kmod.patch
-Patch100:       dracut-010-rosa-livecdfix.patch
+Patch26:	dracut-011-plymouth-compressed-kmod.patch
+Patch100:       dracut-011-rosa-livecdfix.patch
 Patch101:       dracut.error.workaround.patch
 Requires:	filesystem
 Requires:	udev
@@ -67,10 +67,10 @@ Event driven initrd image generator based around udev.
 %patch15 -p1 -b .mkinitrd.orig
 %patch19 -p1 -b .fix_unicode_keytable.orig
 %patch21 -p1 
-%patch22 -p1 
+#%patch22 -p1
 %patch26 -p1
 %patch100 -p1
-%patch101 -p1
+#%patch101 -p1
 %build
 export CFLAGS="%{optflags}"
 %make
