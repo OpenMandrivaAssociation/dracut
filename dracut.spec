@@ -1,11 +1,11 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	011
-Release:	%mkrel 2
+Version:	013
+Release:	%mkrel 1
 Group:		System/Base
 License:	GPLv2+
-URL:		http://apps.sourceforge.net/trac/dracut/wiki
-Source0:	http://downloads.sourceforge.net/project/dracut/%{name}-%{version}.tar.bz2
+URL:		https://dracut.wiki.kernel.org/
+Source0:	http://www.kernel.org/pub/linux/utils/boot/dracut/%{name}-%{version}.tar.bz2
 Source3:	50-dracut-mandriva.conf
 # (bor) mdv-specific fixes
 Patch0:		dracut-011-mdv.patch
@@ -14,14 +14,12 @@ Patch1:		dracut-007-undisable_bootchart.patch
 # (bor) compatibility with mkinitrd
 Patch15:	dracut-010-mkinitrd.patch
 # (bor) Add support for KEYTABLE to dynamically determine whether to install UNICODE or non-UNICODE keymap version.
-Patch19:	dracut-008-fix_unicode_keytable.patch
+Patch19:	dracut-013-fix_unicode_keytable.patch
 Patch21:	dracut-007-aufs-mount.patch
-# (bor) pass flag that dracut was started to systemd (GIT)
-Patch22:	dracut-010-plymouth-touch-dev-systemd-plymouth.patch
 # (anssi) handle gzip compressed KMS kernel modules
 Patch26:	dracut-011-plymouth-compressed-kmod.patch
 Patch100:       dracut-011-rosa-livecdfix.patch
-Patch101:       dracut-011-ld.so.conf.workaround.patch
+Patch101:       dracut-013-ld.so.conf.workaround.patch
 Requires:	filesystem
 Requires:	udev
 Requires:	util-linux-ng
@@ -52,13 +50,19 @@ Requires(post,postun):	update-alternatives
 Conflicts:	mkinitrd < 6.0.93-%manbo_mkrel 10
 Conflicts:	nash < 6.0.93-%manbo_mkrel 11
 BuildArch:	noarch
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
+BuildRequires:	dash
+BuildRequires:	bash
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
-Event driven initrd image generator based around udev.
+Dracut contains tools to create a bootable initramfs for 2.6 Linux kernels.
+Unlike existing implementations, dracut does hard-code as little as possible
+into the initramfs. Dracut contains various modules which are driven by the
+event-based udev. Having root on MD, DM, LVM2, LUKS is supported as well as
+NFS, iSCSI, NBD, FCoE with the dracut-network package.
 
 %prep
 %setup -q
@@ -67,9 +71,8 @@ Event driven initrd image generator based around udev.
 %patch15 -p1 -b .mkinitrd.orig
 %patch19 -p1 -b .fix_unicode_keytable.orig
 %patch21 -p1 
-#%patch22 -p1
 %patch26 -p1
-%patch100 -p1
+#%patch100 -p1
 %patch101 -p1
 %build
 export CFLAGS="%{optflags}"
