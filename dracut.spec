@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	013
-Release:	%mkrel 1
+Release:	%mkrel 2
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -20,7 +20,7 @@ Patch21:	dracut-007-aufs-mount.patch
 Patch26:	dracut-011-plymouth-compressed-kmod.patch
 Patch100:       dracut-011-rosa-livecdfix.patch
 Patch101:       dracut-013-ld.so.conf.workaround.patch
-Requires:	filesystem
+Requires(pre):	filesystem
 Requires:	udev
 Requires:	util-linux-ng
 Requires:	module-init-tools
@@ -55,6 +55,7 @@ BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
 BuildRequires:	dash
 BuildRequires:	bash
+Obsoletes:	dracut < 013
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
@@ -70,10 +71,11 @@ NFS, iSCSI, NBD, FCoE with the dracut-network package.
 %patch1 -p1 -b .undisable_bootchart.orig
 %patch15 -p1 -b .mkinitrd.orig
 %patch19 -p1 -b .fix_unicode_keytable.orig
-%patch21 -p1 
+%patch21 -p1
 %patch26 -p1
 #%patch100 -p1
 %patch101 -p1
+
 %build
 export CFLAGS="%{optflags}"
 %make
