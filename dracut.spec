@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	013
-Release:	%mkrel 2
+Version:	014
+Release:	%mkrel 1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -90,14 +90,14 @@ install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/dracut.conf.d
 find %{buildroot} -name \*.\*.orig -exec rm {} \;
 
 # fix permission of module files
-chmod +x %{buildroot}%{_datadir}/dracut/modules.d/*/*.sh
-chmod +x %{buildroot}%{_datadir}/dracut/modules.d/99aufs-mount/install
+chmod +x %{buildroot}%{_prefix}/lib/dracut/modules.d/*/*.sh
 
 mkdir -p %{buildroot}/boot/dracut
 mkdir -p %{buildroot}%{_var}/lib/dracut/overlay
+install -m 755 -d %{buildroot}%{_datadir}/dracut
 
-mv %{buildroot}/sbin/lsinitrd %{buildroot}/sbin/lsinitrd-dracut
-mv %{buildroot}/sbin/mkinitrd %{buildroot}/sbin/mkinitrd-dracut
+mv %{buildroot}%{_sbindir}/lsinitrd %{buildroot}%{_sbindir}/lsinitrd-dracut
+mv %{buildroot}%{_sbindir}/mkinitrd %{buildroot}%{_sbindir}/mkinitrd-dracut
 
 cat > README.urpmi << EOF
 dracut is the default mkinitrd replacement in mandriva
@@ -110,16 +110,16 @@ EOF
 rm -rf %{buildroot}
 
 %post
-update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-dracut 110 || :
-update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-dracut 110 || :
+update-alternatives --install /sbin/mkinitrd mkinitrd %{_sbindir}/mkinitrd-dracut 110 || :
+update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracut 110 || :
 
 %postun
-[ ! -e /sbin/mkinitrd-dracut ] && update-alternatives --remove mkinitrd /sbin/mkinitrd-dracut || :
-[ ! -e /sbin/lsinitrd-dracut ] && update-alternatives --remove lsinitrd /sbin/lsinitrd-dracut || :
+[ ! -e /sbin/mkinitrd-dracut ] && update-alternatives --remove mkinitrd %{_sbindir}/mkinitrd-dracut || :
+[ ! -e /sbin/lsinitrd-dracut ] && update-alternatives --remove lsinitrd %{_sbindir}/lsinitrd-dracut || :
 
 %files
 %defattr(-,root,root)
-%doc README.generic README.modules README.kernel HACKING TODO AUTHORS 
+%doc README.generic README.modules README.kernel HACKING TODO AUTHORS
 %doc README.urpmi
 %dir /boot/dracut
 %dir %{_datadir}/dracut
@@ -128,14 +128,15 @@ update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-dracut 110 
 %config(noreplace) %{_sysconfdir}/dracut.conf
 %dir %{_sysconfdir}/dracut.conf.d
 %{_sysconfdir}/dracut.conf.d/50-dracut-mandriva.conf
-/sbin/dracut
-/sbin/dracut-gencmdline
-/sbin/dracut-catimages
-/sbin/lsinitrd-dracut
-/sbin/mkinitrd-dracut
-%{_datadir}/dracut/dracut-functions
-%{_datadir}/dracut/modules.d
-%{_datadir}/dracut/dracut-logger
+%{_sbindir}/dracut
+%{_sbindir}/dracut-gencmdline
+%{_sbindir}/dracut-catimages
+%{_sbindir}/lsinitrd-dracut
+%{_sbindir}/mkinitrd-dracut
+%{_prefix}/lib/dracut/dracut-functions
+%{_prefix}/lib/dracut/modules.d
+%{_prefix}/lib/dracut/dracut-logger
 %{_mandir}/man8/dracut*.8*
 %{_mandir}/man7/dracut.kernel.7*
+%{_mandir}/man7/dracut.cmdline.7*
 %{_mandir}/man5/dracut.conf.5*
