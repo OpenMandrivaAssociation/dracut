@@ -11,7 +11,7 @@ Patch1: 0001-dracut-export-host_fs_types-host_devs.patch
 Patch2: 0002-module-setup.sh-use-host_fs_types-host_devs.patch
 Patch3: 0003-95iscsi-iscsiroot-unset-used-variables-before-starti.patch
 Patch4: 0004-99base-dracut-lib.sh-killproc-prefix-local-variables.patch
-Patch5: 0005-dracut.spec-remove-unnecessary-dependencies.patch
+Patch5: 0005-dracut.SPEC-remove-unnecessary-dependencies.patch
 Patch6: 0006-TEST-12-RAID-DEG-mkdir-run.patch
 Patch7: 0007-99base-dracut-lib.sh-added-inst_mount_hook-add_mount.patch
 Patch8: 0008-dracut-add-add-fstab-and-mount-option.patch
