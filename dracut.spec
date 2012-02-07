@@ -77,10 +77,10 @@ Patch67: 0067-let-some-modules-to-respect-mount_needs.patch
 Patch68: 0068-95ssh-client-module-setup.sh-spell-corrections.patch
 Patch69: 0069-95ssh-client-module-setup.sh-do-not-install-ssh-clie.patch
 Patch70: 0070-add-usrmove-module.patch
-Patch71: 0071-dracut.spec-add-compat-symlinks-to-sbin.patch
+Patch71: 0071-dracut.SPEC-add-compat-symlinks-to-sbin.patch
 Patch72: 0072-usrmove-install-missing-binaries-and-set-x-only-for-.patch
 Patch73: 0073-30usrmove-usrmove-convert.sh-rename-duplicate-librar.patch
-Patch74: 0074-dracut.spec-create-compat-symlink-instead-of-ghost.patch
+Patch74: 0074-dracut.SPEC-create-compat-symlink-instead-of-ghost.patch
 Patch75: 0075-fix-kernel-modules-search-for-s390.patch
 Patch76: 0076-fix-kernel-modules-search-for-s390.patch
 Patch77: 0077-30usrmove-usrmove-convert.sh-do-not-force-selinux-au.patch
