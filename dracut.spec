@@ -125,7 +125,6 @@ update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracu
 %dir %{_sysconfdir}/dracut.conf.d
 %{_sysconfdir}/dracut.conf.d/50-dracut-mandriva.conf
 %{_sbindir}/dracut
-%{_sbindir}/dracut-gencmdline
 %{_sbindir}/dracut-catimages
 %{_sbindir}/lsinitrd-dracut
 %{_sbindir}/mkinitrd-dracut
