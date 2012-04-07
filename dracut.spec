@@ -1,6 +1,6 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	017
+Version:	018
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -18,6 +18,7 @@ Patch1003:	dracut-007-aufs-mount.patch
 # (anssi) handle gzip compressed KMS kernel modules
 #Patch1004:	dracut-011-rosa-livecdfix.patch
 Patch1005:	dracut-013-ld.so.conf.workaround.patch
+Patch1006:	dracut-014-multipath-udev-rules.patch
 ### GIT PATCHES GOES HERE  ###
 
 ###
