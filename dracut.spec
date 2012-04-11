@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	018
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -75,7 +75,7 @@ export CFLAGS="%{optflags}"
 %install
 rm -rf %{buildroot}
 
-%makeinstall_std sbindir=/sbin sysconfdir=%{_sysconfdir} mandir=%{_mandir}
+%makeinstall_std sbindir=/sbin sysconfdir=%{_sysconfdir} systemdsystemunitdir=%{_unitdir} mandir=%{_mandir}
 
 install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/dracut.conf.d
 
@@ -111,8 +111,8 @@ update-alternatives --install /sbin/mkinitrd mkinitrd %{_sbindir}/mkinitrd-dracu
 update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracut 110 || :
 
 %postun
-[ ! -e /sbin/mkinitrd-dracut ] && update-alternatives --remove mkinitrd %{_sbindir}/mkinitrd-dracut || :
-[ ! -e /sbin/lsinitrd-dracut ] && update-alternatives --remove lsinitrd %{_sbindir}/lsinitrd-dracut || :
+[ ! -e /usr/sbin/mkinitrd-dracut ] && update-alternatives --remove mkinitrd %{_sbindir}/mkinitrd-dracut || :
+[ ! -e /usr/sbin/lsinitrd-dracut ] && update-alternatives --remove lsinitrd %{_sbindir}/lsinitrd-dracut || :
 
 %files
 %doc README.generic README.modules README.kernel HACKING TODO AUTHORS
@@ -128,6 +128,8 @@ update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracu
 %{_sbindir}/dracut-catimages
 %{_sbindir}/lsinitrd-dracut
 %{_sbindir}/mkinitrd-dracut
+%{_unitdir}/dracut-shutdown.service
+%{_unitdir}/*/dracut-shutdown.service
 %{_prefix}/lib/dracut/dracut-functions.sh
 %{_prefix}/lib/dracut/dracut-functions
 %{_prefix}/lib/dracut/modules.d
