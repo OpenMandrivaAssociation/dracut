@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	018
-Release:	3
+Release:	4
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -46,6 +46,7 @@ Requires:	initscripts
 Requires(pre):	plymouth
 Requires:	plymouth(system-theme)
 Requires:	bootloader-utils
+Requires(pre):	rpm-helper
 Requires(post,postun):	update-alternatives
 Conflicts:	mkinitrd < 6.0.93-%manbo_mkrel 10
 Conflicts:	nash < 6.0.93-%manbo_mkrel 11
