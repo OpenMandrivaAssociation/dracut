@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	018
-Release:	6
+Release:	7
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -20,6 +20,7 @@ Patch1003:	dracut-007-aufs-mount.patch
 Patch1005:	dracut-013-ld.so.conf.workaround.patch
 Patch1006:	dracut-014-multipath-udev-rules.patch
 Patch1007:	dracut-018-check-for-tty-and-use-it.patch
+Patch1008:	dracut-018-do-not-remount-twice-disk-partitions.patch
 ### GIT PATCHES GOES HERE  ###
 
 ###
