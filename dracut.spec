@@ -46,8 +46,7 @@ Requires:	bzip2
 Requires:	file
 Requires:	bridge-utils
 Requires:	initscripts
-Requires(pre):	plymouth
-Requires:	plymouth(system-theme)
+Suggests:	plymouth(system-theme)
 Requires:	bootloader-utils
 Requires(pre):	rpm-helper
 Requires(post,postun):	update-alternatives
