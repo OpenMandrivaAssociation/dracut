@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	018
-Release:	10
+Release:	11
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -25,8 +25,7 @@ Patch1009:	dracut-018-install-var-run-and-var-lock.patch
 ### GIT PATCHES GOES HERE  ###
 
 ###
-# work around dependency mess
-Provides:	mkinitrd = 7.0.0
+Provides:	mkinitrd-command
 Requires(pre):	filesystem
 Requires(pre):	coreutils
 Requires:	udev
