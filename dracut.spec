@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	020
-Release:	3
+Release:	4
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -106,8 +106,8 @@ mkdir -p %{buildroot}%{_sbindir}
 mkdir -p %{buildroot}/sbin
 mv %{buildroot}%{_bindir}/* %{buildroot}%{_sbindir}/
 
-ln -s %{buildroot}%{_sbindir}/dracut %{buildroot}%{_bindir}/dracut
-ln -s %{buildroot}%{_sbindir}/dracut %{buildroot}/sbin/dracut
+ln -s %{_sbindir}/dracut %{buildroot}%{_bindir}/dracut
+ln -s %{_sbindir}/dracut %{buildroot}/sbin/dracut
 
 mkdir -p %{buildroot}%{_localstatedir}/log
 touch %{buildroot}%{_localstatedir}/log/dracut.log
