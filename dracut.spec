@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	020
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -54,7 +54,6 @@ Requires(pre):	rpm-helper
 Requires(post,postun):	update-alternatives
 Conflicts:	mkinitrd < 6.0.93-%manbo_mkrel 10
 Conflicts:	nash < 6.0.93-%manbo_mkrel 11
-BuildArch:	noarch
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
@@ -72,6 +71,8 @@ NFS, iSCSI, NBD, FCoE with the dracut-network package.
 %prep
 %setup -q
 %apply_patches
+# We don't want to strip dracut-install, that's debuginfo's job
+sed -i -e 's,\$(strip),,g' install/Makefile
 
 %build
 %serverbuild_hardened
