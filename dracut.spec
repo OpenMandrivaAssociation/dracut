@@ -17,11 +17,12 @@ Patch1002:	dracut-010-mkinitrd.patch
 Patch1003:	dracut-007-aufs-mount.patch
 # (anssi) handle gzip compressed KMS kernel modules
 #Patch1004:	dracut-011-rosa-livecdfix.patch
-Patch1005:	dracut-013-ld.so.conf.workaround.patch
-Patch1006:	dracut-014-multipath-udev-rules.patch
-Patch1007:	dracut-018-check-for-tty-and-use-it.patch
-Patch1008:	dracut-018-do-not-remount-twice-disk-partitions.patch
-Patch1009:	dracut-018-install-var-run-and-var-lock.patch
+
+#Patch1005:	dracut-013-ld.so.conf.workaround.patch
+#Patch1006:	dracut-014-multipath-udev-rules.patch
+#Patch1007:	dracut-018-check-for-tty-and-use-it.patch
+#Patch1008:	dracut-018-do-not-remount-twice-disk-partitions.patch
+#Patch1009:	dracut-018-install-var-run-and-var-lock.patch
 ### GIT PATCHES GOES HERE  ###
 
 ###
@@ -73,13 +74,19 @@ NFS, iSCSI, NBD, FCoE with the dracut-network package.
 %apply_patches
 
 %build
-export CFLAGS="%{optflags}"
+%serverbuild_hardened
 %make
 
 %install
 rm -rf %{buildroot}
 
-%makeinstall_std sbindir=/sbin sysconfdir=%{_sysconfdir} systemdsystemunitdir=%{_unitdir} mandir=%{_mandir}
+%makeinstall_std \
+	sbindir=/sbin \
+	libdir=%{_prefix}/lib \
+	bindir=%{_bindir} \
+	sysconfdir=%{_sysconfdir} \
+	systemdsystemunitdir=%{_unitdir} \
+	mandir=%{_mandir}
 
 install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/dracut.conf.d
 
@@ -94,8 +101,17 @@ mkdir -p %{buildroot}/boot/dracut
 mkdir -p %{buildroot}%{_var}/lib/dracut/overlay
 install -m 755 -d %{buildroot}%{_datadir}/dracut
 
-install -d %{buildroot}%{_sbindir}
+mkdir -p %{buildroot}%{_sbindir}
+mkdir -p %{buildroot}/sbin
 mv %{buildroot}%{_bindir}/* %{buildroot}%{_sbindir}/
+
+ln -s %{buildroot}%{_sbindir}/dracut %{buildroot}%{_bindir}/dracut
+ln -s %{buildroot}%{_sbindir}/dracut %{buildroot}/sbin/dracut
+
+mkdir -p %{buildroot}%{_localstatedir}/log
+touch %{buildroot}%{_localstatedir}/log/dracut.log
+mkdir -p %{buildroot}%{_sysconfdir}/logrotate.d
+install -m 0644 dracut.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/dracut_log
 
 mv %{buildroot}%{_sbindir}/lsinitrd %{buildroot}%{_sbindir}/lsinitrd-dracut
 mv %{buildroot}%{_sbindir}/mkinitrd %{buildroot}%{_sbindir}/mkinitrd-dracut
@@ -125,18 +141,26 @@ update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracu
 %dir %{_datadir}/dracut
 %dir %{_var}/lib/dracut
 %dir %{_var}/lib/dracut/overlay
-%config(noreplace) %{_sysconfdir}/dracut.conf
+%dir %{_prefix}/lib/dracut/modules.d
 %dir %{_sysconfdir}/dracut.conf.d
+%config(noreplace) %{_sysconfdir}/dracut.conf
+%config(noreplace) %{_sysconfdir}/logrotate.d/dracut_log
+%attr(0644,root,root) %ghost %config(missingok,noreplace) %{_localstatedir}/log/dracut.log
 %{_sysconfdir}/dracut.conf.d/50-dracut-mandriva.conf
+/sbin/dracut
 %{_sbindir}/dracut
+%{_bindir}/dracut
 %{_sbindir}/dracut-catimages
+%{_sbindir}/dracut-install
 %{_sbindir}/lsinitrd-dracut
 %{_sbindir}/mkinitrd-dracut
-%{_unitdir}/dracut-shutdown.service
-%{_unitdir}/*/dracut-shutdown.service
+%{_unitdir}/*.service
+%{_unitdir}/*.target
+%{_unitdir}/*/*.service
+%{_prefix}/lib/dracut/dracut-version.sh
 %{_prefix}/lib/dracut/dracut-functions.sh
 %{_prefix}/lib/dracut/dracut-functions
-%{_prefix}/lib/dracut/modules.d
+%{_prefix}/lib/dracut/modules.d/*
 %{_prefix}/lib/dracut/dracut-initramfs-restore
 %{_prefix}/lib/dracut/dracut-logger.sh
 %{_mandir}/man8/dracut*.8*
