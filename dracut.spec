@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	020
-Release:	4
+Release:	5
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -23,9 +23,11 @@ Patch1003:	dracut-007-aufs-mount.patch
 #Patch1007:	dracut-018-check-for-tty-and-use-it.patch
 #Patch1008:	dracut-018-do-not-remount-twice-disk-partitions.patch
 #Patch1009:	dracut-018-install-var-run-and-var-lock.patch
-### GIT PATCHES GOES HERE  ###
 
+### GIT PATCHES GOES HERE  ###
+Patch1010:	0050-systemd-module-setup.sh-also-include-systemd-udevd-u.patch
 ###
+
 Provides:	mkinitrd-command
 Requires(pre):	filesystem
 Requires(pre):	coreutils
