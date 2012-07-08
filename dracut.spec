@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	020
-Release:	5
+Release:	6
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -128,6 +128,10 @@ EOF
 
 # rpmlint madness
 chmod 755 %{buildroot}%{_prefix}/lib/dracut/modules.d/99aufs-mount/install
+
+# (tpg) don't follow this usr madness
+# systemctl sits in /bin, and it symlinks to /usr/bin
+sed -i -e 's#/usr/bin/systemctl#/bin/systemctl#g' %{buildroot}%{_prefix}/lib/dracut/modules.d/98systemd/*.services
 
 %post
 update-alternatives --install /sbin/mkinitrd mkinitrd %{_sbindir}/mkinitrd-dracut 110 || :
