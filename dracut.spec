@@ -26,6 +26,7 @@ Patch1003:	dracut-007-aufs-mount.patch
 
 ### GIT PATCHES GOES HERE  ###
 Patch1010:	0050-systemd-module-setup.sh-also-include-systemd-udevd-u.patch
+Patch1011:	dracut-020-fix-plymouth-populate-script.patch
 ###
 
 Provides:	mkinitrd-command
@@ -92,6 +93,11 @@ rm -rf %{buildroot}
 	mandir=%{_mandir}
 
 install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/dracut.conf.d
+
+%if %mdvver >= 201200
+# (tpg) default image name in 2012 has changed
+sed -i -e 's/welcome.png/backgorund.png/' %{buildroot}%{_prefix}/lib/dracut/modules.d/50plymouth/plymouth-populate-initrd.sh
+%endif
 
 # bluca remove patch backup files
 find %{buildroot} -type f -name '*.orig' -exec rm {} \;
