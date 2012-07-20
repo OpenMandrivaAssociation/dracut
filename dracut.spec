@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	020
-Release:	7
+Release:	8
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -34,7 +34,11 @@ Requires(pre):	filesystem
 Requires(pre):	coreutils
 Requires:	udev
 Requires:	util-linux-ng
+%if %mdvver < 201200
 Requires:	module-init-tools
+%else
+Requires:	kmod
+%endif
 Requires:	e2fsprogs
 Requires:	cpio
 Requires:	findutils
