@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	020
-Release:	8
+Version:	022
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -25,8 +25,6 @@ Patch1003:	dracut-007-aufs-mount.patch
 #Patch1009:	dracut-018-install-var-run-and-var-lock.patch
 
 ### GIT PATCHES GOES HERE  ###
-Patch1010:	0050-systemd-module-setup.sh-also-include-systemd-udevd-u.patch
-Patch1011:	dracut-020-fix-plymouth-populate-script.patch
 ###
 
 Provides:	mkinitrd-command
@@ -120,6 +118,7 @@ mv %{buildroot}%{_bindir}/* %{buildroot}%{_sbindir}/
 
 ln -s %{_sbindir}/dracut %{buildroot}%{_bindir}/dracut
 ln -s %{_sbindir}/dracut %{buildroot}/sbin/dracut
+ln -s %{_prefix}/lib/dracut/dracut-install %{buildroot}%{_sbindir}/dracut-install
 
 mkdir -p %{buildroot}%{_localstatedir}/log
 touch %{buildroot}%{_localstatedir}/log/dracut.log
@@ -172,15 +171,17 @@ update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracu
 %{_sbindir}/lsinitrd-dracut
 %{_sbindir}/mkinitrd-dracut
 %{_unitdir}/*.service
-%{_unitdir}/*.target
 %{_unitdir}/*/*.service
+%{_prefix}/lib/dracut/dracut-install
 %{_prefix}/lib/dracut/dracut-version.sh
 %{_prefix}/lib/dracut/dracut-functions.sh
 %{_prefix}/lib/dracut/dracut-functions
 %{_prefix}/lib/dracut/modules.d/*
 %{_prefix}/lib/dracut/dracut-initramfs-restore
 %{_prefix}/lib/dracut/dracut-logger.sh
+%{_mandir}/man1/lsinitrd.1.*
 %{_mandir}/man8/dracut*.8*
+%{_mandir}/man8/mkinitrd.8.*
 %{_mandir}/man7/dracut.kernel.7*
 %{_mandir}/man7/dracut.cmdline.7*
 %{_mandir}/man5/dracut.conf.5*
