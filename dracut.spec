@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	022
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -142,6 +142,9 @@ chmod 755 %{buildroot}%{_prefix}/lib/dracut/modules.d/99aufs-mount/install
 # systemctl sits in /bin, and it symlinks to /usr/bin
 sed -i -e 's#/usr/bin/systemctl#/bin/systemctl#g' %{buildroot}%{_prefix}/lib/dracut/modules.d/98systemd/*.service
 
+# (tpg) this conflicts with mkinitrd
+rm -rf %{buildroot}%{_mandir}/man8/mkinitrd.8*
+
 %post
 update-alternatives --install /sbin/mkinitrd mkinitrd %{_sbindir}/mkinitrd-dracut 110 || :
 update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracut 110 || :
@@ -181,7 +184,6 @@ update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracu
 %{_prefix}/lib/dracut/dracut-logger.sh
 %{_mandir}/man1/lsinitrd.1.*
 %{_mandir}/man8/dracut*.8*
-%{_mandir}/man8/mkinitrd.8.*
 %{_mandir}/man7/dracut.kernel.7*
 %{_mandir}/man7/dracut.cmdline.7*
 %{_mandir}/man5/dracut.conf.5*
