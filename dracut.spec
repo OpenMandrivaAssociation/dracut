@@ -64,6 +64,7 @@ BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
 BuildRequires:	dash
 BuildRequires:	bash
+BuildRequires:	asciidoc
 Obsoletes:	dracut < 013
 
 %description
