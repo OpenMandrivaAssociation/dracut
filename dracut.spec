@@ -27,6 +27,13 @@ Patch1003:	dracut-007-aufs-mount.patch
 ### GIT PATCHES GOES HERE  ###
 ###
 
+BuildRequires:	docbook-dtd45-xml
+BuildRequires:	docbook-style-xsl
+BuildRequires:	xsltproc
+BuildRequires:	dash
+BuildRequires:	bash
+BuildRequires:	asciidoc
+
 Provides:	mkinitrd-command
 Requires(pre):	filesystem
 Requires(pre):	coreutils
@@ -53,18 +60,12 @@ Requires:	bzip2
 Requires:	file
 Requires:	bridge-utils
 Requires:	initscripts
-Suggests:	plymouth(system-theme)
 Requires:	bootloader-utils
 Requires(pre):	rpm-helper
 Requires(post,postun):	update-alternatives
 Conflicts:	mkinitrd < 6.0.93-%manbo_mkrel 10
 Conflicts:	nash < 6.0.93-%manbo_mkrel 11
-BuildRequires:	docbook-dtd45-xml
-BuildRequires:	docbook-style-xsl
-BuildRequires:	xsltproc
-BuildRequires:	dash
-BuildRequires:	bash
-BuildRequires:	asciidoc
+
 Obsoletes:	dracut < 013
 
 %description
