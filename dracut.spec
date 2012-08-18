@@ -1,12 +1,14 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	023
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
 Source0:	http://www.kernel.org/pub/linux/utils/boot/dracut/%{name}-%{version}.tar.xz
 Source3:	50-dracut-mandriva.conf
+# (tpg) simple script to provide a backup for current working initrd file
+Source4:	initrd-backup.sh
 # (bor) mdv-specific fixes
 Patch1000:	dracut-011-mdv.patch
 # (bor) Restore original Mandriva behaviour of adding bootchart if RPM is installed.
@@ -149,6 +151,8 @@ sed -i -e 's#/usr/bin/udevadm#/sbin/udevadm#g' %{buildroot}%{_prefix}/lib/dracut
 # (tpg) this conflicts with mkinitrd
 rm -rf %{buildroot}%{_mandir}/man8/mkinitrd.8*
 
+install -m755 %{SOURCE4} %{buildroot}%{_bindir}/initrd-backup.sh
+
 %post
 update-alternatives --install /sbin/mkinitrd mkinitrd %{_sbindir}/mkinitrd-dracut 110 || :
 update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracut 110 || :
@@ -173,6 +177,7 @@ update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracu
 /sbin/dracut
 %{_sbindir}/dracut
 %{_bindir}/dracut
+%{_bindir}/initrd-backup.sh
 %{_sbindir}/dracut-catimages
 %{_sbindir}/dracut-install
 %{_sbindir}/lsinitrd-dracut
