@@ -1,0 +1,10 @@
+--- dracut-014/modules.d/00bootchart/module-setup.sh	2012-02-05 18:10:05.506749879 +0100
++++ dracut-014/modules.d/00bootchart/module-setup.sh.mdv	2012-02-05 18:11:17.348813091 +0100
+@@ -5,7 +5,6 @@
+ check() {
+     [[ "$mount_needs" ]] && return 1
+     [ -x /sbin/bootchartd ] || return 1
+-    return 255
+ }
+ 
+ depends() {

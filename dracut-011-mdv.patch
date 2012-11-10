@@ -1,0 +1,38 @@
+diff -Naur dracut-017/dracut.conf dracut-017.tpg/dracut.conf
+--- dracut-017/dracut.conf	2012-02-24 14:38:08.000000000 +0000
++++ dracut-017.tpg/dracut.conf	2012-03-22 20:43:56.671025120 +0000
+@@ -15,13 +15,13 @@
+ #add_dracutmodules+=""
+ 
+ # additional kernel modules to the default
+-#add_drivers+=""
++add_drivers+="pata_acpi ata_generic ahci"
+ 
+ # list of kernel filesystem modules to be included in the generic initramfs
+ #filesystems+=""
+ 
+ # build initrd only to boot current hardware
+-#hostonly="yes"
++hostonly="yes"
+ #
+ 
+ # install local /etc/mdadm.conf
+diff -Naur dracut-017/modules.d/50plymouth/plymouth-populate-initrd.sh dracut-017.tpg/modules.d/50plymouth/plymouth-populate-initrd.sh
+--- dracut-017/modules.d/50plymouth/plymouth-populate-initrd.sh	2012-02-24 14:38:08.000000000 +0000
++++ dracut-017.tpg/modules.d/50plymouth/plymouth-populate-initrd.sh	2012-03-22 20:46:41.851027798 +0000
+@@ -1,13 +1,13 @@
+ #!/bin/bash
+ # -*- mode: shell-script; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
+ # ex: ts=8 sw=4 sts=4 et filetype=sh
+-PLYMOUTH_LOGO_FILE="/usr/share/pixmaps/system-logo-white.png"
++PLYMOUTH_LOGO_FILE="/usr/share/plymouth/themes/Mandriva-*/welcome.png"
+ PLYMOUTH_THEME=$(plymouth-set-default-theme)
+ 
+ inst /sbin/plymouthd /bin/plymouthd
+ dracut_install /bin/plymouth \
+     "${PLYMOUTH_LOGO_FILE}" \
+-    /etc/system-release
++    /etc/mandriva-release
+ 
+ mkdir -m 0755 -p "${initdir}/usr/share/plymouth"
+ 
