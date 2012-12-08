@@ -1,4 +1,3 @@
+---
 sources:
-  "50-dracut-mandriva.conf:"	ebd361f0bd6f2d6cabe274808f77c5f9261f6009
-  "dracut-024.tar.xz:"	82b195b6028e7d0b84108b1d6b7d7e6bbfb9d1fa
-  "initrd-backup.sh:"	5867002471b546f47d89e4e47aa9bec5fbac5cbc
+  dracut-024.tar.xz: 82b195b6028e7d0b84108b1d6b7d7e6bbfb9d1fa

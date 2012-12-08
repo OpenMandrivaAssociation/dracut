@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	024
-Release:	2
+Release:	7
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -10,7 +10,7 @@ Source3:	50-dracut-mandriva.conf
 # (tpg) simple script to provide a backup for current working initrd file
 Source4:	initrd-backup.sh
 # (bor) mdv-specific fixes
-Patch1000:	dracut-011-mdv.patch
+#Patch1000:	dracut-011-mdv.patch
 # (bor) Restore original Mandriva behaviour of adding bootchart if RPM is installed.
 Patch1001:	dracut-007-undisable_bootchart.patch
 # (bor) compatibility with mkinitrd
@@ -18,7 +18,7 @@ Patch1002:	dracut-010-mkinitrd.patch
 # (bor) Add support for KEYTABLE to dynamically determine whether to install UNICODE or non-UNICODE keymap version.
 Patch1003:	dracut-007-aufs-mount.patch
 # (anssi) handle gzip compressed KMS kernel modules
-#Patch1004:	dracut-011-rosa-livecdfix.patch
+Patch1004:	dracut-024.rosa.patch
 
 #Patch1005:	dracut-013-ld.so.conf.workaround.patch
 #Patch1006:	dracut-014-multipath-udev-rules.patch
@@ -155,6 +155,7 @@ install -m755 %{SOURCE4} %{buildroot}%{_bindir}/initrd-backup.sh
 %post
 update-alternatives --install /sbin/mkinitrd mkinitrd %{_sbindir}/mkinitrd-dracut 110 || :
 update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracut 110 || :
+%{_sbindir}/dracut -f /boot/initrd-$(uname -r).img $(uname -r)
 
 %postun
 [ ! -e /usr/sbin/mkinitrd-dracut ] && update-alternatives --remove mkinitrd %{_sbindir}/mkinitrd-dracut || :
@@ -169,8 +170,8 @@ update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracu
 %dir %{_var}/lib/dracut/overlay
 %dir %{_prefix}/lib/dracut/modules.d
 %dir %{_sysconfdir}/dracut.conf.d
-%config(noreplace) %{_sysconfdir}/dracut.conf
-%config(noreplace) %{_sysconfdir}/logrotate.d/dracut_log
+%config %{_sysconfdir}/dracut.conf
+%config %{_sysconfdir}/logrotate.d/dracut_log
 %attr(0644,root,root) %ghost %config(missingok,noreplace) %{_localstatedir}/log/dracut.log
 %{_sysconfdir}/dracut.conf.d/50-dracut-mandriva.conf
 /sbin/dracut
@@ -197,3 +198,16 @@ update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracu
 %{_mandir}/man7/dracut.kernel.7*
 %{_mandir}/man7/dracut.cmdline.7*
 %{_mandir}/man5/dracut.conf.5*
+
+
+%changelog
+* Fri Oct 19 2012 Tomasz Pawel Gajc <tpg@mandriva.org> 024-2
++ Revision: 819042
+- reupload
+- update to new version 024
+- remove duplicate requires on mount
+- provide a initd-backup.sh script which should store as a backup current working initrd file and recreates new one
+  o just add the script, in next step i'll have to figure out a best mechanism to execute the script on every systemd, dracut on any other core package update
+- fix udevadm path
+- do not suggest plymouth theme
+
