@@ -88,8 +88,6 @@ sed -i -e 's,\$(strip),,g' install/Makefile
 %make
 
 %install
-rm -rf %{buildroot}
-
 %makeinstall_std \
 	sbindir=/sbin \
 	libdir=%{_prefix}/lib \
