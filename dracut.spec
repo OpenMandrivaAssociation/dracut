@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	024
-Release:	8
+Release:	9
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -25,6 +25,7 @@ Patch1004:	dracut-024.rosa.patch
 #Patch1007:	dracut-018-check-for-tty-and-use-it.patch
 #Patch1008:	dracut-018-do-not-remount-twice-disk-partitions.patch
 #Patch1009:	dracut-018-install-var-run-and-var-lock.patch
+Patch1010:	dracut-024-busybox-fallback-to-busybox.static-if-no-busybox.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###

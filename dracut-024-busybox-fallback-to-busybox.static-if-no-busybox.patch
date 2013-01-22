@@ -1,0 +1,20 @@
+--- dracut-024/modules.d/05busybox/module-setup.sh~	2013-01-22 05:46:26.884808416 +0100
++++ dracut-024/modules.d/05busybox/module-setup.sh	2013-01-22 05:46:28.605788482 +0100
+@@ -3,7 +3,7 @@
+ # ex: ts=8 sw=4 sts=4 et filetype=sh
+ 
+ check() {
+-    type -P busybox >/dev/null || return 1
++    type -P busybox >/dev/null || type -P busybox.static >/dev/null || return 1
+ 
+     return 255
+ }
+@@ -14,7 +14,7 @@ depends() {
+ 
+ install() {
+     local _i _progs _path _busybox
+-    _busybox=$(type -P busybox)
++    _busybox=$(type -P busybox || type -P busybox.static)
+     inst $_busybox /usr/bin/busybox
+     for _i in $($_busybox | sed -ne '1,/Currently/!{s/,//g; s/busybox//g; p}')
+     do
