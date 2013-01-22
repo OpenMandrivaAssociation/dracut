@@ -26,6 +26,7 @@ Patch1004:	dracut-024.rosa.patch
 #Patch1008:	dracut-018-do-not-remount-twice-disk-partitions.patch
 #Patch1009:	dracut-018-install-var-run-and-var-lock.patch
 Patch1010:	dracut-024-busybox-fallback-to-busybox.static-if-no-busybox.patch
+Patch1011:	dracut-024-use-busybox--list.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
