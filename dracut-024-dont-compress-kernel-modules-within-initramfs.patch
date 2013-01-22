@@ -1,0 +1,37 @@
+--- dracut-024/dracut-functions.sh~	2013-01-22 08:31:02.135998260 +0100
++++ dracut-024/dracut-functions.sh	2013-01-22 08:32:07.171198644 +0100
+@@ -1372,6 +1372,7 @@ for_each_kmod_dep() {
+ 
+ dracut_kernel_post() {
+     local _moddirname=${srcmods%%/lib/modules/*}
++    local _compress=$1
+ 
+     if [[ $DRACUT_KERNEL_LAZY_HASHDIR ]] && [[ -f "$DRACUT_KERNEL_LAZY_HASHDIR/lazylist" ]]; then
+         xargs -r modprobe -a ${_moddirname+-d ${_moddirname}/} \
+@@ -1428,6 +1429,15 @@ dracut_kernel_post() {
+         [[ $srcmods/$_f ]] && inst_simple "$srcmods/$_f" "/lib/modules/$kernel/$_f"
+     done
+ 
++    # we get better compression ratio if we don't compress files twice, while also
++    # saving ourself from the overhead of decompressing twice as well..
++    for mod in $(find ${initdir}${srcmods} -type f); do
++        case ${mod} in
++            *.ko.gz) gunzip ${mod} ;;
++            *.ko.xz) unxz ${mod} ;;
++        esac
++    done
++
+     # generate module dependencies for the initrd
+     if [[ -d $initdir/lib/modules/$kernel ]] && \
+         ! depmod -a -b "$initdir" $kernel; then
+--- dracut-024/dracut.sh~	2013-01-22 08:32:17.316074187 +0100
++++ dracut-024/dracut.sh	2013-01-22 08:32:18.509059534 +0100
+@@ -930,7 +930,7 @@ if [[ $no_kernel != yes ]]; then
+     fi
+ 
+     dinfo "*** Installing kernel module dependencies and firmware ***"
+-    dracut_kernel_post
++    dracut_kernel_post $compress
+     dinfo "*** Installing kernel module dependencies and firmware done ***"
+ fi
+ 

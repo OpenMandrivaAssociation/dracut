@@ -27,6 +27,7 @@ Patch1004:	dracut-024.rosa.patch
 #Patch1009:	dracut-018-install-var-run-and-var-lock.patch
 Patch1010:	dracut-024-busybox-fallback-to-busybox.static-if-no-busybox.patch
 Patch1011:	dracut-024-use-busybox--list.patch
+Patch1012:	dracut-024-dont-compress-kernel-modules-within-initramfs.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
