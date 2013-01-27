@@ -68,8 +68,8 @@ Requires:	initscripts
 Requires:	bootloader-utils
 Requires(pre):	rpm-helper
 Requires(post,postun):	update-alternatives
-Conflicts:	mkinitrd < 6.0.93-%manbo_mkrel 10
-Conflicts:	nash < 6.0.93-%manbo_mkrel 11
+Conflicts:	mkinitrd < 6.0.93-10
+Conflicts:	nash < 6.0.93-11
 Obsoletes:	dracut < 013
 
 %description
@@ -127,7 +127,7 @@ ln -s %{_prefix}/lib/dracut/dracut-install %{buildroot}%{_sbindir}/dracut-instal
 mkdir -p %{buildroot}%{_localstatedir}/log
 touch %{buildroot}%{_localstatedir}/log/dracut.log
 mkdir -p %{buildroot}%{_sysconfdir}/logrotate.d
-install -m 0644 dracut.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/dracut_log
+install -m 0644 dracut.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/dracut
 
 mv %{buildroot}%{_sbindir}/lsinitrd %{buildroot}%{_sbindir}/lsinitrd-dracut
 mv %{buildroot}%{_sbindir}/mkinitrd %{buildroot}%{_sbindir}/mkinitrd-dracut
@@ -172,7 +172,7 @@ update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracu
 %dir %{_prefix}/lib/dracut/modules.d
 %dir %{_sysconfdir}/dracut.conf.d
 %config %{_sysconfdir}/dracut.conf
-%config %{_sysconfdir}/logrotate.d/dracut_log
+%config %{_sysconfdir}/logrotate.d/dracut
 %attr(0644,root,root) %ghost %config(missingok,noreplace) %{_localstatedir}/log/dracut.log
 %{_sysconfdir}/dracut.conf.d/50-dracut-mandriva.conf
 /sbin/dracut
