@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	025
-Release:	2
+Version:	026
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -39,6 +39,7 @@ BuildRequires:	dash
 BuildRequires:	bash
 BuildRequires:	asciidoc
 
+Requires:	systemd >= 198
 Provides:	mkinitrd-command
 Requires(pre):	filesystem
 Requires(pre):	coreutils
