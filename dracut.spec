@@ -1,6 +1,6 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	026
+Version:	027
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -38,6 +38,7 @@ BuildRequires:	xsltproc
 BuildRequires:	dash
 BuildRequires:	bash
 BuildRequires:	asciidoc
+BuildRequires:	systemd-units
 
 Requires:	systemd >= 198
 Provides:	mkinitrd-command
@@ -88,16 +89,16 @@ sed -i -e 's,\$(strip),,g' install/Makefile
 
 %build
 %serverbuild_hardened
+
+%configure2_5x \
+	--systemdsystemunitdir=%{_unitdir} \
+	--bashcompletiondir=$(pkg-config --variable=completionsdir bash-completion) \
+	--libdir=%{_prefix}/lib
+
 %make
 
 %install
-%makeinstall_std \
-	sbindir=/sbin \
-	libdir=%{_prefix}/lib \
-	bindir=%{_bindir} \
-	sysconfdir=%{_sysconfdir} \
-	systemdsystemunitdir=%{_unitdir} \
-	mandir=%{_mandir}
+%makeinstall_std
 
 install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/dracut.conf.d
 
