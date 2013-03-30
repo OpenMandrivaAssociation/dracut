@@ -198,7 +198,6 @@ update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracu
 %{_prefix}/lib/dracut/dracut-logger.sh
 %{_mandir}/man1/lsinitrd.1.*
 %{_mandir}/man8/dracut*.8*
-%{_mandir}/man8/udevadm-cleanup-db.service.8*
 %{_mandir}/man7/dracut.kernel.7*
 %{_mandir}/man7/dracut.cmdline.7*
 %{_mandir}/man5/dracut.conf.5*
