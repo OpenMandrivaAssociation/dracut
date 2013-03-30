@@ -188,7 +188,7 @@ update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracu
 %{_sbindir}/mkinitrd-dracut
 %{_unitdir}/*.service
 %{_unitdir}/*/*.service
-%{_prefix}/lib/kernel/install.d/50-dracut.install
+%{_prefix}/lib/kernel/install.d/50-dracut*.install
 %{_prefix}/lib/dracut/dracut-install
 %{_prefix}/lib/dracut/dracut-version.sh
 %{_prefix}/lib/dracut/dracut-functions.sh
@@ -196,11 +196,16 @@ update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracu
 %{_prefix}/lib/dracut/modules.d/*
 %{_prefix}/lib/dracut/dracut-initramfs-restore
 %{_prefix}/lib/dracut/dracut-logger.sh
+%{_datadir}/bash-completion/completions/dracut
 %{_mandir}/man1/lsinitrd.1.*
-%{_mandir}/man8/dracut*.8*
+%{_mandir}/man5/dracut.conf.5*
+%{_mandir}/man7/dracut.bootup.7.xz
 %{_mandir}/man7/dracut.kernel.7*
 %{_mandir}/man7/dracut.cmdline.7*
-%{_mandir}/man5/dracut.conf.5*
+%{_mandir}/man8/dracut*.8*
+
+
+
 
 
 %changelog
