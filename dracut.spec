@@ -188,7 +188,7 @@ update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracu
 %{_sbindir}/mkinitrd-dracut
 %{_unitdir}/*.service
 %{_unitdir}/*/*.service
-%{_prefix}/lib/kernel/install.d/50-dracut*.install
+%{_prefix}/lib/kernel/install.d/5*-dracut*.install
 %{_prefix}/lib/dracut/dracut-install
 %{_prefix}/lib/dracut/dracut-version.sh
 %{_prefix}/lib/dracut/dracut-functions.sh
