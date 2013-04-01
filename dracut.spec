@@ -91,7 +91,7 @@ sed -i -e 's,\$(strip),,g' install/Makefile
 	--bashcompletiondir=$(pkg-config --variable=completionsdir bash-completion) \
 	--libdir=%{_prefix}/lib
 
-%make
+%make CC=%{__cc}
 
 %install
 %makeinstall_std
