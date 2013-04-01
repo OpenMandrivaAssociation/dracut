@@ -154,9 +154,6 @@ install -m755 %{SOURCE4} %{buildroot}%{_bindir}/initrd-backup.sh
 %post
 update-alternatives --install /sbin/mkinitrd mkinitrd %{_sbindir}/mkinitrd-dracut 110 || :
 update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracut 110 || :
-
-# move here to workaround issue with bootloader-utils...
-%posttrans
 if [ -d /lib/modules/$(uname -r) ]; then
     %{_sbindir}/dracut -f /boot/initrd-$(uname -r).img $(uname -r)
 fi
