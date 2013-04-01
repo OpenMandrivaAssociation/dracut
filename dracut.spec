@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	027
-Release:	3
+Release:	4
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -154,7 +154,9 @@ install -m755 %{SOURCE4} %{buildroot}%{_bindir}/initrd-backup.sh
 %post
 update-alternatives --install /sbin/mkinitrd mkinitrd %{_sbindir}/mkinitrd-dracut 110 || :
 update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracut 110 || :
-%{_sbindir}/dracut -f /boot/initrd-$(uname -r).img $(uname -r)
+if [ -d /lib/modules/$(uname -r) ]; then
+    %{_sbindir}/dracut -f /boot/initrd-$(uname -r).img $(uname -r)
+fi
 
 %postun
 [ ! -e /usr/sbin/mkinitrd-dracut ] && update-alternatives --remove mkinitrd %{_sbindir}/mkinitrd-dracut || :
