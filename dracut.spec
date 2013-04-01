@@ -47,11 +47,7 @@ Requires(pre):	coreutils
 Suggests:	plymouth
 Requires:	udev
 Requires:	util-linux-ng
-%if %mdvver < 201200
-Requires:	module-init-tools
-%else
-Requires:	kmod
-%endif
+Requires:	kmod-compat
 Requires:	e2fsprogs
 Requires:	cpio
 Requires:	findutils
