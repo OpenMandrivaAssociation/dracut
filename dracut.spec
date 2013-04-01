@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	027
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -63,7 +63,7 @@ Requires:	bzip2
 Requires:	file
 Requires:	bridge-utils
 Requires:	initscripts
-#Requires:	bootloader-utils
+Requires:	bootloader-utils
 Requires(pre):	rpm-helper
 Requires(post,postun):	update-alternatives
 Conflicts:	mkinitrd < 6.0.93-10
