@@ -100,7 +100,7 @@ install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/dracut.conf.d
 
 %if %mdvver >= 201200
 # (tpg) default image name in 2012 has changed
-sed -i -e 's/welcome.png/backgorund.png/' %{buildroot}%{_prefix}/lib/dracut/modules.d/50plymouth/plymouth-populate-initrd.sh
+sed -i -e 's/welcome.png/background.png/' %{buildroot}%{_prefix}/lib/dracut/modules.d/50plymouth/plymouth-populate-initrd.sh
 %endif
 
 # bluca remove patch backup files
