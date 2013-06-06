@@ -1,0 +1,4907 @@
+diff --git a/.gitignore b/.gitignore
+index bec31ab..25506f1 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -13,3 +13,7 @@ test*.img
+ /.project
+ /dracut-version.sh
+ /install/dracut-install
++/*.rpm
++/*.[0-9]
++/modules.d/98systemd/*.service.8
++/*.sign
+diff --git a/.mailmap b/.mailmap
+index bce9b7c..852f269 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -1,12 +1,15 @@
+-Philippe Seewer <philippe.seewer@bfh.ch> <philippe.seewer-omB+W0Dpw2o@public.gmane.org>
+-Seewer Philippe <philippe.seewer@bfh.ch> <philippe.seewer@bfh.ch>
+-Philippe Seewer <philippe.seewer@bfh.ch> <philippe.seewer@bfh.ch>
+-Victor Lowther <victor.lowther@gmail.com> <victor.lowther-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+-Harald Hoyer <harald@redhat.com> <harald-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
+-Harald Hoyer <harald@redhat.com> <harald@eeepc.(none)>
+-Mike Snitzer <snitzer@redhat.com> <msnitzer@redhat.com> 
+-Amerigo Wang <amwang@redhat.com> <xiyou.wangcong@gmail.com>
+-Andrey Borzenkov <arvidjaar@gmail.com> <arvidjaar@mail.ru>
+-Dan Horák <dhorak@redhat.com> <dan@danny.cz>
+-John Reiser <jreiser@bitwagon.com> <jreiser@BitWagon.com>
+-Luca Berra <bluca@vodka.it> <bluca@comedia.it>
++Philippe Seewer <philippe.seewer@bfh.ch> 	<philippe.seewer-omB+W0Dpw2o@public.gmane.org>
++Seewer Philippe <philippe.seewer@bfh.ch> 	<philippe.seewer@bfh.ch>
++Philippe Seewer <philippe.seewer@bfh.ch> 	<philippe.seewer@bfh.ch>
++Victor Lowther <victor.lowther@gmail.com> 	<victor.lowther-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
++Harald Hoyer <harald@redhat.com> 		<harald-H+wXaHxf7aLQT0dZR+AlfA@public.gmane.org>
++Harald Hoyer <harald@redhat.com> 		<harald@eeepc.(none)>
++Mike Snitzer <snitzer@redhat.com> 		<msnitzer@redhat.com>
++Amerigo Wang <amwang@redhat.com> 		<xiyou.wangcong@gmail.com>
++Andrey Borzenkov <arvidjaar@gmail.com> 		<arvidjaar@mail.ru>
++Dan Horák <dhorak@redhat.com> 			<dan@danny.cz>
++John Reiser <jreiser@bitwagon.com> 		<jreiser@BitWagon.com>
++Luca Berra <bluca@vodka.it> 			<bluca@comedia.it>
++Dave Young <dyoung@redhat.com>	 		dyoung@redhat.com
++Frederick Grose <fgrose@sugarlabs.org> 		<fgrose@gmail.com>
++Frederic Crozat <fcrozat@suse.com> 		<fcrozat@mandriva.com>
+diff --git a/AUTHORS b/AUTHORS
+index fa69b91..3512cad 100644
+--- a/AUTHORS
++++ b/AUTHORS
+@@ -6,9 +6,9 @@ Warren Togami <wtogami@redhat.com>
+ Will Woods <wwoods@redhat.com>
+ Jeremy Katz <katzj@redhat.com>
+ David Dillow <dave@thedillows.org>
++Dave Young <dyoung@redhat.com>
+ Michal Soltys <soltys@ziu.info>
+ Amerigo Wang <amwang@redhat.com>
+-Dave Young <dyoung@redhat.com>
+ Colin Guthrie <colin@mageia.org>
+ Andrey Borzenkov <arvidjaar@gmail.com>
+ Andreas Thienemann <andreas@bawue.net>
+@@ -17,53 +17,61 @@ Peter Jones <pjones@redhat.com>
+ John Reiser <jreiser@bitwagon.com>
+ Luca Berra <bluca@vodka.it>
+ Daniel Drake <dsd@laptop.org>
++Dan Horák <dhorak@redhat.com>
+ Leho Kraav <leho@kraav.com>
+ Brian C. Lane <bcl@redhat.com>
+ Marc Grimme <grimme@atix.de>
+ Chao Wang <chaowang@redhat.com>
+-Dan Horák <dhorak@redhat.com>
++Frederic Crozat <fcrozat@suse.com>
+ Jesse Keating <jkeating@redhat.com>
+ Milan Broz <mbroz@redhat.com>
+ Roberto Sassu <roberto.sassu@polito.it>
+-dyoung@redhat.com <dyoung@redhat.com>
+ Anton Blanchard <anton@samba.org>
+ Bill Nottingham <notting@redhat.com>
+ David Cantrell <dcantrell@redhat.com>
+-Frederic Crozat <fcrozat@suse.com>
+ Jon Ander Hernandez <jonan.h@gmail.com>
+ Juan RP <xtraeme@gmail.com>
+ Lance Albertson <lance@osuosl.org>
+ Marian Ganisin <mganisin@redhat.com>
+ Michael Ploujnikov <plouj@somanetworks.com>
+ Peter Rajnoha <prajnoha@redhat.com>
++Radek Vykydal <rvykydal@redhat.com>
++WANG Chao <chaowang@redhat.com>
++Wim Muskee <wimmuskee@gmail.com>
+ Alan Jenkins <alan-jenkins@tuffmail.co.uk>
+ Alan Pevec <apevec@redhat.com>
++Baoquan He <bhe@redhat.com>
+ Colin Walters <walters@verbum.org>
+ Dennis Gilmore <dennis@ausil.us>
++Frederick Grose <fgrose@sugarlabs.org>
+ Ian Dall <ian@beware.dropbear.id.au>
+ James Buren <ryuo@frugalware.org>
+ Joey Boggs <jboggs@redhat.com>
+ Mike Snitzer <snitzer@redhat.com>
+ Przemysław Rudy <prudy1@o2.pl>
++Stefan Reimer <it@startux.de>
+ Thomas Lange <lange@informatik.uni-koeln.de>
+ Vivek Goyal <vgoyal@redhat.com>
+ Vladislav Bogdanov <bubble@hoster-ok.com>
+-Wim Muskee <wimmuskee@gmail.com>
+ Alexander Todorov <atodorov@redhat.com>
+ Andy Lutomirski <luto@mit.edu>
+ Anssi Hannula <anssi@mageia.org>
+ Canek Peláez Valdés <caneko@gmail.com>
+ Chris Leech <cleech@redhat.com>
+ Christian Heinz <christian.ch.heinz@gmail.com>
++Cong Wang <amwang@redhat.com>
+ Dave Jones <davej@redhat.com>
++Dave Young <dave@redhat.com>
+ Duane Griffin <duaneg@dghda.com>
+-Frederic Crozat <fcrozat@mandriva.com>
+-Frederick Grose <fgrose@gmail.com>
+ Glen Gray <slaine@slaine.org>
+ Hermann Gausterer <git-dracut-2012@mrq1.org>
+ James Laska <jlaska@redhat.com>
+ Jan Stodola <jstodola@redhat.com>
++Jiri Pirko <jiri@resnulli.us>
++Joe Lawrence <Joe.Lawrence@stratus.com>
++Kevin Yung <Kevin.Yung@myob.com>
+ Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
++Lars R. Damerow <lars@pixar.com>
+ Lennert Buytenhek <buytenh@wantstofly.org>
+ Lubomir Rintel <lkundrak@v3.sk>
+ Matt <smoothsailing72@hotmail.com>
+@@ -71,17 +79,18 @@ Matt Smith <shadowfax@gmx.com>
+ Michal Schmidt <mschmidt@redhat.com>
+ Mike Gorse <mgorse@suse.com>
+ Munehiro Matsuda <haro@kgt.co.jp>
++Nicolas Chauvet <kwizart@gmail.com>
+ Nikoli <nikoli@lavabit.com>
+ Olivier Blin <dev@blino.org>
+ Paolo Bonzini <pbonzini@redhat.com>
+ Peter Robinson <pbrobinson@fedoraproject.org>
+ Pádraig Brady <P@draigBrady.com>
+ Quentin Armitage <quentin@armitage.org.uk>
+-Radek Vykydal <rvykydal@redhat.com>
++Robert Buchholz <rbu@goodpoint.de>
+ Sergey Fionov <fionov@gmail.com>
+ Srinivasa T N <seenutn@linux.vnet.ibm.com>
+-Stefan Reimer <it@startux.de>
+ Thilo Bangert <thilo.bangert@gmx.net>
++Thomas Backlund <tmb@mageia.org>
+ Tomasz Torcz <tomek@pipebreaker.pl>
+ Vadim Kuznetsov <vadimk@gentoo.org>
+ Ville Skyttä <ville.skytta@iki.fi>
+diff --git a/Makefile b/Makefile
+index 40d44eb..90a4011 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,5 +1,6 @@
+-VERSION=027
+-GITVERSION=$(shell [ -d .git ] && git rev-list  --abbrev-commit  -n 1 HEAD  |cut -b 1-8)
++RELEASEDVERSION = -- will be replaced by "make dist" --
++VERSION = $(shell [ -d .git ] && git describe --abbrev=0 --tags || echo $(RELEASEDVERSION))
++GITVERSION = $(shell [ -d .git ] && { v=$$(git describe --tags); echo -$${v\#*-}; } )
+ 
+ -include Makefile.inc
+ 
+@@ -35,7 +36,7 @@ man8pages = dracut.8 \
+ manpages = $(man1pages) $(man5pages) $(man7pages) $(man8pages)
+ 
+ 
+-.PHONY: install clean archive rpm testimage test all check AUTHORS doc
++.PHONY: install clean archive rpm testimage test all check AUTHORS doc dracut-version.sh
+ 
+ all: syncheck dracut-version.sh dracut-install
+ 
+@@ -136,9 +137,10 @@ endif
+ 	install -m 0755 51-dracut-rescue.install $(DESTDIR)${prefix}/lib/kernel/install.d/51-dracut-rescue.install
+ 	mkdir -p $(DESTDIR)${bashcompletiondir}
+ 	install -m 0644 dracut-bash-completion.sh $(DESTDIR)${bashcompletiondir}/dracut
++	install -m 0644 lsinitrd-bash-completion.sh $(DESTDIR)${bashcompletiondir}/lsinitrd
+ 
+ dracut-version.sh:
+-	@echo "DRACUT_VERSION=$(VERSION)-$(GITVERSION)" > dracut-version.sh
++	@echo "DRACUT_VERSION=$(VERSION)$(GITVERSION)" > dracut-version.sh
+ 
+ clean:
+ 	$(RM) *~
+@@ -147,19 +149,19 @@ clean:
+ 	$(RM) $(manpages:%=%.xml) dracut.xml
+ 	$(RM) test-*.img
+ 	$(RM) dracut-*.rpm dracut-*.tar.bz2
++	$(RM) dracut-version.sh
+ 	$(RM) dracut-install install/dracut-install $(DRACUT_INSTALL_OBJECTS)
+ 	$(RM) $(manpages) dracut.html
+ 	$(MAKE) -C test clean
+ 
+-archive: dracut-$(VERSION)-$(GITVERSION).tar.bz2
+-
+ dist: dracut-$(VERSION).tar.bz2
+ 
+ dracut-$(VERSION).tar.bz2: doc
+ 	git archive --format=tar $(VERSION) --prefix=dracut-$(VERSION)/ > dracut-$(VERSION).tar
+ 	mkdir -p dracut-$(VERSION)
+ 	cp $(manpages) dracut.html dracut-$(VERSION)
+-	tar -rf dracut-$(VERSION).tar dracut-$(VERSION)/*.[0-9] dracut-$(VERSION)/dracut.html
++	git show $(VERSION):Makefile | sed 's/^RELEASEDVERSION =.*/RELEASEDVERSION = $(VERSION)/' > dracut-$(VERSION)/Makefile
++	tar --owner=root --group=root -rf dracut-$(VERSION).tar dracut-$(VERSION)/*.[0-9] dracut-$(VERSION)/dracut.html dracut-$(VERSION)/Makefile
+ 	rm -fr dracut-$(VERSION).tar.bz2 dracut-$(VERSION)
+ 	bzip2 -9 dracut-$(VERSION).tar
+ 	rm -f dracut-$(VERSION).tar
+@@ -178,14 +180,14 @@ syncheck:
+                         modules.d/99base/init.sh modules.d/*/*.sh; do \
+                 [ "$${i##*/}" = "module-setup.sh" ] && continue; \
+                 read line < "$$i"; [ "$${line#*bash*}" != "$$line" ] && continue; \
+-		dash -n "$$i" ; ret=$$(($$ret+$$?)); \
++		[ $$V ] && echo "dash syntax check: $$i"; dash -n "$$i" ; ret=$$(($$ret+$$?)); \
+ 	done;exit $$ret
+ 	@ret=0;for i in *.sh mkinitrd-dracut.sh modules.d/*/*.sh \
+ 	                modules.d/*/module-setup.sh; do \
+-		bash -n "$$i" ; ret=$$(($$ret+$$?)); \
++		[ $$V ] && echo "bash syntax check: $$i"; bash -n "$$i" ; ret=$$(($$ret+$$?)); \
+ 	done;exit $$ret
+ 
+-check: all syncheck
++check: all syncheck rpm
+ 	@[ "$$EUID" == "0" ] || { echo "'check' must be run as root! Please use 'sudo'."; exit 1; }
+ 	@$(MAKE) -C test check
+ 
+diff --git a/TODO b/TODO
+index 9eeedfa..e275324 100644
+--- a/TODO
++++ b/TODO
+@@ -22,6 +22,7 @@ INITRAMFS TODO
+ 
+ GENERATOR TODO
+ 
++- remove wait for swap devs, if no "resume=" is given on the kernel command line
+ - add presets (predefined set of modules)
+ - add interpreter/plugin-scripts to be sourced at the beginning or end (can use dracut-functions)
+ - add mechanism for module specific command line options
+diff --git a/dracut-bash-completion.sh b/dracut-bash-completion.sh
+index 322e630..ae33b3e 100644
+--- a/dracut-bash-completion.sh
++++ b/dracut-bash-completion.sh
+@@ -44,15 +44,19 @@ _dracut() {
+ 
+         if __contains_word "$prev" ${OPTS[ARG]}; then
+                 case $prev in
+-                        --kmoddir|-k|--fwdir|-c|--conf|--confdir|--tmpdir|--sshkey|--add-fstab|--add-device|-I|--install)
++                        --kmoddir|-k|--fwdir|--confdir|--tmpdir)
+                                 comps=$(compgen -d -- "$cur")
+                                 compopt -o filenames
+                         ;;
++                        -c|--conf|--sshkey|--add-fstab|--add-device|-I|--install)
++                                comps=$(compgen -f -- "$cur")
++                                compopt -o filenames
++                        ;;
+                         -a|-m|-o|--add|--modules|--omit)
+                                 comps=$(dracut --list-modules 2>/dev/null)
+                         ;;
+                         --kver)
+-                                comps=$(cd /lib/modules; echo *)
++                                comps=$(cd /lib/modules; echo [0-9]*)
+                         ;;
+                         *)
+                                 return 0
+diff --git a/dracut-functions.sh b/dracut-functions.sh
+index eba7412..3d88c9d 100755
+--- a/dracut-functions.sh
++++ b/dracut-functions.sh
+@@ -254,6 +254,7 @@ get_persistent_dev() {
+     [ -z "$_dev" ] && return
+ 
+     for i in /dev/mapper/* /dev/disk/by-uuid/* /dev/disk/by-id/*; do
++        [[ $i == /dev/mapper/mpath* ]] && continue
+         _tmp=$(udevadm info --query=name --name="$i" 2>/dev/null)
+         if [ "$_tmp" = "$_dev" ]; then
+             echo $i
+@@ -319,131 +320,96 @@ get_maj_min() {
+ # $ find_block_device /usr
+ # 8:4
+ find_block_device() {
+-    local _x _mpt _majmin _dev _fs _maj _min _find_mpt
++    local _majmin _dev _majmin _find_mpt
+     _find_mpt="$1"
+     if [[ $use_fstab != yes ]]; then
+-        while read _x; do
+-            set -- $_x
+-            _majmin="$3"
+-            _mpt="$5"
+-            [[ $8 = "-" ]] && shift
+-            _fs="$8"
+-            _dev="$9"
+-            [[ $_mpt = $_find_mpt ]] || continue
+-            [[ $_fs = nfs ]] && { echo $_dev; return 0;}
+-            [[ $_fs = nfs3 ]] && { echo $_dev; return 0;}
+-            [[ $_fs = nfs4 ]] && { echo $_dev; return 0;}
+-            [[ $_fs = btrfs ]] && {
+-                get_maj_min $_dev
+-                return 0;
+-            }
+-            if [[ ${_majmin#0:} = $_majmin ]]; then
+-                echo $_majmin
+-                return 0 # we have a winner!
++        [[ -d $_find_mpt/. ]]
++        while read _majmin _dev; do
++            if [[ -b $_dev ]]; then
++                if ! [[ $_majmin ]] || [[ $_majmin == 0:* ]]; then
++                    read _majmin < <(get_maj_min $_dev)
++                fi
++                if [[ $_majmin ]]; then
++                    echo $_majmin
++                else
++                    echo $_dev
++                fi
++                return 0
++            fi
++            if [[ $_dev = *:* ]]; then
++                echo $_dev
++                return 0
+             fi
+-        done < /proc/self/mountinfo
++        done < <(findmnt -e -v -n -o 'MAJ:MIN,SOURCE' "$_find_mpt")
+     fi
+     # fall back to /etc/fstab
+-    while read _dev _mpt _fs _x; do
+-        [ "${_dev%%#*}" != "$_dev" ] && continue
+-
+-        if [[ $_mpt = $_find_mpt ]]; then
+-            [[ $_fs = nfs ]] && { echo $_dev; return 0;}
+-            [[ $_fs = nfs3 ]] && { echo $_dev; return 0;}
+-            [[ $_fs = nfs4 ]] && { echo $_dev; return 0;}
+-            [[ $_dev != ${_dev#UUID=} ]] && _dev=/dev/disk/by-uuid/${_dev#UUID=}
+-            [[ $_dev != ${_dev#LABEL=} ]] && _dev=/dev/disk/by-label/${_dev#LABEL=}
+-            [[ -b $_dev ]] || return 1 # oops, not a block device.
+-            get_maj_min "$_dev" && return 0
++
++    while read _majmin _dev; do
++        if ! [[ $_dev ]]; then
++            _dev="$_majmin"
++            unset _majmin
++        fi
++        if [[ -b $_dev ]]; then
++            [[ $_majmin ]] || read _majmin < <(get_maj_min $_dev)
++            if [[ $_majmin ]]; then
++                echo $_majmin
++            else
++                echo $_dev
++            fi
++            return 0
++        fi
++        if [[ $_dev = *:* ]]; then
++            echo $_dev
++            return 0
+         fi
+-    done < /etc/fstab
++    done < <(findmnt -e --fstab -v -n -o 'MAJ:MIN,SOURCE' "$_find_mpt")
+ 
+     return 1
+ }
+ 
+-# find_dev_fstype <device>
+-# Echo the filesystem type for a given device.
++# find_mp_fstype <mountpoint>
++# Echo the filesystem type for a given mountpoint.
+ # /proc/self/mountinfo is taken as the primary source of information
+ # and /etc/fstab is used as a fallback.
+ # No newline is appended!
+ # Example:
+-# $ find_dev_fstype /dev/sda2;echo
++# $ find_mp_fstype /;echo
+ # ext4
+-find_dev_fstype() {
+-    local _x _mpt _majmin _dev _fs _maj _min _find_dev
+-    _find_dev="$1"
+-    strstr "$_find_dev" "/dev" || _find_dev="/dev/block/$_find_dev"
+-    while read _x; do
+-        set -- $_x
+-        _majmin="$3"
+-        _mpt="$5"
+-        [[ $8 = "-" ]] && shift
+-        _fs="$8"
+-        _dev="$9"
+-        strstr "$_dev" "/dev" || continue
+-        [[ $_dev -ef $_find_dev ]] || continue
+-        [[ $_fs = "autofs" ]] && continue
+-        echo -n $_fs;
+-        return 0;
+-    done < /proc/self/mountinfo
++find_mp_fstype() {
++    local _fs
+ 
+-    # fall back to /etc/fstab
+-    while read _dev _mpt _fs _x; do
+-        [ "${_dev%%#*}" != "$_dev" ] && continue
+-        case "$_dev" in
+-            LABEL=*)
+-                _dev="$(echo $_dev | sed 's,/,\\x2f,g')"
+-                _dev="/dev/disk/by-label/${_dev#LABEL=}"
+-                ;;
+-            UUID=*)
+-                _dev="/dev/disk/by-uuid/${_dev#UUID=}"
+-                ;;
+-            PARTUUID=*)
+-                _dev="/dev/disk/by-partuuid/${_dev#PARTUUID=}"
+-                ;;
+-        esac
++    if [[ $use_fstab != yes ]]; then
++        while read _fs; do
++            [[ $_fs ]] || continue
++            [[ $_fs = "autofs" ]] && continue
++            echo -n $_fs
++            return 0
++        done < <(findmnt -e -v -n -o 'FSTYPE' "$1")
++    fi
+ 
+-        [[ $_dev -ef $_find_dev ]] || continue
+-        echo -n $_fs;
+-        return 0;
+-    done < /etc/fstab
++    while read _fs; do
++        [[ $_fs ]] || continue
++        [[ $_fs = "autofs" ]] && continue
++        echo -n $_fs
++        return 0
++    done < <(findmnt --fstab -e -v -n -o 'FSTYPE' "$1")
+ 
+     return 1
+ }
+ 
+-# find_mp_fstype <mountpoint>
+-# Echo the filesystem type for a given mountpoint.
++# find_dev_fstype <device>
++# Echo the filesystem type for a given device.
+ # /proc/self/mountinfo is taken as the primary source of information
+ # and /etc/fstab is used as a fallback.
+ # No newline is appended!
+ # Example:
+-# $ find_mp_fstype /;echo
++# $ find_dev_fstype /dev/sda2;echo
+ # ext4
+-find_mp_fstype() {
+-    local _x _mpt _majmin _dev _fs _maj _min _find_mpt
+-    _find_mpt="$1"
+-    while read _x; do
+-        set -- $_x
+-        _majmin="$3"
+-        _mpt="$5"
+-        [[ $8 = "-" ]] && shift
+-        _fs="$8"
+-        _dev="$9"
+-        [[ $_mpt = $_find_mpt ]] || continue
+-        [[ $_fs = "autofs" ]] && continue
+-        echo -n $_fs;
+-        return 0;
+-    done < /proc/self/mountinfo
+-
+-    # fall back to /etc/fstab
+-    while read _dev _mpt _fs _x; do
+-        [ "${_dev%%#*}" != "$_dev" ] && continue
+-        [[ $_mpt = $_find_mpt ]] || continue
+-        echo -n $_fs;
+-        return 0;
+-    done < /etc/fstab
+-
+-    return 1
++find_dev_fstype() {
++    local _x _mpt _majmin _dev _fs _maj _min _find_dev
++    _find_dev="$1"
++    [[ "$_find_dev" = /dev* ]] || _find_dev="/dev/block/$_find_dev"
++    find_mp_fstype "$_find_dev"
+ }
+ 
+ # finds the major:minor of the block device backing the root filesystem.
+@@ -1643,7 +1609,7 @@ instmods() {
+             while read _mod; do
+                 inst1mod "${_mod%.ko*}" || {
+                     if [[ "$_check" == "yes" ]]; then
+-                        [[ "$_silent" == "no" ]] && dfatal "Failed to install $_mod"
++                        [[ "$_silent" == "no" ]] && dfatal "Failed to install module $_mod"
+                         return 1
+                     fi
+                 }
+@@ -1652,7 +1618,7 @@ instmods() {
+         while (($# > 0)); do  # filenames as arguments
+             inst1mod ${1%.ko*} || {
+                 if [[ "$_check" == "yes" ]]; then
+-                    [[ "$_silent" == "no" ]] && dfatal "Failed to install $1"
++                    [[ "$_silent" == "no" ]] && dfatal "Failed to install module $1"
+                     return 1
+                 fi
+             }
+diff --git a/dracut.8.asc b/dracut.8.asc
+index 6a79d12..8b50782 100644
+--- a/dracut.8.asc
++++ b/dracut.8.asc
+@@ -75,12 +75,12 @@ version is:
+ ----
+ 
+ If you want to create lighter, smaller initramfs images, you may want to specify
+-the --host-only or -H option. Using this option, the resulting image will
++the --hostonly or -H option. Using this option, the resulting image will
+ contain only those dracut modules, kernel modules and filesystems, which are
+ needed to boot this specific machine. This has the drawback, that you can't put
+ the disk on another controller or machine, and that you can't switch to another
+ root filesystem, without recreating the initramfs image. The usage of the
+---host-only option is only for experts and you will have to keep the broken
++--hostonly option is only for experts and you will have to keep the broken
+ pieces. At least keep a copy of a general purpose image (and corresponding
+ kernel) as a fallback to rescue your system.
+ 
+@@ -376,7 +376,7 @@ will not be able to boot. Equivalent to "--compress=bzip2"
+ [WARNING]
+ ====
+ Make sure your kernel has lzma decompression support compiled in, otherwise you
+-will not be able to boot. Equivalent to "--compress=lzma -9"
++will not be able to boot. Equivalent to "lzma --compress=lzma -9"
+ ====
+ 
+ **--xz**::
+@@ -385,8 +385,7 @@ will not be able to boot. Equivalent to "--compress=lzma -9"
+ [WARNING]
+ ====
+ Make sure your kernel has xz decompression support compiled in, otherwise you
+-will not be able to boot. Equivalent to "--compress=xz --check=crc32
+---lzma2=dict=1MiB"
++will not be able to boot. Equivalent to "lzma --compress=xz --check=crc32 --lzma2=dict=1MiB"
+ ====
+ 
+ **--compress** _<compressor>_::
+@@ -409,6 +408,27 @@ will not be able to boot. Equivalent to "--compress=xz --check=crc32
+ **--keep**::
+     Keep the initramfs temporary directory for debugging purposes.
+ 
++**--printsize**::
++    Print out the module install size
++
++**--profile**:
++    Output profile information of the build process
++
++**--ro-mnt**:
++    Mount / and /usr read-only by default.
++
++**-L, --stdlog** _<level>_::
++    [0-6] Specify logging level (to standard error)
++----
++          0 - suppress any messages
++          1 - only fatal errors
++          2 - all errors
++          3 - warnings
++          4 - info
++          5 - debug info (here starts lots of output)
++          6 - trace info (and even more)
++----
++
+ **--regenerate-all**::
+     Regenerate all initramfs images at the default location with the kernel versions found on the system.
+     Additional parameters are passed through.
+diff --git a/dracut.cmdline.7.asc b/dracut.cmdline.7.asc
+index f1457d5..4626279 100644
+--- a/dracut.cmdline.7.asc
++++ b/dracut.cmdline.7.asc
+@@ -121,6 +121,10 @@ Misc
+    specify the controlling terminal for the console.
+    This is useful, if you have multiple "console=" arguments.
+ 
++**action_on_fail=**_{shell|continue}_::
++   Specify the action after failure. By default it's emergency_shell.
++   'continue' means: ignore the current failure and go ahead.
++
+ [[dracutkerneldebug]]
+ Debug
+ ~~~~~
+diff --git a/dracut.sh b/dracut.sh
+index 5e9ea3e..7481ac0 100755
+--- a/dracut.sh
++++ b/dracut.sh
+@@ -74,19 +74,21 @@ Creates initial ramdisk images for preloading modules
+                          call when building the initramfs. Modules are located
+                          in /usr/lib/dracut/modules.d.
+   -o, --omit [LIST]     Omit a space-separated list of dracut modules.
++  --force-add [LIST]    Force to add a space-separated list of dracut modules
++                         to the default set of modules, when -H is specified.
+   -d, --drivers [LIST]  Specify a space-separated list of kernel modules to
+-                        exclusively include in the initramfs.
+-  --add-drivers [LIST] Specify a space-separated list of kernel
+-                        modules to add to the initramfs.
++                         exclusively include in the initramfs.
++  --add-drivers [LIST]  Specify a space-separated list of kernel
++                         modules to add to the initramfs.
+   --omit-drivers [LIST] Specify a space-separated list of kernel
+-                        modules not to add to the initramfs.
++                         modules not to add to the initramfs.
+   --filesystems [LIST]  Specify a space-separated list of kernel filesystem
+-                        modules to exclusively include in the generic
+-                        initramfs.
++                         modules to exclusively include in the generic
++                         initramfs.
+   -k, --kmoddir [DIR]   Specify the directory, where to look for kernel
+-                        modules
++                         modules
+   --fwdir [DIR]         Specify additional directories, where to look for
+-                        firmwares, separated by :
++                         firmwares, separated by :
+   --kernel-only         Only install kernel drivers and firmware files
+   --no-kernel           Do not install kernel drivers and firmware files
+   --kernel-cmdline [PARAMETERS] Specify default kernel command line parameters
+@@ -317,7 +319,9 @@ TEMP=$(unset POSIXLY_CORRECT; getopt \
+     --long quiet \
+     --long local \
+     --long hostonly \
++    --long host-only \
+     --long no-hostonly \
++    --long no-host-only \
+     --long fstab \
+     --long help \
+     --long bzip2 \
+@@ -391,8 +395,10 @@ while :; do
+                        [[ -f "$(readlink -f ${0%/*})/dracut-functions.sh" ]] \
+                            && dracutbasedir="$(readlink -f ${0%/*})"
+                        ;;
+-        -H|--hostonly) hostonly_l="yes" ;;
+-        -N|--no-hostonly) hostonly_l="no" ;;
++        -H|--hostonly|--host-only)
++                       hostonly_l="yes" ;;
++        -N|--no-hostonly|--no-host-only)
++                       hostonly_l="no" ;;
+         --fstab)       use_fstab_l="yes" ;;
+         -h|--help)     long_usage; exit 1 ;;
+         -i|--include)  push include_src "$2"
+@@ -824,7 +830,7 @@ if [[ $hostonly ]]; then
+     # in hostonly mode, determine all devices, which have to be accessed
+     # and examine them for filesystem types
+ 
+-    push host_mp \
++    for mp in \
+         "/" \
+         "/etc" \
+         "/usr" \
+@@ -832,9 +838,8 @@ if [[ $hostonly ]]; then
+         "/usr/sbin" \
+         "/usr/lib" \
+         "/usr/lib64" \
+-        "/boot"
+-
+-    for mp in "${host_mp[@]}"; do
++        "/boot";
++    do
+         mountpoint "$mp" >/dev/null 2>&1 || continue
+         push host_devs $(readlink -f "/dev/block/$(find_block_device "$mp")")
+     done
+@@ -850,11 +855,19 @@ if [[ $hostonly ]]; then
+             [[ "$_d" == UUID\=* ]] && _d="/dev/disk/by-uuid/${_d#UUID=}"
+             [[ "$_d" == LABEL\=* ]] && _d="/dev/disk/by-label/$_d#LABEL=}"
+             [[ "$_d" -ef "$dev" ]] || continue
++
++            while read _mapper _a _p _o; do
++                [[ $_mapper = \#* ]] && continue
++                [[ "$_d" -ef /dev/mapper/"$_mapper" ]] || continue
++                [[ "$_o" ]] || _o="$_p"
++                # skip mkswap swap
++                [[ $_o == *swap* ]] && continue 2
++            done < /etc/crypttab
++
+             push host_devs $(readlink -f $dev)
+             break
+         done < /etc/fstab
+     done < /proc/swaps
+-
+ fi
+ 
+ _get_fs_type() (
+@@ -1134,12 +1147,8 @@ fi
+ PRELINK_BIN=$(command -v prelink)
+ if [[ $UID = 0 ]] && [[ $PRELINK_BIN ]]; then
+     if [[ $DRACUT_FIPS_MODE ]]; then
+-        dinfo "*** Pre-unlinking files ***"
++        dinfo "*** Installing prelink files ***"
+         dracut_install -o prelink /etc/prelink.conf /etc/prelink.conf.d/*.conf /etc/prelink.cache
+-        chroot "$initdir" $PRELINK_BIN -u -a
+-        rm -f "$initdir"/$PRELINK_BIN
+-        rm -fr "$initdir"/etc/prelink.*
+-        dinfo "*** Pre-unlinking files done ***"
+     else
+         dinfo "*** Pre-linking files ***"
+         dracut_install -o prelink /etc/prelink.conf /etc/prelink.conf.d/*.conf
+@@ -1160,7 +1169,7 @@ fi
+ if [[ $do_strip = yes ]] ; then
+     for p in strip xargs find; do
+         if ! type -P $p >/dev/null; then
+-            dwarn "Could not find '$p'. Not stripping the initramfs."
++            dinfo "Could not find '$p'. Not stripping the initramfs."
+             do_strip=no
+         fi
+     done
+@@ -1173,6 +1182,8 @@ if [[ $do_strip = yes ]] ; then
+             -executable -not -path '*/lib/modules/*.ko' -print0 \
+             | while read -r -d $'\0' f; do
+             if ! [[ -e "${f%/*}/.${f##*/}.hmac" ]] \
++                && ! [[ -e "/lib/hmaccalc/${f##*/}.hmac" ]] \
++                && ! [[ -e "/lib64/hmaccalc/${f##*/}.hmac" ]] \
+                 && ! [[ -e "/lib/fipscheck/${f##*/}.hmac" ]] \
+                 && ! [[ -e "/lib64/fipscheck/${f##*/}.hmac" ]]; then
+                 echo -n "$f"; echo -n -e "\000"
+diff --git a/dracut.spec b/dracut.spec
+index af417a4..a475e08 100644
+--- a/dracut.spec
++++ b/dracut.spec
+@@ -84,15 +84,13 @@ Requires: findutils
+ Requires: grep
+ Requires: hardlink
+ Requires: gzip xz
+-Requires: module-init-tools >= 3.7-9
++Requires: kmod
+ Requires: sed
+-Requires: file
+ Requires: kpartx
+-Requires: kbd kbd-misc
+ 
+ %if 0%{?fedora} || 0%{?rhel} > 6
+ Requires: util-linux >= 2.21
+-Requires: systemd >= 198-5
++Requires: systemd >= 199
+ Conflicts: grubby < 8.23
+ %else
+ Requires: udev > 166
+@@ -233,7 +231,6 @@ rm -fr $RPM_BUILD_ROOT/%{dracutlibdir}/modules.d/50gensplash
+ rm -fr $RPM_BUILD_ROOT/%{dracutlibdir}/modules.d/96securityfs
+ rm -fr $RPM_BUILD_ROOT/%{dracutlibdir}/modules.d/97masterkey
+ rm -fr $RPM_BUILD_ROOT/%{dracutlibdir}/modules.d/98integrity
+-rm -fr $RPM_BUILD_ROOT/%{dracutlibdir}/modules.d/98selinux
+ %endif
+ 
+ mkdir -p $RPM_BUILD_ROOT/boot/dracut
+@@ -282,6 +279,7 @@ rm -rf $RPM_BUILD_ROOT
+ # compat symlink
+ /sbin/dracut
+ %{_datadir}/bash-completion/completions/dracut
++%{_datadir}/bash-completion/completions/lsinitrd
+ %if 0%{?fedora} > 12 || 0%{?rhel} >= 6 || 0%{?suse_version} > 9999
+ %{_bindir}/mkinitrd
+ %{_bindir}/lsinitrd
+@@ -349,12 +347,12 @@ rm -rf $RPM_BUILD_ROOT
+ %if %{undefined _unitdir}
+ %{dracutlibdir}/modules.d/96securityfs
+ %{dracutlibdir}/modules.d/97masterkey
+-%{dracutlibdir}/modules.d/98selinux
+ %{dracutlibdir}/modules.d/98integrity
+ %endif
+ %{dracutlibdir}/modules.d/97biosdevname
+ %{dracutlibdir}/modules.d/98ecryptfs
+ %{dracutlibdir}/modules.d/98pollcdrom
++%{dracutlibdir}/modules.d/98selinux
+ %{dracutlibdir}/modules.d/98syslog
+ %{dracutlibdir}/modules.d/98systemd
+ %{dracutlibdir}/modules.d/98usrmount
+diff --git a/git2spec.pl b/git2spec.pl
+index 9f12577..0d8adb4 100755
+--- a/git2spec.pl
++++ b/git2spec.pl
+@@ -1,21 +1,5 @@
+ #!/usr/bin/perl
+ 
+-sub last_tag {
+-    open( GIT, 'git log  --pretty=format:%H |');
+-  LINE: while( <GIT> ) {
+-      open( GIT2, "git tag --contains $_ |");
+-      while( <GIT2> ) {
+-	  chomp;
+-	  last LINE if /..*/;
+-      }
+-      close GIT2;
+-  }
+-    $tag=$_;
+-    close GIT2;
+-    close GIT;         # be done
+-    return $tag;
+-};
+-
+ sub create_patches {
+     my $tag=shift;
+     my $pdir=shift;
+@@ -31,7 +15,8 @@ my $datestr = strftime "%Y%m%d", gmtime;
+ 
+ my $tag=shift;
+ my $pdir=shift;
+-$tag=&last_tag if not defined $tag;
++$tag=`git describe --abbrev=0 --tags` if not defined $tag;
++chomp($tag);
+ my @patches=&create_patches($tag, $pdir);
+ my $num=$#patches + 2;
+ $tag=~s/[^0-9]+?([0-9]+)/$1/;
+diff --git a/install/dracut-install.c b/install/dracut-install.c
+index 5040dea..6b9c613 100644
+--- a/install/dracut-install.c
++++ b/install/dracut-install.c
+@@ -62,6 +62,10 @@ static int dracut_install(const char *src, const char *dst, bool isdir, bool res
+ static size_t dir_len(char const *file)
+ {
+         size_t length;
++
++        if(!file)
++                return 0;
++
+         /* Strip the basename and any redundant slashes before it.  */
+         for (length = strlen(file)-1; 0 < length; length--)
+                 if (file[length] == '/' && file[length-1] != '/')
+@@ -73,20 +77,23 @@ static char *convert_abs_rel(const char *from, const char *target)
+ {
+         /* we use the 4*MAXPATHLEN, which should not overrun */
+         char relative_from[MAXPATHLEN * 4];
+-        char *realtarget = NULL;
+-        char *p, *q;
++        _cleanup_free_ char *realtarget = NULL;
++        _cleanup_free_ char *target_dir_p = NULL, *realpath_p = NULL;
+         const char *realfrom = from;
+-        int level = 0, fromlevel = 0, targetlevel = 0;
+-        int l, i, rl;
+-        int dirlen;
++        size_t level = 0, fromlevel = 0, targetlevel = 0;
++        int l;
++        size_t i, rl, dirlen;
++        int ret;
+ 
+-        p = strdup(target);
+-        dirlen = dir_len(p);
+-        p[dirlen] = '\0';
+-        q = realpath(p, NULL);
++        target_dir_p = strdup(target);
++        if (!target_dir_p)
++                return strdup(from);
++
++        dirlen = dir_len(target_dir_p);
++        target_dir_p[dirlen] = '\0';
++        realpath_p = realpath(target_dir_p, NULL);
+ 
+-        if (q == NULL) {
+-                free(p);
++        if (realpath_p == NULL) {
+                 log_warning("convert_abs_rel(): target '%s' directory has no realpath.", target);
+                 return strdup(from);
+         }
+@@ -95,11 +102,13 @@ static char *convert_abs_rel(const char *from, const char *target)
+          * character - need to skip all leading /'s */
+         rl = strlen(target);
+         for (i = dirlen+1; i < rl; ++i)
+-            if (p[i] != '/')
++            if (target_dir_p[i] != '/')
+                 break;
+-        asprintf(&realtarget, "%s/%s", q, &p[i]);
+-        free(p);
+-        free(q);
++        ret = asprintf(&realtarget, "%s/%s", realpath_p, &target_dir_p[i]);
++        if (ret < 0) {
++                log_error("Out of memory!");
++                exit(EXIT_FAILURE);
++        }
+ 
+         /* now calculate the relative path from <from> to <target> and
+            store it in <relative_from>
+@@ -122,8 +131,6 @@ static char *convert_abs_rel(const char *from, const char *target)
+                 if (realtarget[i] == '/')
+                         level++;
+ 
+-        free(realtarget);
+-
+         /* add "../" to the relative_from path, until the common pathname is
+            reached */
+         for (i = level; i < targetlevel; i++) {
+@@ -155,18 +162,16 @@ static char *convert_abs_rel(const char *from, const char *target)
+ static int ln_r(const char *src, const char *dst)
+ {
+         int ret;
+-        const char *points_to = convert_abs_rel(src, dst);
++        _cleanup_free_ const char *points_to = convert_abs_rel(src, dst);
++
+         log_info("ln -s '%s' '%s'", points_to, dst);
+         ret = symlink(points_to, dst);
+ 
+         if (ret != 0) {
+                 log_error("ERROR: ln -s '%s' '%s': %m", points_to, dst);
+-                free((char *)points_to);
+                 return 1;
+         }
+ 
+-        free((char *)points_to);
+-
+         return 0;
+ }
+ 
+@@ -186,11 +191,11 @@ static bool use_clone = true;
+ static int cp(const char *src, const char *dst)
+ {
+         int pid;
+-        int ret;
++        int ret = 0;
+ 
+         if (use_clone) {
+                 struct stat sb;
+-                int dest_desc, source_desc;
++                _cleanup_close_ int dest_desc = -1, source_desc = -1;
+ 
+                 if (lstat(src, &sb) != 0)
+                         goto normal_copy;
+@@ -207,20 +212,24 @@ static int cp(const char *src, const char *dst)
+                          (sb.st_mode) & (S_ISUID | S_ISGID | S_ISVTX | S_IRWXU | S_IRWXG | S_IRWXO));
+ 
+                 if (dest_desc < 0) {
+-                        close(source_desc);
+                         goto normal_copy;
+                 }
+ 
+                 ret = clone_file(dest_desc, source_desc);
+-                close(source_desc);
++
+                 if (ret == 0) {
++                        struct timeval tv[2];
+                         if (fchown(dest_desc, sb.st_uid, sb.st_gid) != 0)
+-                                fchown(dest_desc, -1, sb.st_gid);
+-                        close(dest_desc);
++                                fchown(dest_desc, (__uid_t)-1, sb.st_gid);
++                        tv[0].tv_sec = sb.st_atime;
++                        tv[0].tv_usec = 0;
++                        tv[1].tv_sec = sb.st_mtime;
++                        tv[1].tv_usec = 0;
++                        futimes(dest_desc, tv);
+                         return ret;
+                 }
+                 close(dest_desc);
+-
++                dest_desc = -1;
+                 /* clone did not work, remove the file */
+                 unlink(dst);
+                 /* do not try clone again */
+@@ -230,16 +239,83 @@ static int cp(const char *src, const char *dst)
+  normal_copy:
+         pid = fork();
+         if (pid == 0) {
+-                execlp("cp", "cp", "--reflink=auto", "--sparse=auto", "--preserve=mode", "-fL", src, dst, NULL);
++                execlp("cp", "cp", "--reflink=auto", "--sparse=auto", "--preserve=mode,timestamps", "-fL", src, dst, NULL);
+                 _exit(EXIT_FAILURE);
+         }
+ 
+         while (waitpid(pid, &ret, 0) < 0) {
+                 if (errno != EINTR) {
+                         ret = -1;
++                        log_error("Failed: cp --reflink=auto --sparse=auto --preserve=mode,timestamps -fL %s %s", src, dst);
+                         break;
+                 }
+         }
++        log_debug("cp ret = %d", ret);
++        return ret;
++}
++
++static int library_install(const char *src, const char *lib)
++{
++        _cleanup_free_ char *p = NULL;
++        _cleanup_free_ char *pdir = NULL, *ppdir = NULL, *clib = NULL;
++        char *q;
++        int r, ret = 0;
++
++        p = strdup(lib);
++
++        r = dracut_install(p, p, false, false, true);
++        if (r != 0)
++                log_error("ERROR: failed to install '%s' for '%s'", p, src);
++        else
++                log_debug("Lib install: '%s'", p);
++        ret += r;
++
++        /* also install lib.so for lib.so.* files */
++        q = strstr(p, ".so.");
++        if (q) {
++                q[3] = '\0';
++
++                /* ignore errors for base lib symlink */
++                if (dracut_install(p, p, false, false, true) == 0)
++                        log_debug("Lib install: '%s'", p);
++        }
++
++        /* Also try to install the same library from one directory above.
++           This fixes the case, where only the HWCAP lib would be installed
++           # ldconfig -p|fgrep libc.so
++           libc.so.6 (libc6,64bit, hwcap: 0x0000001000000000, OS ABI: Linux 2.6.32) => /lib64/power6/libc.so.6
++           libc.so.6 (libc6,64bit, hwcap: 0x0000000000000200, OS ABI: Linux 2.6.32) => /lib64/power6x/libc.so.6
++           libc.so.6 (libc6,64bit, OS ABI: Linux 2.6.32) => /lib64/libc.so.6
++        */
++
++        free(p);
++        p = strdup(lib);
++
++        pdir = dirname(p);
++        if (!pdir)
++                return ret;
++
++        pdir = strdup(pdir);
++        ppdir = dirname(pdir);
++        if (!ppdir)
++                return ret;
++
++        ppdir = strdup(ppdir);
++
++        strcpy(p, lib);
++
++        clib = strjoin(ppdir, "/", basename(p), NULL);
++        if (dracut_install(clib, clib, false, false, true) == 0)
++                log_debug("Lib install: '%s'", clib);
++        /* also install lib.so for lib.so.* files */
++        q = strstr(clib, ".so.");
++        if (q) {
++                q[3] = '\0';
++
++                /* ignore errors for base lib symlink */
++                if (dracut_install(clib, clib, false, false, true) == 0)
++                        log_debug("Lib install: '%s'", p);
++        }
+ 
+         return ret;
+ }
+@@ -248,17 +324,19 @@ static int resolve_deps(const char *src)
+ {
+         int ret = 0;
+ 
+-        char *buf = malloc(LINE_MAX);
++        _cleanup_free_ char *buf = malloc(LINE_MAX);
+         size_t linesize = LINE_MAX;
+-        FILE *fptr;
+-        char *cmd;
++        _cleanup_pclose_ FILE *fptr = NULL;
++        _cleanup_free_ char *cmd = NULL;
+ 
+         if (strstr(src, ".so") == 0) {
+-                int fd;
++                _cleanup_close_ int fd = -1;
+                 fd = open(src, O_RDONLY | O_CLOEXEC);
++                if (fd < 0)
++                        return -errno;
++
+                 read(fd, buf, LINE_MAX);
+                 buf[LINE_MAX - 1] = '\0';
+-                close(fd);
+                 if (buf[0] == '#' && buf[1] == '!') {
+                         /* we have a shebang */
+                         char *p, *q;
+@@ -274,7 +352,14 @@ static int resolve_deps(const char *src)
+         }
+ 
+         /* run ldd */
+-        asprintf(&cmd, "ldd %s 2>&1", src);
++        ret = asprintf(&cmd, "ldd %s 2>&1", src);
++        if (ret < 0) {
++                log_error("Out of memory!");
++                exit(EXIT_FAILURE);
++        }
++
++        ret = 0;
++
+         fptr = popen(cmd, "r");
+ 
+         while (!feof(fptr)) {
+@@ -285,6 +370,12 @@ static int resolve_deps(const char *src)
+ 
+                 log_debug("ldd: '%s'", buf);
+ 
++                if (strstr(buf, "you do not have execution permission")) {
++                        log_error("%s", buf);
++                        ret+=1;
++                        break;
++                }
++
+                 if (strstr(buf, "not a dynamic executable"))
+                         break;
+ 
+@@ -300,31 +391,15 @@ static int resolve_deps(const char *src)
+                 if (strstr(buf, destrootdir))
+                         break;
+ 
+-                p = strstr(buf, "/");
++                p = strchr(buf, '/');
+                 if (p) {
+-                        int r;
+                         for (q = p; *q && *q != ' ' && *q != '\n'; q++) ;
+                         *q = '\0';
+-                        r = dracut_install(p, p, false, false, true);
+-                        if (r != 0)
+-                                log_error("ERROR: failed to install '%s' for '%s'", p, src);
+-                        else
+-                                log_debug("Lib install: '%s'", p);
+-                        ret += r;
+-
+-                        /* also install lib.so for lib.so.* files */
+-                        q = strstr(p, ".so.");
+-                        if (q) {
+-                                q += 3;
+-                                *q = '\0';
+-
+-                                /* ignore errors for base lib symlink */
+-                                if (dracut_install(p, p, false, false, true) == 0)
+-                                        log_debug("Lib install: '%s'", p);
+-                        }
++
++                        ret += library_install(src, p);
++
+                 }
+         }
+-        pclose(fptr);
+ 
+         return ret;
+ }
+@@ -332,10 +407,15 @@ static int resolve_deps(const char *src)
+ /* Install ".<filename>.hmac" file for FIPS self-checks */
+ static int hmac_install(const char *src, const char *dst, const char *hmacpath)
+ {
+-        char *srcpath = strdup(src);
+-        char *dstpath = strdup(dst);
+-        char *srchmacname = NULL;
+-        char *dsthmacname = NULL;
++        _cleanup_free_ char *srcpath = strdup(src);
++        _cleanup_free_ char *dstpath = strdup(dst);
++        _cleanup_free_ char *srchmacname = NULL;
++        _cleanup_free_ char *dsthmacname = NULL;
++        int ret;
++
++        if (!(srcpath && dstpath))
++                return -ENOMEM;
++
+         size_t dlen = dir_len(src);
+ 
+         if (endswith(src, ".hmac"))
+@@ -344,35 +424,51 @@ static int hmac_install(const char *src, const char *dst, const char *hmacpath)
+ 	if (!hmacpath) {
+                 hmac_install(src, dst, "/lib/fipscheck");
+                 hmac_install(src, dst, "/lib64/fipscheck");
++                hmac_install(src, dst, "/lib/hmaccalc");
++                hmac_install(src, dst, "/lib64/hmaccalc");
+         }
+ 
+         srcpath[dlen] = '\0';
+         dstpath[dir_len(dst)] = '\0';
+         if (hmacpath) {
+-                asprintf(&srchmacname, "%s/%s.hmac", hmacpath, &src[dlen + 1]);
+-                asprintf(&dsthmacname, "%s/%s.hmac", hmacpath, &src[dlen + 1]);
++                ret = asprintf(&srchmacname, "%s/%s.hmac", hmacpath, &src[dlen + 1]);
++                if (ret < 0) {
++                        log_error("Out of memory!");
++                        exit(EXIT_FAILURE);
++                }
++
++                ret = asprintf(&dsthmacname, "%s/%s.hmac", hmacpath, &src[dlen + 1]);
++                if (ret < 0) {
++                        log_error("Out of memory!");
++                        exit(EXIT_FAILURE);
++                }
+         } else {
+-                asprintf(&srchmacname, "%s/.%s.hmac", srcpath, &src[dlen + 1]);
+-                asprintf(&dsthmacname, "%s/.%s.hmac", dstpath, &src[dlen + 1]);
++                ret = asprintf(&srchmacname, "%s/.%s.hmac", srcpath, &src[dlen + 1]);
++                if (ret < 0) {
++                        log_error("Out of memory!");
++                        exit(EXIT_FAILURE);
++                }
++
++                ret = asprintf(&dsthmacname, "%s/.%s.hmac", dstpath, &src[dlen + 1]);
++                if (ret < 0) {
++                        log_error("Out of memory!");
++                        exit(EXIT_FAILURE);
++                }
+         }
+         log_debug("hmac cp '%s' '%s')", srchmacname, dsthmacname);
+         dracut_install(srchmacname, dsthmacname, false, false, true);
+-        free(dsthmacname);
+-        free(srchmacname);
+-        free(srcpath);
+-        free(dstpath);
+         return 0;
+ }
+ 
+ static int dracut_install(const char *src, const char *dst, bool isdir, bool resolvedeps, bool hashdst)
+ {
+         struct stat sb, db;
+-        char *dname = NULL;
+-        char *fulldstpath = NULL;
+-        char *fulldstdir = NULL;
++        _cleanup_free_ char *fulldstpath = NULL;
++        _cleanup_free_ char *fulldstdir = NULL;
+         int ret;
+         bool src_exists = true;
+-        char *i, *existing;
++        char *i = NULL;
++        char *existing;
+ 
+         log_debug("dracut_install('%s', '%s')", src, dst);
+ 
+@@ -405,9 +501,16 @@ static int dracut_install(const char *src, const char *dst, bool isdir, bool res
+         }
+ 
+         i = strdup(dst);
++        if (!i)
++                return -ENOMEM;
++
+         hashmap_put(items, i, i);
+ 
+-        asprintf(&fulldstpath, "%s%s", destrootdir, dst);
++        ret = asprintf(&fulldstpath, "%s%s", destrootdir, dst);
++        if (ret < 0) {
++                log_error("Out of memory!");
++                exit(EXIT_FAILURE);
++        }
+ 
+         ret = stat(fulldstpath, &sb);
+ 
+@@ -423,7 +526,6 @@ static int dracut_install(const char *src, const char *dst, bool isdir, bool res
+                 } else
+                         log_debug("'%s' already exists", fulldstpath);
+ 
+-                free(fulldstpath);
+                 /* dst does already exist */
+                 return ret;
+         }
+@@ -435,6 +537,8 @@ static int dracut_install(const char *src, const char *dst, bool isdir, bool res
+         ret = stat(fulldstdir, &db);
+ 
+         if (ret < 0) {
++                _cleanup_free_ char *dname = NULL;
++
+                 if (errno != ENOENT) {
+                         log_error("ERROR: stat '%s': %m", fulldstdir);
+                         return 1;
+@@ -442,35 +546,34 @@ static int dracut_install(const char *src, const char *dst, bool isdir, bool res
+                 /* create destination directory */
+                 log_debug("dest dir '%s' does not exist", fulldstdir);
+                 dname = strdup(dst);
++                if (!dname)
++                        return 1;
++
+                 dname[dir_len(dname)] = '\0';
+                 ret = dracut_install(dname, dname, true, false, true);
+ 
+-                free(dname);
+-
+                 if (ret != 0) {
+                         log_error("ERROR: failed to create directory '%s'", fulldstdir);
+-                        free(fulldstdir);
+                         return 1;
+                 }
+         }
+ 
+-        free(fulldstdir);
+-
+         if (isdir && !src_exists) {
+                 log_info("mkdir '%s'", fulldstpath);
+-                return mkdir(fulldstpath, 0755);
++                ret = mkdir(fulldstpath, 0755);
++                return ret;
+         }
+ 
+         /* ready to install src */
+ 
+         if (S_ISDIR(sb.st_mode)) {
+                 log_info("mkdir '%s'", fulldstpath);
+-                return mkdir(fulldstpath, sb.st_mode | S_IWUSR);
++                ret = mkdir(fulldstpath, sb.st_mode | S_IWUSR);
++                return ret;
+         }
+ 
+         if (S_ISLNK(sb.st_mode)) {
+-                char *abspath;
+-                char *absdestpath = NULL;
++                _cleanup_free_ char *abspath = NULL;
+ 
+                 abspath = realpath(src, NULL);
+ 
+@@ -488,15 +591,17 @@ static int dracut_install(const char *src, const char *dst, bool isdir, bool res
+                 }
+ 
+                 if (lstat(fulldstpath, &sb) != 0) {
++                        _cleanup_free_ char *absdestpath = NULL;
+ 
+-                        asprintf(&absdestpath, "%s%s", destrootdir, abspath);
++                        ret = asprintf(&absdestpath, "%s%s", destrootdir, abspath);
++                        if (ret < 0) {
++                                log_error("Out of memory!");
++                                exit(EXIT_FAILURE);
++                        }
+ 
+                         ln_r(absdestpath, fulldstpath);
+-
+-                        free(absdestpath);
+                 }
+ 
+-                free(abspath);
+                 if (arg_hmac) {
+                         /* copy .hmac files also */
+                         hmac_install(src, dst, NULL);
+@@ -514,8 +619,12 @@ static int dracut_install(const char *src, const char *dst, bool isdir, bool res
+                 }
+         }
+ 
++        log_debug("dracut_install ret = %d", ret);
+         log_info("cp '%s' '%s'", src, fulldstpath);
+         ret += cp(src, fulldstpath);
++
++        log_debug("dracut_install ret = %d", ret);
++
+         return ret;
+ }
+ 
+@@ -526,49 +635,49 @@ static void item_free(char *i)
+ }
+ 
+ static void usage(int status)
+-{
+-        /*                                                                     */
+-        printf("\
+-Usage: %s -D DESTROOTDIR [OPTION]... -a SOURCE...\n\
+-   or: %s -D DESTROOTDIR [OPTION]... SOURCE DEST\n\
+-\n\
+-Install SOURCE to DEST in DESTROOTDIR with all needed dependencies.\n\
+-\n\
+-  -D --destrootdir    Install all files to DESTROOTDIR as the root\n\
+-  -a --all            Install all SOURCE arguments to DESTROOTDIR\n\
+-  -o --optional       If SOURCE does not exist, do not fail\n\
+-  -d --dir            SOURCE is a directory\n\
+-  -l --ldd            Also install shebang executables and libraries\n\
+-  -R --resolvelazy    Only install shebang executables and libraries for all SOURCE files\n\
+-  -H --fips           Also install all '.SOURCE.hmac' files\n\
+-  -v --verbose        Show more output\n\
+-     --debug          Show debug output\n\
+-     --version        Show package version\n\
+-  -h --help           Show this help\n\
+-\n\
+-Example:\n\
+-# mkdir -p /var/tmp/test-root\n\
+-# %s -D /var/tmp/test-root --ldd -a sh tr\n\
+-# tree /var/tmp/test-root\n\
+-/var/tmp/test-root\n\
+-|-- lib64 -> usr/lib64\n\
+-`-- usr\n\
+-    |-- bin\n\
+-    |   |-- bash\n\
+-    |   |-- sh -> bash\n\
+-    |   `-- tr\n\
+-    `-- lib64\n\
+-        |-- ld-2.15.90.so\n\
+-        |-- ld-linux-x86-64.so.2 -> ld-2.15.90.so\n\
+-        |-- libc-2.15.90.so\n\
+-        |-- libc.so\n\
+-        |-- libc.so.6 -> libc-2.15.90.so\n\
+-        |-- libdl-2.15.90.so\n\
+-        |-- libdl.so -> libdl-2.15.90.so\n\
+-        |-- libdl.so.2 -> libdl-2.15.90.so\n\
+-        |-- libtinfo.so.5 -> libtinfo.so.5.9\n\
+-        `-- libtinfo.so.5.9\n\
+-", program_invocation_short_name, program_invocation_short_name, program_invocation_short_name);
++{        
++             /*                                                                     */
++        printf("Usage: %s -D DESTROOTDIR [OPTION]... -a SOURCE...\n"
++               "or: %s -D DESTROOTDIR [OPTION]... SOURCE DEST\n"
++               "\n"
++               "Install SOURCE to DEST in DESTROOTDIR with all needed dependencies.\n"
++               "\n"
++               "  -D --destrootdir    Install all files to DESTROOTDIR as the root\n"
++               "  -a --all            Install all SOURCE arguments to DESTROOTDIR\n"
++               "  -o --optional       If SOURCE does not exist, do not fail\n"
++               "  -d --dir            SOURCE is a directory\n"
++               "  -l --ldd            Also install shebang executables and libraries\n"
++               "  -R --resolvelazy    Only install shebang executables and libraries\n"
++               "                      for all SOURCE files\n"
++               "  -H --fips           Also install all '.SOURCE.hmac' files\n"
++               "  -v --verbose        Show more output\n"
++               "     --debug          Show debug output\n"
++               "     --version        Show package version\n"
++               "  -h --help           Show this help\n"
++               "\n"
++               "Example:\n"
++               "# mkdir -p /var/tmp/test-root\n"
++               "# %s -D /var/tmp/test-root --ldd -a sh tr\n"
++               "# tree /var/tmp/test-root\n"
++               "/var/tmp/test-root\n"
++               "|-- lib64 -> usr/lib64\n"
++               "`-- usr\n"
++               "    |-- bin\n"
++               "    |   |-- bash\n"
++               "    |   |-- sh -> bash\n"
++               "    |   `-- tr\n"
++               "    `-- lib64\n"
++               "        |-- ld-2.15.90.so\n"
++               "        |-- ld-linux-x86-64.so.2 -> ld-2.15.90.so\n"
++               "        |-- libc-2.15.90.so\n"
++               "        |-- libc.so\n"
++               "        |-- libc.so.6 -> libc-2.15.90.so\n"
++               "        |-- libdl-2.15.90.so\n"
++               "        |-- libdl.so -> libdl-2.15.90.so\n"
++               "        |-- libdl.so.2 -> libdl-2.15.90.so\n"
++               "        |-- libtinfo.so.5 -> libtinfo.so.5.9\n"
++               "        `-- libtinfo.so.5.9\n"
++               , program_invocation_short_name, program_invocation_short_name, program_invocation_short_name);
+         exit(status);
+ }
+ 
+@@ -581,7 +690,7 @@ static int parse_argv(int argc, char *argv[])
+                 ARG_DEBUG
+         };
+ 
+-        static const struct option const options[] = {
++        static struct option const options[] = {
+                 {"help", no_argument, NULL, 'h'},
+                 {"version", no_argument, NULL, ARG_VERSION},
+                 {"dir", no_argument, NULL, 'd'},
+@@ -596,7 +705,7 @@ static int parse_argv(int argc, char *argv[])
+                 {NULL, 0, NULL, 0}
+         };
+ 
+-        while ((c = getopt_long(argc, argv, "adhloD:DHILR", options, NULL)) != -1) {
++        while ((c = getopt_long(argc, argv, "adhloD:HR", options, NULL)) != -1) {
+                 switch (c) {
+                 case ARG_VERSION:
+                         puts(PROGRAM_VERSION_STRING);
+@@ -647,7 +756,7 @@ static int parse_argv(int argc, char *argv[])
+ static int resolve_lazy(int argc, char **argv)
+ {
+         int i;
+-        int destrootdirlen = strlen(destrootdir);
++        size_t destrootdirlen = strlen(destrootdir);
+         int ret = 0;
+         char *item;
+         for (i = 0; i < argc; i++) {
+@@ -677,10 +786,12 @@ static int resolve_lazy(int argc, char **argv)
+ 
+ static char *find_binary(const char *src)
+ {
+-        char *path;
++        _cleanup_free_ char *path = NULL;
+         char *p, *q;
+         bool end = false;
+         char *newsrc = NULL;
++        int ret;
++
+         path = getenv("PATH");
+ 
+         if (path == NULL) {
+@@ -689,6 +800,12 @@ static char *find_binary(const char *src)
+         }
+         path = strdup(path);
+         p = path;
++
++        if (path == NULL) {
++                log_error("Out of memory!");
++                exit(EXIT_FAILURE);
++        }
++
+         log_debug("PATH=%s", path);
+ 
+         do {
+@@ -701,7 +818,12 @@ static char *find_binary(const char *src)
+                 else
+                         *q = '\0';
+ 
+-                asprintf(&newsrc, "%s/%s", p, src);
++                ret = asprintf(&newsrc, "%s/%s", p, src);
++                if (ret < 0) {
++                        log_error("Out of memory!");
++                        exit(EXIT_FAILURE);
++                }
++
+                 p = q + 1;
+ 
+                 if (stat(newsrc, &sb) != 0) {
+@@ -715,15 +837,15 @@ static char *find_binary(const char *src)
+ 
+         } while (!end);
+ 
+-        free(path);
+         if (newsrc)
+                 log_debug("find_binary(%s) == %s", src, newsrc);
++
+         return newsrc;
+ }
+ 
+ static int install_one(const char *src, const char *dst)
+ {
+-        int r = 0;
++        int r = EXIT_SUCCESS;
+         int ret;
+ 
+         if (strchr(src, '/') == NULL) {
+@@ -752,29 +874,27 @@ static int install_one(const char *src, const char *dst)
+ 
+ static int install_all(int argc, char **argv)
+ {
+-        int r = 0;
++        int r = EXIT_SUCCESS;
+         int i;
+         for (i = 0; i < argc; i++) {
+                 int ret;
+                 log_debug("Handle '%s'", argv[i]);
+ 
+                 if (strchr(argv[i], '/') == NULL) {
+-                        char *newsrc = find_binary(argv[i]);
++                        _cleanup_free_ char *newsrc = find_binary(argv[i]);
+                         if (newsrc) {
+                                 log_debug("dracut_install '%s'", newsrc);
+                                 ret = dracut_install(newsrc, newsrc, arg_createdir, arg_resolvedeps, true);
+                                 if (ret == 0) {
+                                         log_debug("dracut_install '%s' OK", newsrc);
+                                 }
+-                                free(newsrc);
+                         } else {
+                                 ret = -1;
+                         }
+ 
+                 } else {
+-                        char *dest = strdup(argv[i]);
++                        _cleanup_free_ char *dest = strdup(argv[i]);
+                         ret = dracut_install(argv[i], dest, arg_createdir, arg_resolvedeps, true);
+-                        free(dest);
+                 }
+ 
+                 if ((ret != 0) && (!arg_optional)) {
+diff --git a/install/macro.h b/install/macro.h
+index 1c0aa91..ac61b49 100644
+--- a/install/macro.h
++++ b/install/macro.h
+@@ -1,7 +1,6 @@
+ /*-*- Mode: C; c-basic-offset: 8; indent-tabs-mode: nil -*-*/
+ 
+-#ifndef foomacrohfoo
+-#define foomacrohfoo
++#pragma once
+ 
+ /***
+   This file is part of systemd.
+@@ -45,16 +44,38 @@
+ #define _hidden_ __attribute__ ((visibility("hidden")))
+ #define _weakref_(x) __attribute__((weakref(#x)))
+ #define _introspect_(x) __attribute__((section("introspect." x)))
++#define _alignas_(x) __attribute__((aligned(__alignof(x))))
++#define _cleanup_(x) __attribute__((cleanup(x)))
++
++/* automake test harness */
++#define EXIT_TEST_SKIP 77
+ 
+ #define XSTRINGIFY(x) #x
+ #define STRINGIFY(x) XSTRINGIFY(x)
+ 
+ /* Rounds up */
+-#define ALIGN(l) ALIGN_TO((l), sizeof(void*))
++
++#define ALIGN4(l) (((l) + 3) & ~3)
++#define ALIGN8(l) (((l) + 7) & ~7)
++
++#if __SIZEOF_POINTER__ == 8
++#define ALIGN(l) ALIGN8(l)
++#elif __SIZEOF_POINTER__ == 4
++#define ALIGN(l) ALIGN4(l)
++#else
++#error "Wut? Pointers are neither 4 nor 8 bytes long?"
++#endif
++
++#define ALIGN_PTR(p) ((void*) ALIGN((unsigned long) p))
++#define ALIGN4_PTR(p) ((void*) ALIGN4((unsigned long) p))
++#define ALIGN8_PTR(p) ((void*) ALIGN8((unsigned long) p))
++
+ static inline size_t ALIGN_TO(size_t l, size_t ali) {
+         return ((l + ali - 1) & ~(ali - 1));
+ }
+ 
++#define ALIGN_TO_PTR(p, ali) ((void*) ALIGN_TO((unsigned long) p))
++
+ #define ELEMENTSOF(x) (sizeof(x)/sizeof((x)[0]))
+ 
+ /*
+@@ -64,34 +85,35 @@ static inline size_t ALIGN_TO(size_t l, size_t ali) {
+  * @member: the name of the member within the struct.
+  *
+  */
+-#define container_of(ptr, type, member) ({ \
+-        const typeof( ((type *)0)->member ) *__mptr = (ptr); \
+-        (type *)( (char *)__mptr - offsetof(type,member) );})
++#define container_of(ptr, type, member)                                 \
++        __extension__ ({                                                \
++                        const typeof( ((type *)0)->member ) *__mptr = (ptr); \
++                        (type *)( (char *)__mptr - offsetof(type,member) ); \
++                })
+ 
+-#ifndef MAX
+-#define MAX(a,b)                                \
+-        __extension__ ({                        \
+-                        typeof(a) _a = (a);     \
+-                        typeof(b) _b = (b);     \
+-                        _a > _b ? _a : _b;      \
++#undef MAX
++#define MAX(a,b)                                 \
++        __extension__ ({                         \
++                        typeof(a) _a = (a);      \
++                        typeof(b) _b = (b);      \
++                        _a > _b ? _a : _b;       \
+                 })
+-#endif
+ 
+-#define MAX3(a,b,c)                             \
+-        MAX(MAX(a,b),c)
++#define MAX3(x,y,z)                              \
++        __extension__ ({                         \
++                        typeof(x) _c = MAX(x,y); \
++                        MAX(_c, z);              \
++                })
+ 
+-#ifndef MIN
++#undef MIN
+ #define MIN(a,b)                                \
+         __extension__ ({                        \
+                         typeof(a) _a = (a);     \
+                         typeof(b) _b = (b);     \
+                         _a < _b ? _a : _b;      \
+                 })
+-#endif
+-
+-#define MIN3(a,b,c)                             \
+-        MIN(MIN(a,b),c)
+ 
++#ifndef CLAMP
+ #define CLAMP(x, low, high)                                             \
+         __extension__ ({                                                \
+                         typeof(x) _x = (x);                             \
+@@ -99,6 +121,7 @@ static inline size_t ALIGN_TO(size_t l, size_t ali) {
+                         typeof(high) _high = (high);                    \
+                         ((_x > _high) ? _high : ((_x < _low) ? _low : _x)); \
+                 })
++#endif
+ 
+ #define assert_se(expr)                                                 \
+         do {                                                            \
+@@ -119,14 +142,21 @@ static inline size_t ALIGN_TO(size_t l, size_t ali) {
+                 log_assert_failed_unreachable(t, __FILE__, __LINE__, __PRETTY_FUNCTION__); \
+         } while (false)
+ 
+-#define assert_cc(expr)                            \
+-        do {                                       \
+-                switch (0) {                       \
+-                        case 0:                    \
+-                        case !!(expr):             \
+-                                ;                  \
+-                }                                  \
++#if defined(static_assert)
++#define assert_cc(expr)                         \
++        do {                                    \
++                static_assert(expr, #expr);     \
++        } while (false)
++#else
++#define assert_cc(expr)                         \
++        do {                                    \
++                switch (0) {                    \
++                case 0:                         \
++                case !!(expr):                  \
++                        ;                       \
++                }                               \
+         } while (false)
++#endif
+ 
+ #define PTR_TO_UINT(p) ((unsigned int) ((uintptr_t) (p)))
+ #define UINT_TO_PTR(u) ((void*) ((uintptr_t) (u)))
+@@ -149,6 +179,8 @@ static inline size_t ALIGN_TO(size_t l, size_t ali) {
+ #define memzero(x,l) (memset((x), 0, (l)))
+ #define zero(x) (memzero(&(x), sizeof(x)))
+ 
++#define CHAR_TO_STR(x) ((char[2]) { x, 0 })
++
+ #define char_array_0(x) x[sizeof(x)-1] = 0;
+ 
+ #define IOVEC_SET_STRING(i, s)                  \
+@@ -187,6 +219,66 @@ static inline size_t IOVEC_INCREMENT(struct iovec *i, unsigned n, size_t k) {
+         return k;
+ }
+ 
+-#include "log.h"
++#define VA_FORMAT_ADVANCE(format, ap)                                   \
++do {                                                                    \
++        int _argtypes[128];                                             \
++        size_t _i, _k;                                                  \
++        _k = parse_printf_format((format), ELEMENTSOF(_argtypes), _argtypes); \
++        assert(_k < ELEMENTSOF(_argtypes));                             \
++        for (_i = 0; _i < _k; _i++) {                                   \
++                if (_argtypes[_i] & PA_FLAG_PTR)  {                     \
++                        (void) va_arg(ap, void*);                       \
++                        continue;                                       \
++                }                                                       \
++                                                                        \
++                switch (_argtypes[_i]) {                                \
++                case PA_INT:                                            \
++                case PA_INT|PA_FLAG_SHORT:                              \
++                case PA_CHAR:                                           \
++                        (void) va_arg(ap, int);                         \
++                        break;                                          \
++                case PA_INT|PA_FLAG_LONG:                               \
++                        (void) va_arg(ap, long int);                    \
++                        break;                                          \
++                case PA_INT|PA_FLAG_LONG_LONG:                          \
++                        (void) va_arg(ap, long long int);               \
++                        break;                                          \
++                case PA_WCHAR:                                          \
++                        (void) va_arg(ap, wchar_t);                     \
++                        break;                                          \
++                case PA_WSTRING:                                        \
++                case PA_STRING:                                         \
++                case PA_POINTER:                                        \
++                        (void) va_arg(ap, void*);                       \
++                        break;                                          \
++                case PA_FLOAT:                                          \
++                case PA_DOUBLE:                                         \
++                        (void) va_arg(ap, double);                      \
++                        break;                                          \
++                case PA_DOUBLE|PA_FLAG_LONG_DOUBLE:                     \
++                        (void) va_arg(ap, long double);                 \
++                        break;                                          \
++                default:                                                \
++                        assert_not_reached("Unknown format string argument."); \
++                }                                                       \
++        }                                                               \
++} while(false)
++
++ /* Because statfs.t_type can be int on some architecures, we have to cast
++  * the const magic to the type, otherwise the compiler warns about
++  * signed/unsigned comparison, because the magic can be 32 bit unsigned.
++ */
++#define F_TYPE_CMP(a, b) (a == (typeof(a)) b)
+ 
+-#endif
++
++/* Returns the number of chars needed to format variables of the
++ * specified type as a decimal string. Adds in extra space for a
++ * negative '-' prefix. */
++
++#define DECIMAL_STR_MAX(type)                                           \
++        (1+(sizeof(type) <= 1 ? 3 :                                     \
++            sizeof(type) <= 2 ? 5 :                                     \
++            sizeof(type) <= 4 ? 10 :                                    \
++            sizeof(type) <= 8 ? 20 : sizeof(int[-2*(sizeof(type) > 8)])))
++
++#include "log.h"
+diff --git a/install/util.c b/install/util.c
+index 0247184..9aa131f 100644
+--- a/install/util.c
++++ b/install/util.c
+@@ -185,3 +185,95 @@ static const char *const log_level_table[] = {
+ };
+ 
+ DEFINE_STRING_TABLE_LOOKUP(log_level, int);
++
++char *strnappend(const char *s, const char *suffix, size_t b) {
++        size_t a;
++        char *r;
++
++        if (!s && !suffix)
++                return strdup("");
++
++        if (!s)
++                return strndup(suffix, b);
++
++        if (!suffix)
++                return strdup(s);
++
++        assert(s);
++        assert(suffix);
++
++        a = strlen(s);
++        if (b > ((size_t) -1) - a)
++                return NULL;
++
++        r = new(char, a+b+1);
++        if (!r)
++                return NULL;
++
++        memcpy(r, s, a);
++        memcpy(r+a, suffix, b);
++        r[a+b] = 0;
++
++        return r;
++}
++
++char *strappend(const char *s, const char *suffix) {
++        return strnappend(s, suffix, suffix ? strlen(suffix) : 0);
++}
++
++char *strjoin(const char *x, ...) {
++        va_list ap;
++        size_t l;
++        char *r, *p;
++
++        va_start(ap, x);
++
++        if (x) {
++                l = strlen(x);
++
++                for (;;) {
++                        const char *t;
++                        size_t n;
++
++                        t = va_arg(ap, const char *);
++                        if (!t)
++                                break;
++
++                        n = strlen(t);
++                        if (n > ((size_t) -1) - l) {
++                                va_end(ap);
++                                return NULL;
++                        }
++
++                        l += n;
++                }
++        } else
++                l = 0;
++
++        va_end(ap);
++
++        r = new(char, l+1);
++        if (!r)
++                return NULL;
++
++        if (x) {
++                p = stpcpy(r, x);
++
++                va_start(ap, x);
++
++                for (;;) {
++                        const char *t;
++
++                        t = va_arg(ap, const char *);
++                        if (!t)
++                                break;
++
++                        p = stpcpy(p, t);
++                }
++
++                va_end(ap);
++        } else
++                r[0] = 0;
++
++        return r;
++}
+diff --git a/install/util.h b/install/util.h
+index 9085935..3d7c232 100644
+--- a/install/util.h
++++ b/install/util.h
+@@ -507,6 +507,42 @@ void* memdup(const void *p, size_t l);
+ 
+ int is_kernel_thread(pid_t pid);
+ 
++static inline void freep(void *p) {
++        free(*(void**) p);
++}
++
++static inline void fclosep(FILE **f) {
++        if (*f)
++                fclose(*f);
++}
++
++static inline void pclosep(FILE **f) {
++        if (*f)
++                pclose(*f);
++}
++
++static inline void closep(int *fd) {
++        if (*fd >= 0)
++                close_nointr_nofail(*fd);
++}
++
++static inline void closedirp(DIR **d) {
++        if (*d)
++                closedir(*d);
++}
++
++static inline void umaskp(mode_t *u) {
++        umask(*u);
++}
++
++#define _cleanup_free_ _cleanup_(freep)
++#define _cleanup_fclose_ _cleanup_(fclosep)
++#define _cleanup_pclose_ _cleanup_(pclosep)
++#define _cleanup_close_ _cleanup_(closep)
++#define _cleanup_closedir_ _cleanup_(closedirp)
++#define _cleanup_umask_ _cleanup_(umaskp)
++#define _cleanup_globfree_ _cleanup_(globfree)
++
+ int fd_inc_sndbuf(int fd, size_t n);
+ int fd_inc_rcvbuf(int fd, size_t n);
+ 
+@@ -524,4 +560,6 @@ bool in_initrd(void);
+ 
+ void warn_melody(void);
+ 
++char *strjoin(const char *x, ...) _sentinel_;
++
+ #endif
+diff --git a/lsinitrd-bash-completion.sh b/lsinitrd-bash-completion.sh
+new file mode 100644
+index 0000000..78ab165
+--- /dev/null
++++ b/lsinitrd-bash-completion.sh
+@@ -0,0 +1,63 @@
++#!/bin/bash
++# -*- mode: shell-script; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
++# ex: ts=8 sw=4 sts=4 et filetype=sh
++#
++# Copyright 2013 Red Hat, Inc.  All rights reserved.
++#
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2 of the License, or
++# (at your option) any later version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program.  If not, see <http://www.gnu.org/licenses/>.
++#
++
++__contains_word () {
++        local word=$1; shift
++        for w in $*; do [[ $w = $word ]] && return 0; done
++        return 1
++}
++
++_lsinitrd() {
++        local field_vals= cur=${COMP_WORDS[COMP_CWORD]} prev=${COMP_WORDS[COMP_CWORD-1]}
++        local -A OPTS=(
++                [STANDALONE]='-s --size -h --help'
++
++                       [ARG]='-f --file -k --kver'
++        )
++
++        if __contains_word "$prev" ${OPTS[ARG]}; then
++                case $prev in
++                        --file|-f)
++                                comps=$(compgen -f -- "$cur")
++                                compopt -o filenames
++                        ;;
++                        --kver|-k)
++                                comps=$(cd /lib/modules; echo [0-9]*)
++                        ;;
++                        *)
++                                return 0
++                        ;;
++                esac
++                COMPREPLY=( $(compgen -W '$comps' -- "$cur") )
++                return 0
++        fi
++
++        if [[ $cur = -* ]]; then
++                COMPREPLY=( $(compgen -W '${OPTS[*]}' -- "$cur") )
++                return 0
++        fi
++
++        comps=$(compgen -f -- "$cur")
++        compopt -o filenames
++        COMPREPLY=( $(compgen -W '$comps' -- "$cur") )
++        return 0
++}
++
++complete -F _lsinitrd lsinitrd
+diff --git a/lsinitrd.1.asc b/lsinitrd.1.asc
+index fd98161..4293910 100644
+--- a/lsinitrd.1.asc
++++ b/lsinitrd.1.asc
+@@ -10,7 +10,9 @@ lsinitrd - tool to show the contents of an initramfs image
+ 
+ SYNOPSIS
+ --------
+-*lsinitrd* ['OPTION...'] [<image>]
++*lsinitrd* ['OPTION...'] [<image> [<filename> [<filename> [...] ]]]
++
++*lsinitrd* ['OPTION...'] -k <kernel-version>
+ 
+ DESCRIPTION
+ -----------
+@@ -26,6 +28,12 @@ OPTIONS
+ **-s, --size**::
+     sort the contents of the initramfs by size.
+ 
++**-f, --file** _<filename>_::
++    print the contents of <filename>.
++
++**-k, --kver** _<kernel version>_::
++    inspect the initramfs of <kernel version>.
++
+ AVAILABILITY
+ ------------
+ The lsinitrd command is part of the dracut package and is available from
+diff --git a/lsinitrd.sh b/lsinitrd.sh
+index 1b27393..cd58529 100755
+--- a/lsinitrd.sh
++++ b/lsinitrd.sh
+@@ -22,29 +22,51 @@
+ usage()
+ {
+     {
+-        echo "Usage: ${0##*/} [-s] [<initramfs file> [<filename>]]"
++        echo "Usage: ${0##*/} [options] [<initramfs file> [<filename> [<filename> [...] ]]]"
++        echo "Usage: ${0##*/} [options] -k <kernel version>"
+         echo
+-        echo "-h, --help     print a help message and exit."
+-        echo "-s, --size     sort the contents of the initramfs by size."
++        echo "-h, --help                  print a help message and exit."
++        echo "-s, --size                  sort the contents of the initramfs by size."
++        echo "-f, --file <filename>       print the contents of <filename>."
++        echo "-k, --kver <kernel version> inspect the initramfs of <kernel version>."
+         echo
+     } >&2
+ }
+ 
+-[[ $# -le 2 ]] || { usage ; exit 1 ; }
+-
+ sorted=0
+-while getopts "s" opt; do
+-    case $opt in
+-        s)  sorted=1;;
+-        h)  usage; exit 0;;
+-        \?) usage; exit 1;;
++declare -A filenames
++
++unset POSIXLY_CORRECT
++TEMP=$(getopt \
++    -o "shf:k:" \
++    --long kver: \
++    --long file: \
++    --long help \
++    --long size \
++    -- "$@")
++
++if (( $? != 0 )); then
++    usage
++    exit 1
++fi
++
++eval set -- "$TEMP"
++
++while (($# > 0)); do
++    case $1 in
++        -k|--kver)  KERNEL_VERSION="$2"; shift;;
++        -f|--file)  filenames[${2#/}]=1; shift;;
++        -s|--size)  sorted=1;;
++        -h|--help)  usage; exit 0;;
++        --)         shift;break;;
++        *)          usage; exit 1;;
+     esac
++    shift
+ done
+-shift $((OPTIND-1))
+ 
+-KERNEL_VERSION="$(uname -r)"
++[[ $KERNEL_VERSION ]] || KERNEL_VERSION="$(uname -r)"
+ 
+-if [[ "$1" ]]; then
++if [[ $1 ]]; then
+     image="$1"
+     if ! [[ -f "$image" ]]; then
+         {
+@@ -57,13 +79,20 @@ if [[ "$1" ]]; then
+ else
+     [[ -f /etc/machine-id ]] && read MACHINE_ID < /etc/machine-id
+ 
+-    if [[ $MACHINE_ID ]] && [[ -d /boot/${MACHINE_ID} || -L /boot/${MACHINE_ID} ]] ; then
++    if [[ -d /boot/loader/entries || -L /boot/loader/entries ]] \
++        && [[ $MACHINE_ID ]] \
++        && [[ -d /boot/${MACHINE_ID} || -L /boot/${MACHINE_ID} ]] ; then
+         image="/boot/${MACHINE_ID}/${KERNEL_VERSION}/initrd"
+     else
+         image="/boot/initramfs-${KERNEL_VERSION}.img"
+     fi
+ fi
+ 
++shift
++while (($# > 0)); do
++    filenames[${1#/}]=1;
++    shift
++done
+ 
+ if ! [[ -f "$image" ]]; then
+     {
+@@ -74,37 +103,50 @@ if ! [[ -f "$image" ]]; then
+     exit 1
+ fi
+ 
+-CAT=zcat
+-FILE_T=$(file --dereference "$image")
++read -N 6 bin < "$image"
++case $bin in
++    $'\x1f\x8b'*)
++        CAT="zcat";;
++    BZh*)
++        CAT="bzcat";;
++    070701)
++        CAT="cat";;
++    *)
++        CAT="xzcat";
++        if echo "test"|xz|xzcat --single-stream >/dev/null 2>&1; then
++            CAT="xzcat --single-stream"
++        fi
++        ;;
++esac
+ 
+-if echo "test"|xz|xz -dc --single-stream >/dev/null 2>&1; then
+-    XZ_SINGLE_STREAM="--single-stream"
+-fi
+-
+-if [[ "$FILE_T" =~ :\ gzip\ compressed\ data ]]; then
+-    CAT=zcat
+-elif [[ "$FILE_T" =~ :\ xz\ compressed\ data ]]; then
+-    CAT="xzcat $XZ_SINGLE_STREAM"
+-elif [[ "$FILE_T" =~ :\ XZ\ compressed\ data ]]; then
+-    CAT="xzcat $XZ_SINGLE_STREAM"
+-elif [[ "$FILE_T" =~ :\ LZMA ]]; then
+-    CAT="xzcat $XZ_SINGLE_STREAM"
+-elif [[ "$FILE_T" =~ :\ data ]]; then
+-    CAT="xzcat $XZ_SINGLE_STREAM"
+-fi
+-
+-if [[ $# -eq 2 ]]; then
+-    $CAT $image | cpio --extract --verbose --quiet --to-stdout ${2#/} 2>/dev/null
+-    exit $?
+-fi
++ret=0
+ 
+-echo "$image: $(du -h $image | while read a b; do echo $a;done)"
+-echo "========================================================================"
+-$CAT "$image" | cpio --extract --verbose --quiet --to-stdout '*lib/dracut/dracut-*' 2>/dev/null
+-echo "========================================================================"
+-if [ "$sorted" -eq 1 ]; then
+-    $CAT "$image" | cpio --extract --verbose --quiet --list | sort -n -k5
++if (( ${#filenames[@]} > 0 )); then
++    (( ${#filenames[@]} == 1 )) && nofileinfo=1
++    for f in ${!filenames[@]}; do
++        [[ $nofileinfo ]] || echo "initramfs:/$f"
++        [[ $nofileinfo ]] || echo "========================================================================"
++        $CAT $image | cpio --extract --verbose --quiet --to-stdout $f 2>/dev/null
++        ((ret+=$?))
++        [[ $nofileinfo ]] || echo "========================================================================"
++        [[ $nofileinfo ]] || echo
++    done
+ else
+-    $CAT "$image" | cpio --extract --verbose --quiet --list | sort -k9
++    echo "Image: $image: $(du -h $image | while read a b; do echo $a;done)"
++    echo "========================================================================"
++    version=$($CAT "$image" | cpio --extract --verbose --quiet --to-stdout '*lib/dracut/dracut-*' 2>/dev/null)
++    ((ret+=$?))
++    echo "$version with dracut modules:"
++    $CAT "$image" | cpio --extract --verbose --quiet --to-stdout 'usr/lib/dracut/modules.txt' 2>/dev/null
++    ((ret+=$?))
++    echo "========================================================================"
++    if [ "$sorted" -eq 1 ]; then
++        $CAT "$image" | cpio --extract --verbose --quiet --list | sort -n -k5
++    else
++        $CAT "$image" | cpio --extract --verbose --quiet --list | sort -k9
++    fi
++    ((ret+=$?))
++    echo "========================================================================"
+ fi
+-echo "========================================================================"
++
++exit $ret
+diff --git a/modules.d/01fips/fips.sh b/modules.d/01fips/fips.sh
+index 48ad0e6..0095416 100755
+--- a/modules.d/01fips/fips.sh
++++ b/modules.d/01fips/fips.sh
+@@ -51,7 +51,6 @@ mount_boot()
+ 
+ do_fips()
+ {
+-    info "Checking integrity of kernel"
+     KERNEL=$(uname -r)
+ 
+     if ! [ -e "/boot/.vmlinuz-${KERNEL}.hmac" ]; then
+@@ -59,19 +58,21 @@ do_fips()
+         return 1
+     fi
+ 
+-    sha512hmac -c "/boot/.vmlinuz-${KERNEL}.hmac" || return 1
+-
+     FIPSMODULES=$(cat /etc/fipsmodules)
+ 
+     info "Loading and integrity checking all crypto modules"
+     for module in $FIPSMODULES; do
+         if [ "$module" != "tcrypt" ]; then
+-            modprobe ${module} || return 1
++            modprobe ${module}
+         fi
+     done
+     info "Self testing crypto algorithms"
+     modprobe tcrypt || return 1
+     rmmod tcrypt
++
++    info "Checking integrity of kernel"
++    sha512hmac -c "/boot/.vmlinuz-${KERNEL}.hmac" || return 1
++
+     info "All initrd crypto checks done"
+ 
+     > /tmp/fipsdone
+diff --git a/modules.d/01fips/module-setup.sh b/modules.d/01fips/module-setup.sh
+index 8953132..6013318 100755
+--- a/modules.d/01fips/module-setup.sh
++++ b/modules.d/01fips/module-setup.sh
+@@ -12,9 +12,11 @@ depends() {
+ 
+ installkernel() {
+     local _fipsmodules _mod
+-    _fipsmodules="aead aes_generic xts aes-x86_64 ansi_cprng cbc ccm chainiv ctr gcm ghash_generic"
+-    _fipsmodules+=" des deflate ecb eseqiv hmac seqiv sha256 sha256_generic sha512 sha512_generic"
+-    _fipsmodules+=" cryptomgr crypto_null tcrypt dm-mod dm-crypt lzo"
++    _fipsmodules="aead aes_generic aes-x86_64 ansi_cprng arc4 blowfish camellia cast6 cbc ccm "
++    _fipsmodules+="chainiv crc32c cryptomgr crypto_null ctr cts deflate des des3_ede dm-crypt dm-mod "
++    _fipsmodules+="ecb eseqiv fcrypt gcm ghash_generic hmac khazad lzo md4 md5 michael_mic rmd128 "
++    _fipsmodules+="rmd160 rmd256 rmd320 rot13 salsa20 seed seqiv serpent sha1 sha224 sha256 sha256_generic "
++    _fipsmodules+="sha384 sha512 sha512_generic tcrypt tea tnepres twofish wp256 wp384 wp512 xeta xtea xts zlib"
+ 
+     mkdir -m 0755 -p "${initdir}/etc/modprobe.d"
+ 
+@@ -36,7 +38,7 @@ install() {
+ 
+     inst_libdir_file libsoftokn3.so libsoftokn3.so \
+         libsoftokn3.chk libfreebl3.so libfreebl3.chk \
+-        libssl.so 'hmaccalc/sha512hmac.hmac'
++        libssl.so 'hmaccalc/sha512hmac.hmac' libssl.so.10
+ 
+     dracut_install -o prelink
+ }
+diff --git a/modules.d/10i18n/module-setup.sh b/modules.d/10i18n/module-setup.sh
+index fcd8282..60a50e7 100755
+--- a/modules.d/10i18n/module-setup.sh
++++ b/modules.d/10i18n/module-setup.sh
+@@ -14,7 +14,7 @@ depends() {
+ install() {
+     dracut_install -o $systemdutildir/systemd-vconsole-setup
+     KBDSUBDIRS=consolefonts,consoletrans,keymaps,unimaps
+-    DEFAULT_FONT=LatArCyrHeb-16
++    DEFAULT_FONT=latarcyrheb-sun16
+     I18N_CONF="/etc/locale.conf"
+     VCONFIG_CONF="/etc/vconsole.conf"
+ 
+diff --git a/modules.d/40network/ifup.sh b/modules.d/40network/ifup.sh
+index 582278f..526251f 100755
+--- a/modules.d/40network/ifup.sh
++++ b/modules.d/40network/ifup.sh
+@@ -21,14 +21,18 @@ use_bridge='false'
+ use_vlan='false'
+ 
+ # enslave this interface to bond?
+-if [ -e /tmp/bond.info ]; then
+-    . /tmp/bond.info
++for i in /tmp/bond.*.info; do
++    [ -e "$i" ] || continue
++    unset bondslaves
++    unset bondname
++    . "$i"
+     for slave in $bondslaves ; do
+         if [ "$netif" = "$slave" ] ; then
+             netif=$bondname
++            break 2
+         fi
+     done
+-fi
++done
+ 
+ if [ -e /tmp/team.info ]; then
+     . /tmp/team.info
+@@ -39,6 +43,20 @@ if [ -e /tmp/team.info ]; then
+     done
+ fi
+ 
++if [ -e /tmp/vlan.info ]; then
++    . /tmp/vlan.info
++    if [ "$netif" = "$phydevice" ]; then
++        if [ "$netif" = "$bondname" ] && [ -n "$DO_BOND_SETUP" ] ; then
++            : # We need to really setup bond (recursive call)
++        elif [ "$netif" = "$teammaster" ] && [ -n "$DO_TEAM_SETUP" ] ; then
++            : # We need to really setup team (recursive call)
++        else
++            netif="$vlanname"
++            use_vlan='true'
++        fi
++    fi
++fi
++
+ # bridge this interface?
+ if [ -e /tmp/bridge.info ]; then
+     . /tmp/bridge.info
+@@ -46,6 +64,10 @@ if [ -e /tmp/bridge.info ]; then
+         if [ "$netif" = "$ethname" ]; then
+             if [ "$netif" = "$bondname" ] && [ -n "$DO_BOND_SETUP" ] ; then
+                 : # We need to really setup bond (recursive call)
++            elif [ "$netif" = "$teammaster" ] && [ -n "$DO_TEAM_SETUP" ] ; then
++                : # We need to really setup team (recursive call)
++            elif [ "$netif" = "$vlanname" ] && [ -n "$DO_VLAN_SETUP" ]; then
++                : # We need to really setup vlan (recursive call)
+             else
+                 netif="$bridgename"
+                 use_bridge='true'
+@@ -54,18 +76,6 @@ if [ -e /tmp/bridge.info ]; then
+     done
+ fi
+ 
+-if [ -e /tmp/vlan.info ]; then
+-    . /tmp/vlan.info
+-    if [ "$netif" = "$phydevice" ]; then
+-        if [ "$netif" = "$bondname" ] && [ -n "$DO_BOND_SETUP" ] ; then
+-            : # We need to really setup bond (recursive call)
+-        else
+-            netif="$vlanname"
+-            use_vlan='true'
+-        fi
+-    fi
+-fi
+-
+ # disable manual ifup while netroot is set for simplifying our logic
+ # in netroot case we prefer netroot to bringup $netif automaticlly
+ [ -n "$2" -a "$2" = "-m" ] && [ -z "$netroot" ] && manualup="$2"
+@@ -134,11 +144,12 @@ if [ "$netif" = "lo" ] ; then
+ fi
+ 
+ # start bond if needed
+-if [ -e /tmp/bond.info ]; then
+-    . /tmp/bond.info
++if [ -e /tmp/bond.${netif}.info ]; then
++    . /tmp/bond.${netif}.info
+ 
+     if [ "$netif" = "$bondname" ] && [ ! -e /tmp/net.$bondname.up ] ; then # We are master bond device
+         modprobe bonding
++        echo "+$netif" >  /sys/class/net/bonding_masters
+         ip link set $netif down
+ 
+         # Stolen from ifup-eth
+@@ -212,6 +223,10 @@ if [ -e /tmp/bridge.info ]; then
+         for ethname in $ethnames ; do
+             if [ "$ethname" = "$bondname" ] ; then
+                 DO_BOND_SETUP=yes ifup $bondname -m
++            elif [ "$ethname" = "$teammaster" ] ; then
++                DO_TEAM_SETUP=yes ifup $teammaster -m
++            elif [ "$ethname" = "$vlanname" ]; then
++                DO_VLAN_SETUP=yes ifup $vlanname -m
+             else
+                 linkup $ethname
+             fi
+@@ -235,10 +250,13 @@ if [ "$netif" = "$vlanname" ] && [ ! -e /tmp/net.$vlanname.up ]; then
+     modprobe 8021q
+     if [ "$phydevice" = "$bondname" ] ; then
+         DO_BOND_SETUP=yes ifup $phydevice -m
++    elif [ "$phydevice" = "$teammaster" ] ; then
++        DO_TEAM_SETUP=yes ifup $phydevice -m
+     else
+         linkup "$phydevice"
+     fi
+     ip link add dev "$vlanname" link "$phydevice" type vlan id "$(get_vid $vlanname)"
++    ip link set "$vlanname" up
+ fi
+ 
+ # setup nameserver
+diff --git a/modules.d/40network/net-genrules.sh b/modules.d/40network/net-genrules.sh
+index f4652b9..8f28c93 100755
+--- a/modules.d/40network/net-genrules.sh
++++ b/modules.d/40network/net-genrules.sh
+@@ -14,8 +14,10 @@ fix_bootif() {
+     echo $macaddr | sed 'y/ABCDEF/abcdef/'
+ }
+ 
++getargbool 0 rd.neednet && NEEDNET=1
++
+ # Don't continue if we don't need network
+-if [ -z "$netroot" ] && [ ! -e "/tmp/net.ifaces" ] && ! getargbool 0 rd.neednet >/dev/null; then
++if [ -z "$netroot" ] && [ ! -e "/tmp/net.ifaces" ] && [ "$NEEDNET" != "1" ]; then
+     return
+ fi
+ 
+@@ -25,23 +27,30 @@ fi
+     if [ -e /tmp/bridge.info ]; then
+         . /tmp/bridge.info
+         IFACES="$IFACES ${ethnames%% *}"
++        MASTER_IFACES="$MASTER_IFACES $bridgename"
+     fi
+ 
+     # bond: attempt only the defined interface (override bridge defines)
+-    if [ -e /tmp/bond.info ]; then
+-        . /tmp/bond.info
++    for i in /tmp/bond.*.info; do
++        [ -e "$i" ] || continue
++        unset bondslaves
++        unset bondname
++        . "$i"
+         # It is enough to fire up only one
+         IFACES="$IFACES ${bondslaves%% *}"
+-    fi
++        MASTER_IFACES="$MASTER_IFACES ${bondname}"
++    done
+ 
+     if [ -e /tmp/team.info ]; then
+         . /tmp/team.info
+         IFACES="$IFACES ${teamslaves}"
++        MASTER_IFACES="$MASTER_IFACES ${teammaster}"
+     fi
+ 
+     if [ -e /tmp/vlan.info ]; then
+         . /tmp/vlan.info
+         IFACES="$IFACES $phydevice"
++        MASTER_IFACES="$MASTER_IFACES ${vlanname}"
+     fi
+ 
+     if [ -z "$IFACES" ]; then
+@@ -66,11 +75,16 @@ fi
+     elif [ -n "$IFACES" ] ; then
+         for iface in $IFACES ; do
+             printf 'SUBSYSTEM=="net", ENV{INTERFACE}=="%s", RUN+="%s"\n' "$iface" "/sbin/initqueue --onetime $ifup"
+-            if [ "$bootdev" = "$iface" ]; then
++            if [ "$bootdev" = "$iface" ] || [ "$NEEDNET" = "1" ]; then
+                 echo "[ -f /tmp/setup_net_${iface}.ok ]" >$hookdir/initqueue/finished/wait-$iface.sh
+             fi
+         done
+ 
++        for iface in $MASTER_IFACES; do
++            if [ "$bootdev" = "$iface" ] || [ "$NEEDNET" = "1" ]; then
++                echo "[ -f /tmp/setup_net_${iface}.ok ]" >$hookdir/initqueue/finished/wait-$iface.sh
++            fi
++        done
+     # Default: We don't know the interface to use, handle all
+     # Fixme: waiting for the interface as well.
+     else
+diff --git a/modules.d/40network/net-lib.sh b/modules.d/40network/net-lib.sh
+index f9b461b..d62d5ad 100644
+--- a/modules.d/40network/net-lib.sh
++++ b/modules.d/40network/net-lib.sh
+@@ -366,3 +366,7 @@ linkup() {
+      && wait_for_if_up $1 2>/dev/null
+ }
+ 
++type hostname >/dev/null 2>&1 || \
++hostname() {
++	cat /proc/sys/kernel/hostname
++}
+diff --git a/modules.d/40network/parse-bond.sh b/modules.d/40network/parse-bond.sh
+index 983eb3a..25c51b8 100755
+--- a/modules.d/40network/parse-bond.sh
++++ b/modules.d/40network/parse-bond.sh
+@@ -54,8 +54,8 @@ if getarg bond >/dev/null; then
+     fi
+     # Make it suitable for initscripts export
+     bondoptions=$(str_replace "$bondoptions" ";" ",")
+-    echo "bondname=$bondname" > /tmp/bond.info
+-    echo "bondslaves=\"$bondslaves\"" >> /tmp/bond.info
+-    echo "bondoptions=\"$bondoptions\"" >> /tmp/bond.info
++    echo "bondname=$bondname" > /tmp/bond.${bondname}.info
++    echo "bondslaves=\"$bondslaves\"" >> /tmp/bond.${bondname}.info
++    echo "bondoptions=\"$bondoptions\"" >> /tmp/bond.${bondname}.info
+     return
+ fi
+diff --git a/modules.d/40network/parse-bridge.sh b/modules.d/40network/parse-bridge.sh
+index 1f027bb..8c305c0 100755
+--- a/modules.d/40network/parse-bridge.sh
++++ b/modules.d/40network/parse-bridge.sh
+@@ -37,12 +37,6 @@ parsebridge() {
+ unset bridgename ethnames
+ 
+ iface=eth0
+-if [ -e /tmp/bond.info ]; then
+-    . /tmp/bond.info
+-    if [ -n "$bondname" ] ; then
+-        iface=$bondname
+-    fi
+-fi
+ 
+ # Parse bridge for bridgename and ethnames
+ if bridge="$(getarg bridge)"; then
+diff --git a/modules.d/40network/parse-ip-opts.sh b/modules.d/40network/parse-ip-opts.sh
+index c7dc3ce..f64c936 100755
+--- a/modules.d/40network/parse-ip-opts.sh
++++ b/modules.d/40network/parse-ip-opts.sh
+@@ -54,6 +54,12 @@ fi
+ for p in $(getargs ip=); do
+     ip_to_var $p
+ 
++    # make first device specified the BOOTDEV
++    if [ -z "$BOOTDEV" ] && [ -n "$dev" ]; then
++        BOOTDEV="$dev"
++        [ -n "$NEEDBOOTDEV" ] && warn "Setting bootdev to '$BOOTDEV'"
++    fi
++
+     # skip ibft since we did it above
+     [ "$autoconf" = "ibft" ] && continue
+ 
+@@ -121,6 +127,3 @@ fi
+ # Store BOOTDEV and IFACES for later use
+ [ -n "$BOOTDEV" ] && echo $BOOTDEV > /tmp/net.bootdev
+ [ -n "$IFACES" ]  && echo $IFACES > /tmp/net.ifaces
+-
+-# We need a ip= line for the configured bootdev=
+-[ -n "$NEEDBOOTDEV" ] && [ -z "$BOOTDEVOK" ] && die "Bootdev Argument '$BOOTDEV' not found"
+diff --git a/modules.d/45ifcfg/write-ifcfg.sh b/modules.d/45ifcfg/write-ifcfg.sh
+index f7a476c..2e78c49 100755
+--- a/modules.d/45ifcfg/write-ifcfg.sh
++++ b/modules.d/45ifcfg/write-ifcfg.sh
+@@ -4,14 +4,6 @@
+ 
+ # NFS root might have reached here before /tmp/net.ifaces was written
+ udevadm settle --timeout=30
+-# Don't write anything if we don't know our bootdev
+-[ -f /tmp/net.ifaces ] || return 1
+-
+-read IFACES < /tmp/net.ifaces
+-
+-if [ -e /tmp/bond.info ]; then
+-    . /tmp/bond.info
+-fi
+ 
+ if [ -e /tmp/bridge.info ]; then
+     . /tmp/bridge.info
+@@ -83,12 +75,27 @@ print_s390() {
+     echo "OPTIONS=\"${OPTIONS}\""
+ }
+ 
++for netup in /tmp/net.*.did-setup ; do
++    [ -f $netup ] || continue
+ 
+-for netif in $IFACES ; do
++    netif=${netup%%.did-setup}
++    netif=${netif##*/net.}
+     [ -e /tmp/ifcfg/ifcfg-$netif ] && continue
+-    # bridge?
+     unset bridge
+     unset bond
++    unset bondslaves
++    unset bondname
++    unset bondoptions
++    unset uuid
++    unset ip
++    unset gw
++    unset mtu
++    unset mask
++    unset macaddr
++    unset slave
++    unset ethname
++    [ -e /tmp/bond.${netif}.info ] && . /tmp/bond.${netif}.info
++
+     uuid=$(cat /proc/sys/kernel/random/uuid)
+     if [ "$netif" = "$bridgename" ]; then
+         bridge=yes
+@@ -99,45 +106,46 @@ for netif in $IFACES ; do
+     cat /sys/class/net/$netif/address > /tmp/net.$netif.hwaddr
+     {
+         echo "# Generated by dracut initrd"
+-        echo "DEVICE=$netif"
++        echo "DEVICE=\"$netif\""
+         echo "ONBOOT=yes"
+         echo "NETBOOT=yes"
+-        echo "UUID=$uuid"
+-        [ -n "$mtu" ] && echo "MTU=$mtu"
+-        if [ -f /tmp/net.$netif.lease ]; then
++        echo "UUID=\"$uuid\""
++        if [ -f /tmp/dhclient.$netif.lease ]; then
++            [ -f /tmp/dhclient.$netif.dhcpopts ] && . /tmp/dhclient.$netif.dhcpopts
+             strstr "$ip" '*:*:*' && echo "IPV6INIT=yes"
+             if [ -f /tmp/net.$netif.has_ibft_config ]; then
+                 echo "BOOTPROTO=ibft"
+             else
+                 echo "BOOTPROTO=dhcp"
+             fi
+-            cp /tmp/net.$netif.lease /tmp/ifcfg-leases/dhclient-$uuid-$netif.lease
++            cp /tmp/dhclient.$netif.lease /tmp/ifcfg-leases/dhclient-$uuid-$netif.lease
+         else
+             # If we've booted with static ip= lines, the override file is there
+             [ -e /tmp/net.$netif.override ] && . /tmp/net.$netif.override
+             if strstr "$ip" '*:*:*'; then
+                 echo "IPV6INIT=yes"
+                 echo "IPV6_AUTOCONF=no"
+-                echo "IPV6ADDR=$ip/$mask"
++                echo "IPV6ADDR=\"$ip/$mask\""
+             else
+                 if [ -f /tmp/net.$netif.has_ibft_config ]; then
+                     echo "BOOTPROTO=ibft"
+                 else
+                     echo "BOOTPROTO=none"
+-                    echo "IPADDR=$ip"
++                    echo "IPADDR=\"$ip\""
+                     if strstr "$mask" "."; then
+-                        echo "NETMASK=$mask"
++                        echo "NETMASK=\"$mask\""
+                     else
+-                        echo "PREFIX=$mask"
++                        echo "PREFIX=\"$mask\""
+                     fi
+                 fi
+             fi
+             if strstr "$gw" '*:*:*'; then
+-                echo "IPV6_DEFAULTGW=$gw"
++                echo "IPV6_DEFAULTGW=\"$gw\""
+             elif [ -n "$gw" ]; then
+-                echo "GATEWAY=$gw"
++                echo "GATEWAY=\"$gw\""
+             fi
+         fi
++        [ -n "$mtu" ] && echo "MTU=\"$mtu\""
+     } > /tmp/ifcfg/ifcfg-$netif
+ 
+     # bridge needs different things written to ifcfg
+@@ -145,14 +153,14 @@ for netif in $IFACES ; do
+         # standard interface
+         {
+             if [ -n "$macaddr" ]; then
+-                echo "MACADDR=$macaddr"
++                echo "MACADDR=\"$macaddr\""
+             else
+                 echo "HWADDR=\"$(cat /sys/class/net/$netif/address)\""
+             fi
+             print_s390 $netif
+             echo "TYPE=Ethernet"
+-            echo "NAME=\"Boot Disk\""
+-            [ -n "$mtu" ] && echo "MTU=$mtu"
++            echo "NAME=\"$netif\""
++            [ -n "$mtu" ] && echo "MTU=\"$mtu\""
+         } >> /tmp/ifcfg/ifcfg-$netif
+     fi
+ 
+@@ -161,22 +169,22 @@ for netif in $IFACES ; do
+         {
+             # This variable is an indicator of a bond interface for initscripts
+             echo "BONDING_OPTS=\"$bondoptions\""
+-            echo "NAME=\"Boot Disk\""
++            echo "NAME=\"$netif\""
++            echo "TYPE=Bond"
+         } >> /tmp/ifcfg/ifcfg-$netif
+ 
+         for slave in $bondslaves ; do
+-            # Set ONBOOT=no to prevent initscripts from trying to setup already bonded physical interface
+             # write separate ifcfg file for the raw eth interface
+             {
+                 echo "# Generated by dracut initrd"
+-                echo "DEVICE=$slave"
++                echo "DEVICE=\"$slave\""
+                 echo "TYPE=Ethernet"
+-                echo "ONBOOT=no"
++                echo "ONBOOT=yes"
+                 echo "NETBOOT=yes"
+-                echo "HWADDR=$(cat /sys/class/net/$slave/address)"
++                echo "HWADDR=\"$(cat /sys/class/net/$slave/address)\""
+                 echo "SLAVE=yes"
+-                echo "MASTER=$netif"
+-                echo "NAME=$slave"
++                echo "MASTER=\"$netif\""
++                echo "NAME=\"$slave\""
+             } >> /tmp/ifcfg/ifcfg-$slave
+         done
+     fi
+@@ -185,52 +193,50 @@ for netif in $IFACES ; do
+         # bridge
+         {
+             echo "TYPE=Bridge"
+-            echo "NAME=\"Boot Disk\""
++            echo "NAME=\"$netif\""
+         } >> /tmp/ifcfg/ifcfg-$netif
+         if [ "$ethname" = "$bondname" ] ; then
+             {
+-                # Set ONBOOT=no to prevent initscripts from trying to setup already bridged bond interface
+                 echo "# Generated by dracut initrd"
+-                echo "DEVICE=$bondname"
+-                echo "ONBOOT=no"
++                echo "DEVICE=\"$bondname\""
++                echo "ONBOOT=yes"
+                 echo "NETBOOT=yes"
+                 # This variable is an indicator of a bond interface for initscripts
+                 echo "BONDING_OPTS=\"$bondoptions\""
+-                echo "BRIDGE=$netif"
++                echo "BRIDGE=\"$netif\""
+                 echo "NAME=\"$bondname\""
+             } >> /tmp/ifcfg/ifcfg-$bondname
+             for slave in $bondslaves ; do
+                 # write separate ifcfg file for the raw eth interface
+-                # Set ONBOOT=no to prevent initscripts from trying to setup already bridged physical interface
+                 {
+                     echo "# Generated by dracut initrd"
+-                    echo "DEVICE=$slave"
++                    echo "DEVICE=\"$slave\""
+                     echo "TYPE=Ethernet"
+-                    echo "ONBOOT=no"
++                    echo "ONBOOT=yes"
+                     echo "NETBOOT=yes"
+-                    echo "HWADDR=$(cat /sys/class/net/$slave/address)"
++                    echo "HWADDR=\"$(cat /sys/class/net/$slave/address)\""
+                     echo "SLAVE=yes"
+-                    echo "MASTER=$bondname"
+-                    echo "NAME=$slave"
++                    echo "MASTER=\"$bondname\""
++                    echo "NAME=\"$slave\""
+                 } >> /tmp/ifcfg/ifcfg-$slave
+             done
+         else
+             # write separate ifcfg file for the raw eth interface
+             {
+                 echo "# Generated by dracut initrd"
+-                echo "DEVICE=$ethname"
++                echo "DEVICE=\"$ethname\""
+                 echo "TYPE=Ethernet"
+-                echo "ONBOOT=no"
++                echo "ONBOOT=yes"
+                 echo "NETBOOT=yes"
+-                echo "HWADDR=$(cat /sys/class/net/$ethname/address)"
+-                echo "BRIDGE=$netif"
+-                echo "NAME=$ethname"
++                echo "HWADDR=\"$(cat /sys/class/net/$ethname/address)\""
++                echo "BRIDGE=\"$netif\""
++                echo "NAME=\"$ethname\""
+             } >> /tmp/ifcfg/ifcfg-$ethname
+         fi
+     fi
+     i=1
+     for ns in $(getargs nameserver); do
+-        echo "DNS${i}=${ns}" >> /tmp/ifcfg/ifcfg-$netif
++        echo "DNS${i}=\"${ns}\"" >> /tmp/ifcfg/ifcfg-$netif
+         i=$((i+1))
+     done
+ done
+diff --git a/modules.d/45url-lib/module-setup.sh b/modules.d/45url-lib/module-setup.sh
+index 0fb3667..e8b9700 100755
+--- a/modules.d/45url-lib/module-setup.sh
++++ b/modules.d/45url-lib/module-setup.sh
+@@ -12,6 +12,7 @@ depends() {
+ }
+ 
+ install() {
++    local _dir _crt _found
+     inst_simple "$moddir/url-lib.sh" "/lib/url-lib.sh"
+     dracut_install curl
+     # also install libs for curl https
+@@ -20,11 +21,17 @@ install() {
+     inst_libdir_file "libsoftokn3.so*"
+     inst_libdir_file "libsqlite3.so*"
+ 
+-    mkdir -m 0755 -p "$initdir/etc/ssl/certs"
+-    if ! inst_any -t /etc/ssl/certs/ca-bundle.crt \
+-            /etc/ssl/certs/ca-bundle.crt \
+-            /etc/ssl/certs/ca-certificates.crt; then
+-        dwarn "Couldn't find SSL CA cert bundle; HTTPS won't work."
+-    fi
++    for _dir in $libdirs; do
++	    [[ -d $_dir ]] || continue
++            _crt=$(grep -F --binary-files=text -z .crt $_dir/libcurl.so)
++            [[ $_crt ]] || continue
++            [[ $_crt == /*/* ]] || continue
++            if ! inst_simple "$_crt"; then
++                dwarn "Couldn't install '$_crt' SSL CA cert bundle; HTTPS might not work."
++                continue
++            fi
++            _found=1
++    done
++    [[ $_found ]] || dwarn "Couldn't find SSL CA cert bundle; HTTPS won't work."
+ }
+ 
+diff --git a/modules.d/45url-lib/url-lib.sh b/modules.d/45url-lib/url-lib.sh
+index 4a3d56d..c00ca18 100755
+--- a/modules.d/45url-lib/url-lib.sh
++++ b/modules.d/45url-lib/url-lib.sh
+@@ -54,7 +54,7 @@ add_url_handler() {
+ 
+ export CURL_HOME="/run/initramfs/url-lib"
+ mkdir -p $CURL_HOME
+-curl_args="--location --retry 3 --fail --show-error"
++curl_args="--globoff --location --retry 3 --fail --show-error"
+ getargbool 0 rd.noverifyssl && curl_args="$curl_args --insecure"
+ 
+ proxy=$(getarg proxy=)
+@@ -64,7 +64,7 @@ curl_fetch_url() {
+     local url="$1" outloc="$2"
+     echo "$url" > /proc/self/fd/0
+     if [ -n "$outloc" ]; then
+-        curl --globoff $curl_args --output "$outloc" "$url" || return $?
++        curl $curl_args --output "$outloc" "$url" || return $?
+     else
+         local outdir="$(mkuniqdir /tmp curl_fetch_url)"
+         ( cd "$outdir"; curl $curl_args --remote-name "$url" || return $? )
+diff --git a/modules.d/50plymouth/module-setup.sh b/modules.d/50plymouth/module-setup.sh
+index f754e24..ae35b11 100755
+--- a/modules.d/50plymouth/module-setup.sh
++++ b/modules.d/50plymouth/module-setup.sh
+@@ -4,7 +4,7 @@
+ 
+ check() {
+     [[ "$mount_needs" ]] && return 1
+-    [[ -x /sbin/plymouthd && -x /bin/plymouth && -x /usr/sbin/plymouth-set-default-theme ]]
++    type -P plymouthd >/dev/null && type -P plymouth >/dev/null
+ }
+ 
+ depends() {
+diff --git a/modules.d/50plymouth/plymouth-emergency.sh b/modules.d/50plymouth/plymouth-emergency.sh
+index 68955b8..ed0b0ac 100755
+--- a/modules.d/50plymouth/plymouth-emergency.sh
++++ b/modules.d/50plymouth/plymouth-emergency.sh
+@@ -1,4 +1,4 @@
+ #!/bin/sh
+ # -*- mode: shell-script; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
+ # ex: ts=8 sw=4 sts=4 et filetype=sh
+-[ -x /bin/plymouth ] && /bin/plymouth --hide-splash
++plymouth --hide-splash 2>/dev/null || :
+diff --git a/modules.d/50plymouth/plymouth-newroot.sh b/modules.d/50plymouth/plymouth-newroot.sh
+index 2311b47..96cd138 100755
+--- a/modules.d/50plymouth/plymouth-newroot.sh
++++ b/modules.d/50plymouth/plymouth-newroot.sh
+@@ -2,6 +2,6 @@
+ # -*- mode: shell-script; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
+ # ex: ts=8 sw=4 sts=4 et filetype=sh
+ 
+-if [ -x /bin/plymouth -a -z "$DRACUT_SYSTEMD" ]; then
+-    /bin/plymouth --newroot=$NEWROOT
++if type plymouth >/dev/null 2>&1 && [ -z "$DRACUT_SYSTEMD" ]; then
++    plymouth --newroot=$NEWROOT
+ fi
+diff --git a/modules.d/50plymouth/plymouth-populate-initrd.sh b/modules.d/50plymouth/plymouth-populate-initrd.sh
+index 1e2ffe7..6e0f561 100755
+--- a/modules.d/50plymouth/plymouth-populate-initrd.sh
++++ b/modules.d/50plymouth/plymouth-populate-initrd.sh
+@@ -4,15 +4,14 @@
+ PLYMOUTH_LOGO_FILE="/usr/share/pixmaps/system-logo-white.png"
+ PLYMOUTH_THEME=$(plymouth-set-default-theme)
+ 
+-inst /sbin/plymouthd /bin/plymouthd
+-dracut_install /bin/plymouth \
++dracut_install plymouthd plymouth \
+     "${PLYMOUTH_LOGO_FILE}" \
+     /etc/system-release
+ 
+ mkdir -m 0755 -p "${initdir}/usr/share/plymouth"
+ 
+ inst_libdir_file "plymouth/text.so" "plymouth/details.so"
+-    
++
+ if [[ $hostonly ]]; then
+     dracut_install \
+         "/usr/share/plymouth/themes/details/details.plymouth" \
+diff --git a/modules.d/50plymouth/plymouth-pretrigger.sh b/modules.d/50plymouth/plymouth-pretrigger.sh
+index 0e3cb02..196f2f9 100755
+--- a/modules.d/50plymouth/plymouth-pretrigger.sh
++++ b/modules.d/50plymouth/plymouth-pretrigger.sh
+@@ -2,7 +2,7 @@
+ # -*- mode: shell-script; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
+ # ex: ts=8 sw=4 sts=4 et filetype=sh
+ 
+-if [ -x /bin/plymouthd -a -z "$DRACUT_SYSTEMD" ]; then
++if type plymouthd >/dev/null 2>&1 && [ -z "$DRACUT_SYSTEMD" ]; then
+     if getargbool 1 plymouth.enable && getargbool 1 rd.plymouth -d -n rd_NO_PLYMOUTH; then
+         # first trigger graphics subsystem
+         udevadm trigger --action=add --attr-match=class=0x030000 >/dev/null 2>&1
+@@ -16,8 +16,8 @@ if [ -x /bin/plymouthd -a -z "$DRACUT_SYSTEMD" ]; then
+         read consoledev rest < /sys/class/tty/console/active
+         consoledev=${consoledev:-tty0}
+         [ -x /lib/udev/console_init -a -e "/dev/$consoledev" ] && /lib/udev/console_init "/dev/$consoledev"
+-        [ -x /bin/plymouthd ] && /bin/plymouthd --attach-to-session --pid-file /run/plymouth/pid
+-        /bin/plymouth --show-splash 2>&1 | vinfo
++        plymouthd --attach-to-session --pid-file /run/plymouth/pid
++        plymouth --show-splash 2>&1 | vinfo
+         # reset tty after plymouth messed with it
+         [ -x /lib/udev/console_init -a -e "/dev/$consoledev" ] && /lib/udev/console_init "/dev/$consoledev"
+     fi
+diff --git a/modules.d/80cms/cmsifup.sh b/modules.d/80cms/cmsifup.sh
+index 6481778..c19f2c8 100755
+--- a/modules.d/80cms/cmsifup.sh
++++ b/modules.d/80cms/cmsifup.sh
+@@ -27,7 +27,7 @@ else
+ fi
+ 
+ {
+-    echo "ip=$IPADDR::$GATEWAY:$NETMASK:$HOSTNAME:$DEVICE:none:$MACADDR"
++    echo "ip=$IPADDR::$GATEWAY:$NETMASK:$HOSTNAME:$DEVICE:none:$MTU:$MACADDR"
+     for i in $DNS1 $DNS2; do
+ 	echo "nameserver=$i"
+     done
+diff --git a/modules.d/80cms/cmssetup.sh b/modules.d/80cms/cmssetup.sh
+index e6daa07..37fd84e 100755
+--- a/modules.d/80cms/cmssetup.sh
++++ b/modules.d/80cms/cmssetup.sh
+@@ -51,152 +51,152 @@ function dasd_settle_all() {
+         fi
+     done
+     return 0
+-}
++    }
+ 
+ # prints a canonocalized device bus ID for a given devno of any format
+-function canonicalize_devno()
+-{
+-    case ${#1} in
+-        3) echo "0.0.0${1}" ;;
+-        4) echo "0.0.${1}" ;;
+-        *) echo "${1}" ;;
+-    esac
+-    return 0
+-}
++    function canonicalize_devno()
++    {
++        case ${#1} in
++            3) echo "0.0.0${1}" ;;
++            4) echo "0.0.${1}" ;;
++            *) echo "${1}" ;;
++        esac
++        return 0
++    }
+ 
+ # read file from CMS and write it to /tmp
+-function readcmsfile() # $1=dasdport $2=filename
+-{
+-    local dev
+-    local numcpus
+-    local devname
+-    local ret=0
+-    if [ $# -ne 2 ]; then return; fi
++    function readcmsfile() # $1=dasdport $2=filename
++    {
++        local dev
++        local numcpus
++        local devname
++        local ret=0
++        if [ $# -ne 2 ]; then return; fi
+     # precondition: udevd created dasda block device node
+-    if ! dasd_cio_free -d $1 ; then
+-        echo $"DASD $1 could not be cleared from device blacklist"
+-        return 1
+-    fi
++        if ! dasd_cio_free -d $1 ; then
++            echo $"DASD $1 could not be cleared from device blacklist"
++            return 1
++        fi
+ 
+-    modprobe dasd_mod dasd=$CMSDASD
+-    modprobe dasd_eckd_mod
+-    udevadm settle
++        modprobe dasd_mod dasd=$CMSDASD
++        modprobe dasd_eckd_mod
++        udevadm settle
+ 
+     # precondition: dasd_eckd_mod driver incl. dependencies loaded,
+     #               dasd_mod must be loaded without setting any DASD online
+-    dev=$(canonicalize_devno $1)
+-    numcpus=$(
+-	while read line; do
+-	    if strstr "$line" "# processors"; then
+-		echo ${line##*:};
+-		break;
+-	    fi;
+-	done < /proc/cpuinfo
+-    )
+-
+-    if [ ${numcpus} -eq 1 ]; then
+-        echo 1 > /sys/bus/ccw/devices/$dev/online
+-    else
+-        if ! sysecho /sys/bus/ccw/devices/$dev/online 1; then
+-            echo $"DASD $dev could not be set online"
+-            return 1
+-        fi
+-        udevadm settle
+-        if ! dasd_settle $dev ; then
+-            echo $"Could not access DASD $dev in time"
+-            return 1
++        dev=$(canonicalize_devno $1)
++        numcpus=$(
++	    while read line; do
++	        if strstr "$line" "# processors"; then
++		    echo ${line##*:};
++		    break;
++	        fi;
++	    done < /proc/cpuinfo
++        )
++
++        if [ ${numcpus} -eq 1 ]; then
++            echo 1 > /sys/bus/ccw/devices/$dev/online
++        else
++            if ! sysecho /sys/bus/ccw/devices/$dev/online 1; then
++                echo $"DASD $dev could not be set online"
++                return 1
++            fi
++            udevadm settle
++            if ! dasd_settle $dev ; then
++                echo $"Could not access DASD $dev in time"
++                return 1
++            fi
+         fi
+-    fi
+ 
+-    udevadm settle
+-
+-    devname=$(cd /sys/bus/ccw/devices/$dev/block; set -- *; [ -b /dev/$1 ] && echo $1)
+-    devname=${devname:-dasda}
+-
+-    [[ -d /mnt ]] || mkdir /mnt
+-    if cmsfs-fuse --to=UTF-8 -a /dev/$devname /mnt; then
+-	cat /mnt/$2 > /run/initramfs/$2
+-        umount /mnt || umount -l /mnt
+         udevadm settle
+-    else
+-        echo $"Could not read conf file $2 on CMS DASD $1."
+-        ret=1
+-    fi
+-
+-    if ! sysecho /sys/bus/ccw/devices/$dev/online 0; then
+-        echo $"DASD $dev could not be set offline again"
+-        #return 1
+-    fi
+-    udevadm settle
+ 
+-    # unbind all dasds to unload the dasd modules for a clean start
+-    ( cd /sys/bus/ccw/drivers/dasd-eckd; for i in *.*; do echo $i > unbind;done)
+-    udevadm settle
+-    modprobe -r dasd_eckd_mod
+-    udevadm settle
+-    modprobe -r dasd_diag_mod
+-    udevadm settle
+-    modprobe -r dasd_mod
+-    udevadm settle
+-    return $ret
+-}
++        devname=$(cd /sys/bus/ccw/devices/$dev/block; set -- *; [ -b /dev/$1 ] && echo $1)
++        devname=${devname:-dasda}
+ 
+-processcmsfile()
+-{
+-    source /tmp/cms.conf
+-
+-    if [[ $NETTYPE ]]; then
+-	(
+-	    echo -n $NETTYPE,$SUBCHANNELS
+-	    [[ $PORTNAME ]] && echo ",portname=$PORTNAME"
+-	    [[ $LAYER2 ]] && echo ",layer2=$LAYER"
+-	    [[ "$NETTYPE" = "ctc" ]] && [[ $CTCPROT ]] && echo ",protocol=$CTCPROT"
+-	    echo
+-	) >> /etc/ccw.conf
+-
+-	OLDIFS=$IFS
+-	IFS=,
+-	read -a subch_array <<< "indexzero,$SUBCHANNELS"
+-	IFS=$OLDIFS
+-	devbusid=${subch_array[1]}
+-        if [ "$NETTYPE" = "ctc" ]; then
+-            driver="ctcm"
++        [[ -d /mnt ]] || mkdir /mnt
++        if cmsfs-fuse --to=UTF-8 -a /dev/$devname /mnt; then
++	    cat /mnt/$2 > /run/initramfs/$2
++            umount /mnt || umount -l /mnt
++            udevadm settle
+         else
+-            driver=$NETTYPE
++            echo $"Could not read conf file $2 on CMS DASD $1."
++            ret=1
+         fi
+ 
+-	printf 'SUBSYSTEM=="net", ACTION=="add", DRIVERS=="%s", KERNELS=="%s", ENV{INTERFACE}=="?*", RUN+="/sbin/initqueue --onetime --unique --name cmsifup-$env{INTERFACE} /sbin/cmsifup $env{INTERFACE}"\n' "$driver" "$devbusid" > /etc/udev/rules.d/99-cms.rules
+-        # remove the default net rules
+-        rm -f /etc/udev/rules.d/91-default-net.rules
+-	[[ -f /etc/udev/rules.d/90-net.rules ]] \
+-	    || printf 'SUBSYSTEM=="net", ACTION=="online", RUN+="/sbin/initqueue --onetime --env netif=$env{INTERFACE} source_hook initqueue/online"\n' >> /etc/udev/rules.d/99-cms.rules
++        if ! sysecho /sys/bus/ccw/devices/$dev/online 0; then
++            echo $"DASD $dev could not be set offline again"
++        #return 1
++        fi
++        udevadm settle
+ 
+-	znet_cio_free
+-    fi
++    # unbind all dasds to unload the dasd modules for a clean start
++        ( cd /sys/bus/ccw/drivers/dasd-eckd; for i in *.*; do echo $i > unbind;done)
++        udevadm settle
++        modprobe -r dasd_eckd_mod
++        udevadm settle
++        modprobe -r dasd_diag_mod
++        udevadm settle
++        modprobe -r dasd_mod
++        udevadm settle
++        return $ret
++    }
++
++    processcmsfile()
++    {
++        source /tmp/cms.conf
++
++        if [[ $NETTYPE ]]; then
++	    (
++	        echo -n $NETTYPE,$SUBCHANNELS
++	        [[ $PORTNAME ]] && echo -n ",portname=$PORTNAME"
++	        [[ $LAYER2 ]] && echo -n ",layer2=$LAYER2"
++	        [[ "$NETTYPE" = "ctc" ]] && [[ $CTCPROT ]] && echo -n ",protocol=$CTCPROT"
++	        echo
++	    ) >> /etc/ccw.conf
++
++	    OLDIFS=$IFS
++	    IFS=,
++	    read -a subch_array <<< "indexzero,$SUBCHANNELS"
++	    IFS=$OLDIFS
++	    devbusid=${subch_array[1]}
++            if [ "$NETTYPE" = "ctc" ]; then
++                driver="ctcm"
++            else
++                driver=$NETTYPE
++            fi
++
++	    printf 'SUBSYSTEM=="net", ACTION=="add", DRIVERS=="%s", KERNELS=="%s", ENV{INTERFACE}=="?*", RUN+="/sbin/initqueue --onetime --unique --name cmsifup-$env{INTERFACE} /sbin/cmsifup $env{INTERFACE}"\n' "$driver" "$devbusid" > /etc/udev/rules.d/99-cms.rules
++        # remove the default net rules
++            rm -f /etc/udev/rules.d/91-default-net.rules
++	    [[ -f /etc/udev/rules.d/90-net.rules ]] \
++	        || printf 'SUBSYSTEM=="net", ACTION=="online", RUN+="/sbin/initqueue --onetime --env netif=$env{INTERFACE} source_hook initqueue/online"\n' >> /etc/udev/rules.d/99-cms.rules
++            udevadm control --reload
++	    znet_cio_free
++        fi
+ 
+-    if [[ $DASD ]]; then
+-	echo $DASD | normalize_dasd_arg > /etc/dasd.conf
+-	echo "options dasd_mod dasd=$DASD" > /etc/modprobe.d/dasd_mod.conf
+-	dasd_cio_free
+-    fi
++        if [[ $DASD ]]; then
++	    echo $DASD | normalize_dasd_arg > /etc/dasd.conf
++	    echo "options dasd_mod dasd=$DASD" > /etc/modprobe.d/dasd_mod.conf
++	    dasd_cio_free
++        fi
+ 
+-    unset _do_zfcp
+-    for i in ${!FCP_*}; do
+-	echo "${!i}" >> /etc/zfcp.conf
+-	_do_zfcp=1
+-    done
+-    [[ $_do_zfcp ]] && zfcp_cio_free
+-    unset _do_zfcp
+-}
++        unset _do_zfcp
++        for i in ${!FCP_*}; do
++	    echo "${!i}" >> /etc/zfcp.conf
++	    _do_zfcp=1
++        done
++        [[ $_do_zfcp ]] && zfcp_cio_free
++        unset _do_zfcp
++    }
+ 
+-[[ $CMSDASD ]] || CMSDASD=$(getarg "CMSDASD=")
+-[[ $CMSCONFFILE ]] || CMSCONFFILE=$(getarg "CMSCONFFILE=")
++    [[ $CMSDASD ]] || CMSDASD=$(getarg "CMSDASD=")
++    [[ $CMSCONFFILE ]] || CMSCONFFILE=$(getarg "CMSCONFFILE=")
+ 
+ # Parse configuration
+-if [ -n "$CMSDASD" -a -n "$CMSCONFFILE" ]; then
+-    if readcmsfile $CMSDASD $CMSCONFFILE; then
+-        ln -s /run/initramfs/$CMSCONFFILE /tmp/$CMSCONFFILE
+-        ln -s /run/initramfs/$CMSCONFFILE /tmp/cms.conf
+-        processcmsfile
++    if [ -n "$CMSDASD" -a -n "$CMSCONFFILE" ]; then
++        if readcmsfile $CMSDASD $CMSCONFFILE; then
++            ln -s /run/initramfs/$CMSCONFFILE /tmp/$CMSCONFFILE
++            ln -s /run/initramfs/$CMSCONFFILE /tmp/cms.conf
++            processcmsfile
++        fi
+     fi
+-fi
+diff --git a/modules.d/90btrfs/module-setup.sh b/modules.d/90btrfs/module-setup.sh
+index 4a7c01d..e1c8577 100755
+--- a/modules.d/90btrfs/module-setup.sh
++++ b/modules.d/90btrfs/module-setup.sh
+@@ -43,7 +43,7 @@ install() {
+             /usr/lib/dracut/hooks/initqueue/timeout/btrfs_timeout.sh
+     fi
+ 
+-    dracut_install btrfsck
++    dracut_install -o btrfsck btrfs-zero-log
+     inst $(command -v btrfs) /sbin/btrfs
+ }
+ 
+diff --git a/modules.d/90crypt/crypt-lib.sh b/modules.d/90crypt/crypt-lib.sh
+index d66ba88..ebe09f8 100755
+--- a/modules.d/90crypt/crypt-lib.sh
++++ b/modules.d/90crypt/crypt-lib.sh
+@@ -47,8 +47,8 @@ ask_for_password() {
+ 
+     { flock -s 9;
+         # Prompt for password with plymouth, if installed and running.
+-        if [ -x /bin/plymouth ] && /bin/plymouth --ping; then
+-            /bin/plymouth ask-for-password \
++        if type plymouth >/dev/null 2>&1 && plymouth --ping 2>/dev/null; then
++            plymouth ask-for-password \
+                 --prompt "$ply_prompt" --number-of-tries=$ply_tries \
+                 --command="$ply_cmd"
+             ret=$?
+diff --git a/modules.d/90crypt/module-setup.sh b/modules.d/90crypt/module-setup.sh
+index b76f6ae..639a77f 100755
+--- a/modules.d/90crypt/module-setup.sh
++++ b/modules.d/90crypt/module-setup.sh
+@@ -56,7 +56,26 @@ install() {
+     if ! dracut_module_included "systemd"; then
+         inst_hook cleanup 30 "$moddir/crypt-cleanup.sh"
+     fi
+-    [[ $hostonly ]]  && inst_simple /etc/crypttab
++
++    if [[ $hostonly ]]; then
++        # filter /etc/crypttab for the devices we need
++        while read _mapper _dev _rest; do
++            [[ $_mapper = \#* ]] && continue
++            [[ $_dev ]] || continue
++
++            [[ $_dev == UUID=* ]] && \
++                _dev="/dev/disk/by-uuid/${_dev#UUID=}"
++
++            for _hdev in "${!host_fs_types[@]}"; do
++                [[ ${host_fs_types[$_hdev]} == "crypto_LUKS" ]] || continue
++                if [[ $_hdev -ef $_dev ]] || [[ /dev/block/$_hdev -ef $_dev ]]; then
++                    echo "$_mapper $_dev $_rest"
++                    break
++                fi
++            done
++        done < /etc/crypttab > $initdir/etc/crypttab
++    fi
++
+     inst_simple "$moddir/crypt-lib.sh" "/lib/dracut-crypt-lib.sh"
+ 
+     dracut_install -o \
+diff --git a/modules.d/90crypt/parse-crypt.sh b/modules.d/90crypt/parse-crypt.sh
+index d61220c..4cb281b 100755
+--- a/modules.d/90crypt/parse-crypt.sh
++++ b/modules.d/90crypt/parse-crypt.sh
+@@ -27,6 +27,14 @@ else
+                     printf -- '--name cryptroot-ask-%%k %s ' $(command -v cryptroot-ask)
+                     printf -- '$env{DEVNAME} luks-$env{ID_FS_UUID} %s"\n' $tout
+                 } >> /etc/udev/rules.d/70-luks.rules.new
++            else
++                {
++                    printf -- 'ENV{ID_FS_TYPE}=="crypto_LUKS", '
++                    printf -- 'ENV{ID_FS_UUID}=="*%s*", ' $luksid
++                    printf -- 'RUN+="%s --unique --onetime ' $(command -v initqueue)
++                    printf -- '--name systemd-cryptsetup-%%k %s start ' $(command -v systemctl)
++                    printf -- 'systemd-cryptsetup@luks$$(dev_unit_name -$env{ID_FS_UUID}).service"\n'
++                } >> /etc/udev/rules.d/70-luks.rules.new
+             fi
+ 
+             uuid=$luksid
+diff --git a/modules.d/90dmraid/dmraid.sh b/modules.d/90dmraid/dmraid.sh
+index 68e0515..3753ddd 100755
+--- a/modules.d/90dmraid/dmraid.sh
++++ b/modules.d/90dmraid/dmraid.sh
+@@ -28,7 +28,7 @@ if [ -n "$DM_RAIDS" ] || getargbool 0 rd.auto; then
+                 if [ "${s##$r}" != "$s" ]; then
+                     info "Activating $s"
+                     dmraid -ay -i -p --rm_partitions "$s" 2>&1 | vinfo
+-                    [ -e "/dev/mapper/$s" ] && kpartx -a -p p "/dev/mapper/$s" 2>&1 | vinfo
++                    [ -e "/dev/mapper/$s" ] && kpartx -a "/dev/mapper/$s" 2>&1 | vinfo
+                     udevsettle
+                 fi
+             done
+@@ -38,7 +38,7 @@ if [ -n "$DM_RAIDS" ] || getargbool 0 rd.auto; then
+         for s in $SETS; do
+             info "Activating $s"
+             dmraid -ay -i -p --rm_partitions "$s" 2>&1 | vinfo
+-            [ -e "/dev/mapper/$s" ] && kpartx -a -p p "/dev/mapper/$s" 2>&1 | vinfo
++            [ -e "/dev/mapper/$s" ] && kpartx -a "/dev/mapper/$s" 2>&1 | vinfo
+         done
+     fi
+ 
+diff --git a/modules.d/90dmsquash-live/dmsquash-live-root.sh b/modules.d/90dmsquash-live/dmsquash-live-root.sh
+index a79b0d9..14e84e1 100755
+--- a/modules.d/90dmsquash-live/dmsquash-live-root.sh
++++ b/modules.d/90dmsquash-live/dmsquash-live-root.sh
+@@ -19,6 +19,9 @@ livedev="$1"
+ # specified as their own things
+ live_dir=$(getarg rd.live.dir -d live_dir)
+ [ -z "$live_dir" ] && live_dir="LiveOS"
++squash_image=$(getarg rd.live.squashimg)
++[ -z "$squash_image" ] && squash_image="squashfs.img"
++
+ getargbool 0 rd.live.ram -d -y live_ram && live_ram="yes"
+ getargbool 0 rd.live.overlay.reset -d -y reset_overlay && reset_overlay="yes"
+ getargbool 0 rd.live.overlay.readonly -d -y readonly_overlay && readonly_overlay="--readonly" || readonly_overlay=""
+@@ -31,7 +34,7 @@ if [ "$fs" = "iso9660" -o "$fs" = "udf" ]; then
+ fi
+ getarg rd.live.check -d check || check=""
+ if [ -n "$check" ]; then
+-    [ -x /bin/plymouth ] && /bin/plymouth --hide-splash
++    type plymouth >/dev/null 2>&1 && plymouth --hide-splash
+     if [ -n "$DRACUT_SYSTEMD" ]; then
+         p=$(str_replace "$livedev" "-" '\x2d')
+         systemctl start checkisomd5@${p}.service
+@@ -42,7 +45,7 @@ if [ -n "$check" ]; then
+         die "CD check failed!"
+         exit 1
+     fi
+-    [ -x /bin/plymouth ] && /bin/plymouth --show-splash
++    type plymouth >/dev/null 2>&1 && plymouth --show-splash
+ fi
+ 
+ ln -s $livedev /run/initramfs/livedev
+@@ -180,8 +183,8 @@ if [ -n "$FSIMG" ] ; then
+ fi
+ 
+ # we might have an embedded fs image on squashfs (compressed live)
+-if [ -e /run/initramfs/live/${live_dir}/squashfs.img ]; then
+-    SQUASHED="/run/initramfs/live/${live_dir}/squashfs.img"
++if [ -e /run/initramfs/live/${live_dir}/${squash_image} ]; then
++    SQUASHED="/run/initramfs/live/${live_dir}/${squash_image}"
+ fi
+ 
+ if [ -e "$SQUASHED" ] ; then
+diff --git a/modules.d/90dmsquash-live/iso-scan.sh b/modules.d/90dmsquash-live/iso-scan.sh
+new file mode 100755
+index 0000000..9300d12
+--- /dev/null
++++ b/modules.d/90dmsquash-live/iso-scan.sh
+@@ -0,0 +1,25 @@
++#!/bin/sh
++# -*- mode: shell-script; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
++# ex: ts=8 sw=4 sts=4 et filetype=sh
++
++type getarg >/dev/null 2>&1 || . /lib/dracut-lib.sh
++
++PATH=/usr/sbin:/usr/bin:/sbin:/bin
++
++isofile=$1
++
++[ -z "$isofile" ] && exit 1
++
++mkdir -p "/run/initramfs/isoscan"
++for dev in /dev/disk/by-uuid/*; do
++    mount -t auto -o ro "$dev" "/run/initramfs/isoscan" || continue
++    if [ -f "/run/initramfs/isoscan/$isofile" ]; then
++        losetup -f "/run/initramfs/isoscan/$isofile"
++        exit 0
++    else
++        umount "/run/initramfs/isoscan"
++    fi
++done
++
++rmdir "/run/initramfs/isoscan"
++exit 1
+diff --git a/modules.d/90dmsquash-live/module-setup.sh b/modules.d/90dmsquash-live/module-setup.sh
+index 76358da..5b283d1 100755
+--- a/modules.d/90dmsquash-live/module-setup.sh
++++ b/modules.d/90dmsquash-live/module-setup.sh
+@@ -23,10 +23,12 @@ install() {
+     dracut_install umount dmsetup blkid dd losetup grep blockdev
+     dracut_install -o checkisomd5
+     inst_hook cmdline 30 "$moddir/parse-dmsquash-live.sh"
++    inst_hook cmdline 31 "$moddir/parse-iso-scan.sh"
+     inst_hook pre-udev 30 "$moddir/dmsquash-live-genrules.sh"
+     inst_hook pre-udev 30 "$moddir/dmsquash-liveiso-genrules.sh"
+     inst_hook pre-pivot 20 "$moddir/apply-live-updates.sh"
+     inst_script "$moddir/dmsquash-live-root.sh" "/sbin/dmsquash-live-root"
++    inst_script "$moddir/iso-scan.sh" "/sbin/iso-scan"
+     # should probably just be generally included
+     inst_rules 60-cdrom_id.rules
+     inst_simple "$moddir/checkisomd5@.service" "/etc/systemd/system/checkisomd5@.service"
+diff --git a/modules.d/90dmsquash-live/parse-iso-scan.sh b/modules.d/90dmsquash-live/parse-iso-scan.sh
+new file mode 100755
+index 0000000..be071fd
+--- /dev/null
++++ b/modules.d/90dmsquash-live/parse-iso-scan.sh
+@@ -0,0 +1,14 @@
++#!/bin/sh
++# -*- mode: shell-script; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
++# ex: ts=8 sw=4 sts=4 et filetype=sh
++# live images are specified with
++# root=live:backingdev
++
++isofile=$(getarg iso-scan/filename)
++
++if [ -n "$isofile" ]; then
++    {
++        printf 'KERNEL=="loop0", RUN+="/sbin/initqueue --settled --onetime --unique /sbin/iso-scan %s"\n' \
++            "'${isofile}'"
++    } >> /etc/udev/rules.d/99-isofile-mount.rules
++fi
+diff --git a/modules.d/90kernel-modules/module-setup.sh b/modules.d/90kernel-modules/module-setup.sh
+index a04eba8..8388a08 100755
+--- a/modules.d/90kernel-modules/module-setup.sh
++++ b/modules.d/90kernel-modules/module-setup.sh
+@@ -42,12 +42,12 @@ installkernel() {
+         instmods yenta_socket scsi_dh_rdac scsi_dh_emc \
+             atkbd i8042 usbhid hid-apple hid-sunplus hid-cherry hid-logitech \
+             hid-logitech-dj hid-microsoft firewire-ohci \
+-            pcmcia usb_storage
++            pcmcia usb_storage nvme hid-hyperv hv-vmbus
+ 
+         if [[ "$(uname -p)" == arm* ]]; then
+             # arm specific modules
+             hostonly='' instmods sdhci_esdhc_imx mmci sdhci_tegra mvsdio omap omapdrm \
+-                omap_hsmmc sdhci_dove ahci_platform pata_imx sata_mv
++                omap_hsmmc panel-tfp410 sdhci_dove ahci_platform pata_imx sata_mv
+         fi
+ 
+         # install virtual machine support
+diff --git a/modules.d/90lvm/module-setup.sh b/modules.d/90lvm/module-setup.sh
+index 22186f4..a51bb05 100755
+--- a/modules.d/90lvm/module-setup.sh
++++ b/modules.d/90lvm/module-setup.sh
+@@ -3,7 +3,6 @@
+ # ex: ts=8 sw=4 sts=4 et filetype=sh
+ 
+ check() {
+-    local _rootdev _activated
+     # No point trying to support lvm if the binaries are missing
+     type -P lvm >/dev/null || return 1
+ 
+@@ -25,6 +24,8 @@ depends() {
+ 
+ install() {
+     local _i
++    local _needthin
++    local _activated
+     inst lvm
+ 
+     check_lvm() {
+@@ -39,6 +40,10 @@ install() {
+             fi
+             push _activated "${DM_VG_NAME}/${DM_LV_NAME}"
+         fi
++        if ! [[ $_needthin ]]; then
++            [[ $(lvs --noheadings -o segtype ${DM_VG_NAME}) == *thin* ]] && _needthin=1
++        fi
++
+         return 0
+     }
+ 
+@@ -65,5 +70,10 @@ install() {
+     inst_hook cmdline 30 "$moddir/parse-lvm.sh"
+ 
+     inst_libdir_file "libdevmapper-event-lvm*.so"
++
++    if [[ $_needthin ]]; then
++        dracut_install -o thin_dump thin_restore thin_check
++    fi
++
+ }
+ 
+diff --git a/modules.d/91crypt-loop/module-setup.sh b/modules.d/91crypt-loop/module-setup.sh
+index 5e7bcbd..218d27a 100644
+--- a/modules.d/91crypt-loop/module-setup.sh
++++ b/modules.d/91crypt-loop/module-setup.sh
+@@ -8,6 +8,10 @@ depends() {
+ 	echo crypt
+ }
+ 
++installkernel() {
++	    instmods loop
++}
++
+ install() {
+ 	dracut_install losetup
+ 	inst "$moddir/crypt-loop-lib.sh" "/lib/dracut-crypt-loop-lib.sh"
+diff --git a/modules.d/95nfs/module-setup.sh b/modules.d/95nfs/module-setup.sh
+index 7c3a64d..6d4d412 100755
+--- a/modules.d/95nfs/module-setup.sh
++++ b/modules.d/95nfs/module-setup.sh
+@@ -62,12 +62,8 @@ install() {
+ 
+     # Rather than copy the passwd file in, just set a user for rpcbind
+     # We'll save the state and restart the daemon from the root anyway
+-    egrep '^nfsnobody:' /etc/passwd >> "$initdir/etc/passwd"
+-    egrep '^rpc:' /etc/passwd >> "$initdir/etc/passwd"
+-    egrep '^rpcuser:' /etc/passwd >> "$initdir/etc/passwd"
+-    #type -P nologin >/dev/null && dracut_install nologin
+-    egrep '^nobody:' /etc/group >> "$initdir/etc/group"
+-    egrep '^rpc:' /etc/group >> "$initdir/etc/group"
++    egrep '^nfsnobody:|^rpc:|^rpcuser:' /etc/passwd >> "$initdir/etc/passwd"
++    egrep '^nogroup:|^rpc:|^nobody:' /etc/group >> "$initdir/etc/group"
+ 
+     # rpc user needs to be able to write to this directory to save the warmstart
+     # file
+diff --git a/modules.d/95rootfs-block/mount-root.sh b/modules.d/95rootfs-block/mount-root.sh
+index c7626c3..6ed35c1 100755
+--- a/modules.d/95rootfs-block/mount-root.sh
++++ b/modules.d/95rootfs-block/mount-root.sh
+@@ -68,7 +68,7 @@ mount_root() {
+                 warn "*** Warning -- the system did not shut down cleanly. "
+                 warn "*** Dropping you to a shell; the system will continue"
+                 warn "*** when you leave the shell."
+-                emergency_shell
++                action_on_fail
+             fi
+             fsckoptions="$AUTOFSCK_OPT $fsckoptions"
+         fi
+diff --git a/modules.d/95udev-rules/module-setup.sh b/modules.d/95udev-rules/module-setup.sh
+index 1c48202..e952e80 100755
+--- a/modules.d/95udev-rules/module-setup.sh
++++ b/modules.d/95udev-rules/module-setup.sh
+@@ -69,6 +69,8 @@ install() {
+         ${udevdir}/pcmcia-socket-startup \
+         ${udevdir}/pcmcia-check-broken-cis
+ 
++    dracut_install -o /etc/pcmcia/config.opts
++
+     [ -f /etc/arch-release ] && \
+         inst_script "$moddir/load-modules.sh" /lib/udev/load-modules.sh
+ 
+diff --git a/modules.d/95zfcp/56-zfcp.rules b/modules.d/95zfcp/56-zfcp.rules
+deleted file mode 100644
+index 5e846a4..0000000
+--- a/modules.d/95zfcp/56-zfcp.rules
++++ /dev/null
+@@ -1 +0,0 @@
+-KERNEL=="zfcp_cfdc", RUN+="/sbin/zfcpconf.sh"
+diff --git a/modules.d/95zfcp/zfcpconf.sh b/modules.d/95zfcp/zfcpconf.sh
+deleted file mode 100755
+index 7127eae..0000000
+--- a/modules.d/95zfcp/zfcpconf.sh
++++ /dev/null
+@@ -1,57 +0,0 @@
+-#!/bin/sh
+-# -*- mode: shell-script; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
+-# ex: ts=8 sw=4 sts=4 et filetype=sh
+-
+-# config file syntax:
+-# deviceno   WWPN   FCPLUN
+-#
+-# Example:
+-# 0.0.4000 0x5005076300C213e9 0x5022000000000000
+-# 0.0.4001 0x5005076300c213e9 0x5023000000000000
+-#
+-#
+-# manual setup:
+-# modprobe zfcp
+-# echo 1    > /sys/bus/ccw/drivers/zfcp/0.0.4000/online
+-# echo LUN  > /sys/bus/ccw/drivers/zfcp/0.0.4000/WWPN/unit_add
+-#
+-# Example:
+-# modprobe zfcp
+-# echo 1                  > /sys/bus/ccw/drivers/zfcp/0.0.4000/online
+-# echo 0x5022000000000000 > /sys/bus/ccw/drivers/zfcp/0.0.4000/0x5005076300c213e9/unit_add
+-
+-CONFIG=/etc/zfcp.conf
+-PATH=/usr/sbin:/usr/bin:/sbin:/bin
+-
+-if [ -f "$CONFIG" ]; then
+-    if [ ! -d /sys/bus/ccw/drivers/zfcp ]; then
+-        modprobe zfcp
+-    fi
+-    if [ ! -d /sys/bus/ccw/drivers/zfcp ]; then
+-        return
+-    fi
+-    sed 'y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/' < $CONFIG| while read line; do
+-    case $line in
+-        \#*) ;;
+-        *)
+-            [ -z "$line" ] && continue
+-            set $line
+-            if [ $# -eq 5 ]; then
+-                DEVICE=$1
+-                SCSIID=$2
+-                WWPN=$3
+-                SCSILUN=$4
+-                FCPLUN=$5
+-                echo "Warning: Deprecated values in /etc/zfcp.conf, ignoring SCSI ID $SCSIID and SCSI LUN $SCSILUN"
+-            elif [ $# -eq 3 ]; then
+-                DEVICE=${1##*0x}
+-                WWPN=$2
+-                FCPLUN=$3
+-            fi
+-            echo 1 > /sys/bus/ccw/drivers/zfcp/${DEVICE}/online
+-            [ ! -d /sys/bus/ccw/drivers/zfcp/${DEVICE}/${WWPN}/${FCPLUN} ] \
+-                && echo $FCPLUN > /sys/bus/ccw/drivers/zfcp/${DEVICE}/${WWPN}/unit_add
+-            ;;
+-    esac
+-    done
+-fi
+diff --git a/modules.d/98selinux/selinux-loadpolicy.sh b/modules.d/98selinux/selinux-loadpolicy.sh
+index d6e24d6..5dddfc2 100755
+--- a/modules.d/98selinux/selinux-loadpolicy.sh
++++ b/modules.d/98selinux/selinux-loadpolicy.sh
+@@ -24,7 +24,8 @@ rd_load_policy()
+         local ret=0
+         local out
+         info "Loading SELinux policy"
+-        # load_policy does mount /proc and /selinux in
++        mount -o bind /sys $NEWROOT/sys
++        # load_policy does mount /proc and /sys/fs/selinux in
+         # libselinux,selinux_init_load_policy()
+         if [ -x "$NEWROOT/sbin/load_policy" ]; then
+             out=$(LANG=C chroot "$NEWROOT" /sbin/load_policy -i 2>&1)
+@@ -35,6 +36,8 @@ rd_load_policy()
+             ret=$?
+             info $out
+         fi
++        umount $NEWROOT/sys/fs/selinux
++        umount $NEWROOT/sys
+ 
+         if [ "$SELINUX" = "disabled" ]; then
+             return 0;
+@@ -52,16 +55,14 @@ rd_load_policy()
+         if [ $ret -eq 3 -o $permissive -eq 0 ]; then
+             warn "Machine in enforcing mode."
+             warn "Not continuing"
+-            emergency_shell -n selinux
+-            exit 1
++            action_on_fail -n selinux || exit 1
+         fi
+         return 0
+     elif [ $permissive -eq 0 -a "$SELINUX" != "disabled" ]; then
+         warn "Machine in enforcing mode and cannot execute load_policy."
+         warn "To disable selinux, add selinux=0 to the kernel command line."
+         warn "Not continuing"
+-        emergency_shell -n selinux
+-        exit 1
++        action_on_fail -n selinux || exit 1
+     fi
+ }
+ 
+diff --git a/modules.d/98systemd/dracut-cmdline.service b/modules.d/98systemd/dracut-cmdline.service
+index 33a37f9..07f6939 100644
+--- a/modules.d/98systemd/dracut-cmdline.service
++++ b/modules.d/98systemd/dracut-cmdline.service
+@@ -23,6 +23,8 @@ ConditionKernelCommandLine=|resume
+ ConditionKernelCommandLine=|noresume
+ 
+ [Service]
++Environment=DRACUT_SYSTEMD=1
++Environment=NEWROOT=/sysroot
+ Type=oneshot
+ ExecStart=-/bin/dracut-cmdline
+ StandardInput=null
+diff --git a/modules.d/98systemd/dracut-cmdline.sh b/modules.d/98systemd/dracut-cmdline.sh
+index ad51142..a6738bd 100755
+--- a/modules.d/98systemd/dracut-cmdline.sh
++++ b/modules.d/98systemd/dracut-cmdline.sh
+@@ -2,8 +2,6 @@
+ # -*- mode: shell-script; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
+ # ex: ts=8 sw=4 sts=4 et filetype=sh
+ 
+-export DRACUT_SYSTEMD=1
+-export NEWROOT="/sysroot"
+ [ -d $NEWROOT ] || mkdir -p -m 0755 $NEWROOT
+ [ -d /run/initramfs ] || mkdir -p -m 0755 /run/initramfs
+ [ -d /run/lock ] || mkdir -p -m 0755 /run/lock
+diff --git a/modules.d/98systemd/dracut-emergency.service b/modules.d/98systemd/dracut-emergency.service
+index 153931b..ebf5aac 100644
+--- a/modules.d/98systemd/dracut-emergency.service
++++ b/modules.d/98systemd/dracut-emergency.service
+@@ -13,9 +13,12 @@ DefaultDependencies=no
+ After=systemd-vconsole-setup.service
+ Wants=systemd-vconsole-setup.service
+ Conflicts=emergency.service emergency.target
++ConditionKernelCommandLine=!action_on_fail=continue
+ 
+ [Service]
+ Environment=HOME=/
++Environment=DRACUT_SYSTEMD=1
++Environment=NEWROOT=/sysroot
+ WorkingDirectory=/
+ ExecStart=/bin/dracut-emergency
+ ExecStopPost=-/bin/rm -f /.console_lock
+diff --git a/modules.d/98systemd/dracut-emergency.sh b/modules.d/98systemd/dracut-emergency.sh
+index a0a4b12..8ab045e 100755
+--- a/modules.d/98systemd/dracut-emergency.sh
++++ b/modules.d/98systemd/dracut-emergency.sh
+@@ -10,7 +10,7 @@ type getarg >/dev/null 2>&1 || . /lib/dracut-lib.sh
+ 
+ source_conf /etc/conf.d
+ 
+-[ -x /bin/plymouth ] && /bin/plymouth quit
++type plymouth >/dev/null 2>&1 && plymouth quit
+ 
+ export _rdshell_name="dracut" action="Boot" hook="emergency"
+ 
+diff --git a/modules.d/98systemd/dracut-initqueue.service b/modules.d/98systemd/dracut-initqueue.service
+index c19cfea..f4c1dd4 100644
+--- a/modules.d/98systemd/dracut-initqueue.service
++++ b/modules.d/98systemd/dracut-initqueue.service
+@@ -19,6 +19,8 @@ ConditionPathExistsGlob=|/lib/dracut/hooks/initqueue/*.sh
+ ConditionKernelCommandLine=|rd.break=pre-mount
+ 
+ [Service]
++Environment=DRACUT_SYSTEMD=1
++Environment=NEWROOT=/sysroot
+ Type=oneshot
+ ExecStart=-/bin/dracut-initqueue
+ StandardInput=null
+diff --git a/modules.d/98systemd/dracut-initqueue.sh b/modules.d/98systemd/dracut-initqueue.sh
+index c6fab30..2c71bf4 100755
+--- a/modules.d/98systemd/dracut-initqueue.sh
++++ b/modules.d/98systemd/dracut-initqueue.sh
+@@ -62,7 +62,7 @@ while :; do
+     fi
+ 
+     main_loop=$(($main_loop+1))
+-    [ $main_loop -gt $RDRETRY ] && emergency_shell "Could not boot."
++    [ $main_loop -gt $RDRETRY ] && action_on_fail "Could not boot." && break
+ done
+ 
+ unset job
+diff --git a/modules.d/98systemd/dracut-mount.service b/modules.d/98systemd/dracut-mount.service
+index db18f86..20c633d 100644
+--- a/modules.d/98systemd/dracut-mount.service
++++ b/modules.d/98systemd/dracut-mount.service
+@@ -17,6 +17,8 @@ ConditionDirectoryNotEmpty=|/lib/dracut/hooks/mount
+ ConditionKernelCommandLine=|rd.break=mount
+ 
+ [Service]
++Environment=DRACUT_SYSTEMD=1
++Environment=NEWROOT=/sysroot
+ Type=oneshot
+ ExecStart=-/bin/dracut-mount
+ StandardInput=null
+diff --git a/modules.d/98systemd/dracut-mount.sh b/modules.d/98systemd/dracut-mount.sh
+index 5f3d9f0..ae01512 100755
+--- a/modules.d/98systemd/dracut-mount.sh
++++ b/modules.d/98systemd/dracut-mount.sh
+@@ -31,7 +31,7 @@ while :; do
+     done
+ 
+     i=$(($i+1))
+-    [ $i -gt 20 ] && emergency_shell "Can't mount root filesystem"
++    [ $i -gt 20 ] && action_on_fail "Can't mount root filesystem" && break
+ done
+ 
+ export -p > /dracut-state.sh
+diff --git a/modules.d/98systemd/dracut-pre-mount.service b/modules.d/98systemd/dracut-pre-mount.service
+index bec3c75..d7be48d 100644
+--- a/modules.d/98systemd/dracut-pre-mount.service
++++ b/modules.d/98systemd/dracut-pre-mount.service
+@@ -19,6 +19,8 @@ ConditionDirectoryNotEmpty=|/lib/dracut/hooks/pre-mount
+ ConditionKernelCommandLine=|rd.break=pre-mount
+ 
+ [Service]
++Environment=DRACUT_SYSTEMD=1
++Environment=NEWROOT=/sysroot
+ Type=oneshot
+ ExecStart=-/bin/dracut-pre-mount
+ StandardInput=null
+diff --git a/modules.d/98systemd/dracut-pre-pivot.service b/modules.d/98systemd/dracut-pre-pivot.service
+index 9d0143c..36394aa 100644
+--- a/modules.d/98systemd/dracut-pre-pivot.service
++++ b/modules.d/98systemd/dracut-pre-pivot.service
+@@ -18,6 +18,8 @@ ConditionDirectoryNotEmpty=|/lib/dracut/hooks/pre-pivot
+ ConditionKernelCommandLine=|rd.break=pre-pivot
+ 
+ [Service]
++Environment=DRACUT_SYSTEMD=1
++Environment=NEWROOT=/sysroot
+ Type=oneshot
+ ExecStart=-/bin/dracut-pre-pivot
+ StandardInput=null
+diff --git a/modules.d/98systemd/dracut-pre-trigger.service b/modules.d/98systemd/dracut-pre-trigger.service
+index e49e405..bb34196 100644
+--- a/modules.d/98systemd/dracut-pre-trigger.service
++++ b/modules.d/98systemd/dracut-pre-trigger.service
+@@ -19,6 +19,8 @@ ConditionDirectoryNotEmpty=|/lib/dracut/hooks/pre-trigger
+ ConditionKernelCommandLine=|rd.break=pre-trigger
+ 
+ [Service]
++Environment=DRACUT_SYSTEMD=1
++Environment=NEWROOT=/sysroot
+ Type=oneshot
+ ExecStart=-/bin/dracut-pre-trigger
+ StandardInput=null
+diff --git a/modules.d/98systemd/dracut-pre-udev.service b/modules.d/98systemd/dracut-pre-udev.service
+index b372373..d125b37 100644
+--- a/modules.d/98systemd/dracut-pre-udev.service
++++ b/modules.d/98systemd/dracut-pre-udev.service
+@@ -22,6 +22,8 @@ ConditionKernelCommandLine=|rd.driver.pre
+ ConditionKernelCommandLine=|rd.driver.post
+ 
+ [Service]
++Environment=DRACUT_SYSTEMD=1
++Environment=NEWROOT=/sysroot
+ Type=oneshot
+ ExecStart=-/bin/dracut-pre-udev
+ StandardInput=null
+diff --git a/modules.d/98systemd/emergency.service b/modules.d/98systemd/emergency.service
+index a932739..c19fe37 100644
+--- a/modules.d/98systemd/emergency.service
++++ b/modules.d/98systemd/emergency.service
+@@ -12,9 +12,12 @@ Description=Emergency Shell
+ DefaultDependencies=no
+ After=systemd-vconsole-setup.service
+ Wants=systemd-vconsole-setup.service
++ConditionKernelCommandLine=!action_on_fail=continue
+ 
+ [Service]
+ Environment=HOME=/
++Environment=DRACUT_SYSTEMD=1
++Environment=NEWROOT=/sysroot
+ WorkingDirectory=/
+ ExecStart=/bin/dracut-emergency
+ ExecStopPost=-/usr/bin/systemctl --fail --no-block default
+diff --git a/modules.d/98systemd/module-setup.sh b/modules.d/98systemd/module-setup.sh
+index 450b42b..9183626 100755
+--- a/modules.d/98systemd/module-setup.sh
++++ b/modules.d/98systemd/module-setup.sh
+@@ -85,6 +85,7 @@ install() {
+         $systemdsystemunitdir/systemd-ask-password-plymouth.service \
+         $systemdsystemunitdir/systemd-journald.service \
+         $systemdsystemunitdir/systemd-vconsole-setup.service \
++        $systemdsystemunitdir/systemd-random-seed-load.service \
+         $systemdsystemunitdir/sysinit.target.wants/systemd-modules-load.service \
+         $systemdsystemunitdir/sysinit.target.wants/systemd-ask-password-console.path \
+         $systemdsystemunitdir/sysinit.target.wants/systemd-journald.service \
+diff --git a/modules.d/98systemd/rescue.service b/modules.d/98systemd/rescue.service
+index b5fb663..62f2067 100644
+--- a/modules.d/98systemd/rescue.service
++++ b/modules.d/98systemd/rescue.service
+@@ -13,6 +13,8 @@ DefaultDependencies=no
+ 
+ [Service]
+ Environment=HOME=/
++Environment=DRACUT_SYSTEMD=1
++Environment=NEWROOT=/sysroot
+ WorkingDirectory=/
+ ExecStartPre=-/bin/plymouth quit
+ ExecStart=-/bin/sh -i -l
+diff --git a/modules.d/98usrmount/mount-usr.sh b/modules.d/98usrmount/mount-usr.sh
+index 5aaefbc..de7dcc2 100755
+--- a/modules.d/98usrmount/mount-usr.sh
++++ b/modules.d/98usrmount/mount-usr.sh
+@@ -42,7 +42,7 @@ fsck_usr()
+             warn "*** Warning -- the system did not shut down cleanly. "
+             warn "*** Dropping you to a shell; the system will continue"
+             warn "*** when you leave the shell."
+-            emergency_shell
++            action_on_fail
+         fi
+         _fsckoptions="$AUTOFSCK_OPT $_fsckoptions"
+     fi
+@@ -61,14 +61,14 @@ mount_usr()
+                 LABEL=*)
+                     _dev="$(echo $_dev | sed 's,/,\\x2f,g')"
+                     _dev="/dev/disk/by-label/${_dev#LABEL=}"
+-		    ;;
++                    ;;
+                 UUID=*)
+                     _dev="${_dev#block:}"
+                     _dev="/dev/disk/by-uuid/${_dev#UUID=}"
+                     ;;
+             esac
+             if strstr "$_opts" "subvol=" && \
+-                [ "${root#block:}" -ef $_dev ]
++                [ "${root#block:}" -ef $_dev ] && \
+                 [ -n "$rflags" ]; then
+                 # for btrfs subvolumes we have to mount /usr with the same rflags
+                 rflags=$(filtersubvol "$rflags")
+@@ -105,7 +105,7 @@ mount_usr()
+             warn "Mounting /usr to $NEWROOT/usr failed"
+             warn "*** Dropping you to a shell; the system will continue"
+             warn "*** when you leave the shell."
+-            emergency_shell
++            action_on_fail
+         fi
+     fi
+ }
+diff --git a/modules.d/99base/dracut-lib.sh b/modules.d/99base/dracut-lib.sh
+index e456b01..d20ce67 100755
+--- a/modules.d/99base/dracut-lib.sh
++++ b/modules.d/99base/dracut-lib.sh
+@@ -2,6 +2,9 @@
+ # -*- mode: shell-script; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
+ # ex: ts=8 sw=4 sts=4 et filetype=sh
+ 
++export DRACUT_SYSTEMD
++export NEWROOT
++
+ debug_off() {
+     set +x
+ }
+@@ -325,6 +328,7 @@ splitsep() {
+ }
+ 
+ setdebug() {
++    [ -f /etc/initrd-release ] || return
+     if [ -z "$RD_DEBUG" ]; then
+         if [ -e /proc/cmdline ]; then
+             RD_DEBUG=no
+@@ -383,7 +387,7 @@ die() {
+         echo "warn dracut: FATAL: \"$*\"";
+         echo "warn dracut: Refusing to continue";
+     } >> $hookdir/emergency/01-die.sh
+-
++    [ -d /run/initramfs ] || mkdir -p /run/initramfs
+     > /run/initramfs/.die
+     emergency_shell
+     exit 1
+@@ -818,6 +822,15 @@ wait_for_mount()
+     } >> "$hookdir/emergency/90-${_name}.sh"
+ }
+ 
++dev_unit_name()
++{
++    _name="${1%%/}"
++    _name="${_name##/}"
++    _name="$(str_replace "$_name" '-' '\x2d')"
++    _name="$(str_replace "$_name" '/' '-')"
++    echo "$_name"
++}
++
+ # wait_for_dev <dev>
+ #
+ # Installs a initqueue-finished script,
+@@ -835,14 +848,18 @@ wait_for_dev()
+     } >> "${PREFIX}$hookdir/emergency/80-${_name}.sh"
+ 
+     if [ -n "$DRACUT_SYSTEMD" ]; then
+-        _name="${1%%/}"
+-        _name="${_name##/}"
+-        _name="$(str_replace "$_name" '-' '\x2d')"
+-        _name="$(str_replace "$_name" '/' '-')"
++        _name=$(dev_unit_name "$1")
+         if ! [ -L ${PREFIX}/etc/systemd/system/initrd.target.requires/${_name}.device ]; then
+             [ -d ${PREFIX}/etc/systemd/system/initrd.target.requires ] || mkdir -p ${PREFIX}/etc/systemd/system/initrd.target.requires
+             ln -s ../${_name}.device ${PREFIX}/etc/systemd/system/initrd.target.requires/${_name}.device
+         fi
++
++        mkdir -p ${PREFIX}/etc/systemd/system/${_name}.device.d
++        {
++            echo "[Unit]"
++            echo "JobTimeoutSec=3600"
++        } > ${PREFIX}/etc/systemd/system/${_name}.device.d/timeout.conf
++        [ -z "$PREFIX" ] && /sbin/initqueue --onetime --unique --name daemon-reload systemctl daemon-reload
+     fi
+ }
+ 
+@@ -852,6 +869,12 @@ cancel_wait_for_dev()
+     _name="$(str_replace "$1" '/' '\\x2f')"
+     rm -f "$hookdir/initqueue/finished/devexists-${_name}.sh"
+     rm -f "$hookdir/emergency/80-${_name}.sh"
++    if [ -n "$DRACUT_SYSTEMD" ]; then
++        _name=$(dev_unit_name "$1")
++        rm -f ${PREFIX}/etc/systemd/system/initrd.target.requires/${_name}.device
++        rm -f ${PREFIX}/etc/systemd/system/${_name}.device.d/timeout.conf
++        /sbin/initqueue --onetime --unique --name daemon-reload systemctl daemon-reload
++    fi
+ }
+ 
+ killproc() {
+@@ -906,7 +929,7 @@ _emergency_shell()
+     local _name="$1"
+     if [ -n "$DRACUT_SYSTEMD" ]; then
+         > /.console_lock
+-        echo "PS1=\"$_name:\${PWD}# \"" >/etc/profile
++        echo "PS1=\"$_name:\\\${PWD}# \"" >/etc/profile
+         systemctl start dracut-emergency.service
+         rm -f /etc/profile
+         rm -f /.console_lock
+@@ -952,8 +975,8 @@ emergency_shell()
+         shift 2
+     elif [ "$1" = "--shutdown" ]; then
+         _rdshell_name=$2; action="Shutdown"; hook="shutdown-emergency"
+-        if [ -x /bin/plymouth ]; then
+-            /bin/plymouth --hide-splash
++        if type plymouth >/dev/null 2>&1; then
++            plymouth --hide-splash
+         elif [ -x /oldroot/bin/plymouth ]; then
+             /oldroot/bin/plymouth --hide-splash
+         fi
+@@ -975,6 +998,28 @@ emergency_shell()
+     [ -e /run/initramfs/.die ] && exit 1
+ }
+ 
++action_on_fail()
++{
++    local _action=$(getarg action_on_fail=)
++    case "$_action" in
++        continue)
++            [ "$1" = "-n" ] && shift 2
++            [ "$1" = "--shutdown" ] && shift 2
++            warn "$*"
++            warn "Not dropping to emergency shell, because 'action_on_fail=continue' was set on the kernel command line."
++            return 0
++            ;;
++        shell)
++            emergency_shell $@
++            return 1
++            ;;
++        *)
++            emergency_shell $@
++            return 1
++            ;;
++    esac
++}
++
+ # Retain the values of these variables but ensure that they are unexported
+ # This is a POSIX-compliant equivalent of bash's "export -n"
+ export_n()
+@@ -1017,7 +1062,7 @@ listlist() {
+ 
+ # returns OK if both lists contain the same values.  An order and a duplication
+ # doesn't matter.
+-# 
++#
+ # $1 = separator
+ # $2 = list1
+ # $3 = list2
+diff --git a/modules.d/99base/init.sh b/modules.d/99base/init.sh
+index b441a27..c72129b 100755
+--- a/modules.d/99base/init.sh
++++ b/modules.d/99base/init.sh
+@@ -55,6 +55,15 @@ if ! ismounted /dev; then
+     exit 1
+ fi
+ 
++# setup system time
++if [ -f /etc/adjtime ]; then
++    if strstr "$(cat /etc/adjtime)" LOCAL; then
++        hwclock --hctosys --localtime
++    else
++        hwclock --hctosys --utc
++    fi
++fi
++
+ # prepare the /dev directory
+ [ ! -h /dev/fd ] && ln -s /proc/self/fd /dev/fd >/dev/null 2>&1
+ [ ! -h /dev/stdin ] && ln -s /proc/self/fd/0 /dev/stdin >/dev/null 2>&1
+@@ -79,7 +88,7 @@ if ! ismounted /run; then
+     rm -fr /newrun
+ fi
+ 
+-trap "emergency_shell Signal caught!" 0
++trap "action_on_fail Signal caught!" 0
+ 
+ [ -d /run/initramfs ] || mkdir -p -m 0755 /run/initramfs
+ [ -d /run/log ] || mkdir -p -m 0755 /run/log
+@@ -104,7 +113,7 @@ else
+ fi
+ 
+ [ -f /etc/initrd-release ] && . /etc/initrd-release
+-[ -n "$VERSION" ] && info "dracut-$VERSION"
++[ -n "$VERSION_ID" ] && info "$NAME-$VERSION_ID"
+ 
+ source_conf /etc/conf.d
+ 
+@@ -199,7 +208,7 @@ while :; do
+ 
+     main_loop=$(($main_loop+1))
+     [ $main_loop -gt $RDRETRY ] \
+-        && { flock -s 9 ; emergency_shell "Could not boot."; } 9>/.console_lock
++        && { flock -s 9 ; action_on_fail "Could not boot." && break; } 9>/.console_lock
+ done
+ unset job
+ unset queuetriggered
+@@ -234,7 +243,7 @@ while :; do
+ 
+     i=$(($i+1))
+     [ $i -gt 20 ] \
+-        && { flock -s 9 ; emergency_shell "Can't mount root filesystem"; } 9>/.console_lock
++        && { flock -s 9 ; action_on_fail "Can't mount root filesystem" && break; } 9>/.console_lock
+ done
+ 
+ {
+@@ -268,7 +277,7 @@ done
+ [ "$INIT" ] || {
+     echo "Cannot find init!"
+     echo "Please check to make sure you passed a valid root filesystem!"
+-    emergency_shell
++    action_on_fail
+ }
+ 
+ if [ $UDEVVERSION -lt 168 ]; then
+@@ -370,13 +379,13 @@ if [ -f /etc/capsdrop ]; then
+ 	warn "Command:"
+ 	warn capsh --drop=$CAPS_INIT_DROP -- -c exec switch_root "$NEWROOT" "$INIT" $initargs
+ 	warn "failed."
+-	emergency_shell
++	action_on_fail
+     }
+ else
+     unset RD_DEBUG
+     exec $SWITCH_ROOT "$NEWROOT" "$INIT" $initargs || {
+ 	warn "Something went very badly wrong in the initramfs.  Please "
+ 	warn "file a bug against dracut."
+-	emergency_shell
++	action_on_fail
+     }
+ fi
+diff --git a/modules.d/99base/module-setup.sh b/modules.d/99base/module-setup.sh
+index 7f2940b..f3caf28 100755
+--- a/modules.d/99base/module-setup.sh
++++ b/modules.d/99base/module-setup.sh
+@@ -28,6 +28,17 @@ install() {
+     egrep '^root:' "$initdir/etc/passwd" 2>/dev/null || echo  'root:x:0:0::/root:/bin/sh' >> "$initdir/etc/passwd"
+     egrep '^nobody:' /etc/passwd >> "$initdir/etc/passwd"
+ 
++    # install /etc/adjtime and time zone data
++    if [[ $hostonly ]]; then
++        dracut_install -o /etc/adjtime \
++                          /etc/localtime
++
++        # Our init.sh script needs hwclock to set system time
++        if ! dracut_module_included "systemd"; then
++            dracut_install -o hwclock
++        fi
++    fi
++
+     # install our scripts and hooks
+     inst_script "$moddir/init.sh" "/init"
+     inst_script "$moddir/initqueue.sh" "/sbin/initqueue"
+@@ -89,18 +100,18 @@ install() {
+ 
+     ## save host_devs which we need bring up
+     (
++        if dracut_module_included "systemd"; then
++            DRACUT_SYSTEMD=1
++        fi
++        PREFIX="$initdir"
++
+         . "$moddir/dracut-lib.sh"
++
+         for _dev in ${host_devs[@]}; do
+             _pdev=$(get_persistent_dev $_dev)
+ 
+             case "$_pdev" in
+-                /dev/?*)
+-                    if ! dracut_module_included "systemd"; then
+-                        PREFIX="$initdir" wait_for_dev $_pdev
+-                    else
+-                        DRACUT_SYSTEMD=1 PREFIX="$initdir" wait_for_dev $_pdev
+-                    fi
+-                    ;;
++                /dev/?*) wait_for_dev $_pdev;;
+                 *) ;;
+             esac
+         done
+diff --git a/modules.d/99base/wait-host-devs.sh b/modules.d/99base/wait-host-devs.sh
+deleted file mode 100644
+index ce84922..0000000
+--- a/modules.d/99base/wait-host-devs.sh
++++ /dev/null
+@@ -1,20 +0,0 @@
+-#!/bin/sh
+-# -*- mode: shell-script; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
+-# ex: ts=8 sw=4 sts=4 et filetype=sh
+-
+-type getarg >/dev/null 2>&1 || . /lib/dracut-lib.sh
+-
+-wait_host_devs() {
+-    local _dev
+-
+-    while read _dev; do
+-        case "$_dev" in
+-        /dev/?*)
+-            wait_for_dev $_dev
+-            ;;
+-        *) ;;
+-        esac
+-    done < $1
+-}
+-
+-[ -f /etc/host_devs ] && wait_host_devs /etc/host_devs
+diff --git a/modules.d/99fs-lib/fs-lib.sh b/modules.d/99fs-lib/fs-lib.sh
+index e1f3074..88e7348 100755
+--- a/modules.d/99fs-lib/fs-lib.sh
++++ b/modules.d/99fs-lib/fs-lib.sh
+@@ -7,14 +7,14 @@ type getarg >/dev/null 2>&1 || . /lib/dracut-lib.sh
+ fsck_ask_reboot() {
+     info "note - fsck suggests reboot, if you"
+     info "leave shell, booting will continue normally"
+-    emergency_shell -n "(reboot ?)"
++    action_on_fail -n "(reboot ?)"
+ }
+ 
+ fsck_ask_err() {
+     warn "*** An error occurred during the file system check."
+     warn "*** Dropping you to a shell; the system will try"
+     warn "*** to mount the filesystem(s), when you leave the shell."
+-    emergency_shell -n "(Repair filesystem)"
++    action_on_fail -n "(Repair filesystem)"
+ }
+ 
+ # inherits: _ret _drv _out
+diff --git a/modules.d/99fs-lib/module-setup.sh b/modules.d/99fs-lib/module-setup.sh
+index 637737e..df9a04c 100755
+--- a/modules.d/99fs-lib/module-setup.sh
++++ b/modules.d/99fs-lib/module-setup.sh
+@@ -15,7 +15,7 @@ echo_fs_helper() {
+     local dev=$1 fs=$2
+     case "$fs" in
+         xfs)
+-            echo -n " xfs_db xfs_repair xfs_check "
++            echo -n " xfs_db xfs_repair xfs_check xfs_metadump "
+             ;;
+         ext?)
+             echo -n " e2fsck "
+@@ -65,7 +65,7 @@ install() {
+     if [[ "$fscks" = "${fscks#*[^ ]*}" ]]; then
+         _helpers="\
+             umount mount /sbin/fsck*
+-            xfs_db xfs_check xfs_repair
++            xfs_db xfs_check xfs_repair xfs_metadump
+             e2fsck jfs_fsck reiserfsck btrfsck
+         "
+         if [[ $hostonly ]]; then
+diff --git a/modules.d/99shutdown/shutdown.sh b/modules.d/99shutdown/shutdown.sh
+index 6457cb0..d6a532b 100755
+--- a/modules.d/99shutdown/shutdown.sh
++++ b/modules.d/99shutdown/shutdown.sh
+@@ -8,7 +8,7 @@
+ # Harald Hoyer <harald@redhat.com>
+ ACTION="$1"
+ 
+-exec </dev/console >>/dev/console 2>>/dev/console
++[ -w /dev/console ] && exec </dev/console >>/dev/console 2>>/dev/console
+ 
+ export TERM=linux
+ export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+diff --git a/test/TEST-01-BASIC/test.sh b/test/TEST-01-BASIC/test.sh
+index 7727cd0..d39556c 100755
+--- a/test/TEST-01-BASIC/test.sh
++++ b/test/TEST-01-BASIC/test.sh
+@@ -16,7 +16,7 @@ test_run() {
+ 	-watchdog i6300esb -watchdog-action poweroff \
+ 	-append "root=LABEL=dracut rw systemd.log_level=debug systemd.log_target=console rd.retry=3 rd.debug console=ttyS0,115200n81 $DEBUGFAIL" \
+ 	-initrd $TESTDIR/initramfs.testing || return 1
+-    grep -m 1 -q dracut-root-block-success $TESTDIR/result || return 1
++    grep -F -m 1 -q dracut-root-block-success $TESTDIR/result || return 1
+ }
+ 
+ test_setup() {
+@@ -40,6 +40,7 @@ test_setup() {
+ 	inst "$basedir/modules.d/40network/dhclient-script.sh" "/sbin/dhclient-script"
+ 	inst "$basedir/modules.d/40network/ifup.sh" "/sbin/ifup"
+ 	dracut_install grep
++        inst_simple /etc/os-release
+ 	inst ./test-init.sh /sbin/init
+ 	find_binary plymouth >/dev/null && dracut_install plymouth
+ 	(cd "$initdir"; mkdir -p dev sys proc etc var/run tmp )
+@@ -74,7 +75,7 @@ test_setup() {
+ 	-kernel "/boot/vmlinuz-$kernel" \
+ 	-append "root=/dev/dracut/root rw rootfstype=ext3 quiet console=ttyS0,115200n81 selinux=0" \
+ 	-initrd $TESTDIR/initramfs.makeroot  || return 1
+-    grep -m 1 -q dracut-root-block-created $TESTDIR/root.ext3 || return 1
++    grep -F -m 1 -q dracut-root-block-created $TESTDIR/root.ext3 || return 1
+ 
+ 
+     (
+@@ -86,7 +87,7 @@ test_setup() {
+     )
+     sudo $basedir/dracut.sh -l -i $TESTDIR/overlay / \
+ 	-a "debug watchdog" \
+-	-d "piix ide-gd_mod ata_piix ext3 sd_mod i6300esbwdt" \
++	-d "piix ide-gd_mod ata_piix ext3 sd_mod i6300esb ib700wdt" \
+ 	-f $TESTDIR/initramfs.testing $KVERSION || return 1
+ 
+ #	-o "plymouth network md dmraid multipath fips caps crypt btrfs resume dmsquash-live dm"
+diff --git a/test/TEST-02-SYSTEMD/test.sh b/test/TEST-02-SYSTEMD/test.sh
+index 459cf03..c141527 100755
+--- a/test/TEST-02-SYSTEMD/test.sh
++++ b/test/TEST-02-SYSTEMD/test.sh
+@@ -12,7 +12,7 @@ test_run() {
+ 	-net none -kernel /boot/vmlinuz-$KVERSION \
+ 	-append "root=LABEL=dracut rw loglevel=77 systemd.log_level=debug systemd.log_target=console rd.retry=3 rd.info console=ttyS0,115200n81 selinux=0 rd.debug init=/sbin/init $DEBUGFAIL" \
+ 	-initrd $TESTDIR/initramfs.testing
+-    grep -m 1 -q dracut-root-block-success $TESTDIR/root.ext3 || return 1
++    grep -F -m 1 -q dracut-root-block-success $TESTDIR/root.ext3 || return 1
+ }
+ 
+ test_setup() {
+@@ -36,6 +36,7 @@ test_setup() {
+ 	inst "$basedir/modules.d/40network/dhclient-script.sh" "/sbin/dhclient-script"
+ 	inst "$basedir/modules.d/40network/ifup.sh" "/sbin/ifup"
+ 	dracut_install grep
++        inst_simple /etc/os-release
+ 	inst ./test-init.sh /sbin/init
+ 	find_binary plymouth >/dev/null && dracut_install plymouth
+ 	(cd "$initdir"; mkdir -p dev sys proc etc var/run tmp )
+@@ -70,7 +71,7 @@ test_setup() {
+ 	-kernel "/boot/vmlinuz-$kernel" \
+ 	-append "root=/dev/fakeroot rw rootfstype=ext3 quiet console=ttyS0,115200n81 selinux=0" \
+ 	-initrd $TESTDIR/initramfs.makeroot  || return 1
+-    grep -m 1 -q dracut-root-block-created $TESTDIR/root.ext3 || return 1
++    grep -F -m 1 -q dracut-root-block-created $TESTDIR/root.ext3 || return 1
+ 
+ 
+     (
+diff --git a/test/TEST-03-USR-MOUNT/test.sh b/test/TEST-03-USR-MOUNT/test.sh
+index 680720b..01a6915 100755
+--- a/test/TEST-03-USR-MOUNT/test.sh
++++ b/test/TEST-03-USR-MOUNT/test.sh
+@@ -29,7 +29,7 @@ client_run() {
+         return 1
+     fi
+ 
+-    if ! grep -m 1 -q dracut-root-block-success $TESTDIR/result; then
++    if ! grep -F -m 1 -q dracut-root-block-success $TESTDIR/result; then
+ 	echo "CLIENT TEST END: $test_name [FAILED]"
+         return 1
+     fi
+@@ -68,6 +68,7 @@ test_setup() {
+ 	inst "$basedir/modules.d/40network/ifup.sh" "/sbin/ifup"
+ 	dracut_install grep
+         inst_simple ./fstab /etc/fstab
++        inst_simple /etc/os-release
+ 	inst ./test-init.sh /sbin/init
+ 	find_binary plymouth >/dev/null && dracut_install plymouth
+ 	(cd "$initdir"; mkdir -p dev sys proc etc var/run tmp )
+@@ -109,7 +110,7 @@ test_setup() {
+ 	-kernel "/boot/vmlinuz-$kernel" \
+ 	-append "root=/dev/dracut/root rw rootfstype=btrfs quiet console=ttyS0,115200n81 selinux=0" \
+ 	-initrd $TESTDIR/initramfs.makeroot  || return 1
+-    grep -m 1 -q dracut-root-block-created $TESTDIR/root.btrfs || return 1
++    grep -F -m 1 -q dracut-root-block-created $TESTDIR/root.btrfs || return 1
+ 
+ 
+     (
+@@ -122,7 +123,7 @@ test_setup() {
+     sudo $basedir/dracut.sh -l -i $TESTDIR/overlay / \
+ 	-a "debug watchdog" \
+         -o "network" \
+-	-d "piix ide-gd_mod ata_piix btrfs sd_mod i6300esbwdt" \
++	-d "piix ide-gd_mod ata_piix btrfs sd_mod i6300esb ib700wdt" \
+ 	-f $TESTDIR/initramfs.testing $KVERSION || return 1
+ 
+     rm -rf $TESTDIR/overlay
+diff --git a/test/TEST-04-FULL-SYSTEMD/test.sh b/test/TEST-04-FULL-SYSTEMD/test.sh
+index d3dc7ef..6c972a3 100755
+--- a/test/TEST-04-FULL-SYSTEMD/test.sh
++++ b/test/TEST-04-FULL-SYSTEMD/test.sh
+@@ -30,7 +30,7 @@ client_run() {
+         return 1
+     fi
+ 
+-    if ! grep -m 1 -q dracut-root-block-success $TESTDIR/result; then
++    if ! grep -F -m 1 -q dracut-root-block-success $TESTDIR/result; then
+ 	echo "CLIENT TEST END: $test_name [FAILED]"
+         return 1
+     fi
+@@ -251,7 +251,7 @@ EOF
+ 	-kernel "/boot/vmlinuz-$kernel" \
+ 	-append "root=/dev/fakeroot rw rootfstype=btrfs quiet console=ttyS0,115200n81 selinux=0" \
+ 	-initrd $TESTDIR/initramfs.makeroot  || return 1
+-    grep -m 1 -q dracut-root-block-created $TESTDIR/root.btrfs || return 1
++    grep -F -m 1 -q dracut-root-block-created $TESTDIR/root.btrfs || return 1
+ 
+ 
+     (
+diff --git a/test/TEST-10-RAID/test.sh b/test/TEST-10-RAID/test.sh
+index e11c518..ffce8fc 100755
+--- a/test/TEST-10-RAID/test.sh
++++ b/test/TEST-10-RAID/test.sh
+@@ -14,7 +14,7 @@ test_run() {
+ 	-net none -kernel /boot/vmlinuz-$KVERSION \
+ 	-append "root=/dev/dracut/root rd.auto rw rd.retry=10 console=ttyS0,115200n81 selinux=0 $DEBUGFAIL" \
+ 	-initrd $TESTDIR/initramfs.testing
+-    grep -m 1 -q dracut-root-block-success $DISKIMAGE || return 1
++    grep -F -m 1 -q dracut-root-block-success $DISKIMAGE || return 1
+ }
+ 
+ test_setup() {
+@@ -35,6 +35,7 @@ test_setup() {
+ 	    [ -f ${_terminfodir}/l/linux ] && break
+ 	done
+ 	dracut_install -o ${_terminfodir}/l/linux
++        inst_simple /etc/os-release
+ 	inst ./test-init.sh /sbin/init
+ 	inst "$basedir/modules.d/40network/dhclient-script.sh" "/sbin/dhclient-script"
+ 	inst "$basedir/modules.d/40network/ifup.sh" "/sbin/ifup"
+@@ -71,8 +72,8 @@ test_setup() {
+ 	-kernel "/boot/vmlinuz-$kernel" \
+ 	-append "root=/dev/cannotreach rw rootfstype=ext2 console=ttyS0,115200n81 selinux=0" \
+ 	-initrd $TESTDIR/initramfs.makeroot  || return 1
+-    grep -m 1 -q dracut-root-block-created $DISKIMAGE || return 1
+-    eval $(grep -a -m 1 ID_FS_UUID $DISKIMAGE)
++    grep -F -m 1 -q dracut-root-block-created $DISKIMAGE || return 1
++    eval $(grep -F -a -m 1 ID_FS_UUID $DISKIMAGE)
+ 
+     (
+ 	export initdir=$TESTDIR/overlay
+diff --git a/test/TEST-11-LVM/test.sh b/test/TEST-11-LVM/test.sh
+index d876e55..65cf588 100755
+--- a/test/TEST-11-LVM/test.sh
++++ b/test/TEST-11-LVM/test.sh
+@@ -13,7 +13,7 @@ test_run() {
+ 	-net none -kernel /boot/vmlinuz-$KVERSION \
+ 	-append "root=/dev/dracut/root rw rd.auto=1 quiet rd.retry=3 rd.info console=ttyS0,115200n81 selinux=0 rd.debug  $DEBUGFAIL" \
+ 	-initrd $TESTDIR/initramfs.testing
+-    grep -m 1 -q dracut-root-block-success $TESTDIR/root.ext2 || return 1
++    grep -F -m 1 -q dracut-root-block-success $TESTDIR/root.ext2 || return 1
+ }
+ 
+ test_setup() {
+@@ -34,6 +34,7 @@ test_setup() {
+ 	inst "$basedir/modules.d/40network/dhclient-script.sh" "/sbin/dhclient-script"
+ 	inst "$basedir/modules.d/40network/ifup.sh" "/sbin/ifup"
+ 	dracut_install grep
++        inst_simple /etc/os-release
+ 	inst ./test-init.sh /sbin/init
+ 	find_binary plymouth >/dev/null && dracut_install plymouth
+ 	(cd "$initdir"; mkdir -p dev sys proc etc var/run tmp )
+@@ -65,7 +66,7 @@ test_setup() {
+ 	-kernel "/boot/vmlinuz-$kernel" \
+ 	-append "root=/dev/fakeroot rw rootfstype=ext2 quiet console=ttyS0,115200n81 selinux=0" \
+ 	-initrd $TESTDIR/initramfs.makeroot  || return 1
+-    grep -m 1 -q dracut-root-block-created $TESTDIR/root.ext2 || return 1
++    grep -F -m 1 -q dracut-root-block-created $TESTDIR/root.ext2 || return 1
+     (
+ 	export initdir=$TESTDIR/overlay
+ 	. $basedir/dracut-functions.sh
+diff --git a/test/TEST-12-RAID-DEG/create-root.sh b/test/TEST-12-RAID-DEG/create-root.sh
+index 07d0b39..5723b0b 100755
+--- a/test/TEST-12-RAID-DEG/create-root.sh
++++ b/test/TEST-12-RAID-DEG/create-root.sh
+@@ -39,7 +39,7 @@ udevadm settle
+ cryptsetup luksClose /dev/mapper/dracut_crypt_test
+ udevadm settle
+ mdadm -W /dev/md0 || :
+-mdadm --detail --export /dev/md0 |grep MD_UUID > /tmp/mduuid
++mdadm --detail --export /dev/md0 |grep -F MD_UUID > /tmp/mduuid
+ . /tmp/mduuid
+ eval $(udevadm info --query=env --name=/dev/md0|while read line; do [ "$line" != "${line#*ID_FS_UUID*}" ] && echo $line; done;)
+ { echo "dracut-root-block-created"; echo MD_UUID=$MD_UUID;  echo "ID_FS_UUID=$ID_FS_UUID";} > /dev/sda1
+diff --git a/test/TEST-12-RAID-DEG/test.sh b/test/TEST-12-RAID-DEG/test.sh
+index 1eae41a..1b5e756 100755
+--- a/test/TEST-12-RAID-DEG/test.sh
++++ b/test/TEST-12-RAID-DEG/test.sh
+@@ -21,7 +21,7 @@ client_run() {
+ 	-net none -kernel /boot/vmlinuz-$KVERSION \
+ 	-append "$* root=LABEL=root rw rd.retry=10 rd.info console=ttyS0,115200n81 selinux=0 rd.debug $DEBUGFAIL " \
+ 	-initrd $TESTDIR/initramfs.testing
+-    if ! grep -m 1 -q dracut-root-block-success $TESTDIR/root.ext2; then
++    if ! grep -F -m 1 -q dracut-root-block-success $TESTDIR/root.ext2; then
+ 	echo "CLIENT TEST END: $@ [FAIL]"
+ 	return 1;
+     fi
+@@ -32,7 +32,7 @@ client_run() {
+ }
+ 
+ test_run() {
+-    eval $(grep --binary-files=text -m 1 MD_UUID $TESTDIR/root.ext2)
++    eval $(grep -F --binary-files=text -m 1 MD_UUID $TESTDIR/root.ext2)
+     echo "MD_UUID=$MD_UUID"
+     read LUKS_UUID < $TESTDIR/luksuuid
+ 
+@@ -75,6 +75,7 @@ test_setup() {
+ 	inst "$basedir/modules.d/40network/dhclient-script.sh" "/sbin/dhclient-script"
+ 	inst "$basedir/modules.d/40network/ifup.sh" "/sbin/ifup"
+ 	dracut_install grep
++        inst_simple /etc/os-release
+ 	inst ./test-init.sh /sbin/init
+ 	find_binary plymouth >/dev/null && dracut_install plymouth
+ 	(cd "$initdir"; mkdir -p dev sys proc etc var/run tmp )
+@@ -111,9 +112,9 @@ test_setup() {
+ 	-append "root=/dev/fakeroot rw rootfstype=ext2 quiet console=ttyS0,115200n81 selinux=0" \
+ 	-initrd $TESTDIR/initramfs.makeroot  || return 1
+ 
+-    grep -m 1 -q dracut-root-block-created $TESTDIR/root.ext2 || return 1
+-    eval $(grep --binary-files=text -m 1 MD_UUID $TESTDIR/root.ext2)
+-    eval $(grep -a -m 1 ID_FS_UUID $TESTDIR/root.ext2)
++    grep -F -m 1 -q dracut-root-block-created $TESTDIR/root.ext2 || return 1
++    eval $(grep -F --binary-files=text -m 1 MD_UUID $TESTDIR/root.ext2)
++    eval $(grep -F -a -m 1 ID_FS_UUID $TESTDIR/root.ext2)
+     echo $ID_FS_UUID > $TESTDIR/luksuuid
+ 
+     (
+diff --git a/test/TEST-13-ENC-RAID-LVM/create-root.sh b/test/TEST-13-ENC-RAID-LVM/create-root.sh
+index c8b6781..c4c7a17 100755
+--- a/test/TEST-13-ENC-RAID-LVM/create-root.sh
++++ b/test/TEST-13-ENC-RAID-LVM/create-root.sh
+@@ -48,7 +48,7 @@ cryptsetup luksClose /dev/mapper/dracut_sda4 && \
+ {
+     echo "dracut-root-block-created"
+     for i in /dev/sda[234]; do
+-	udevadm info --query=env --name=$i|grep 'ID_FS_UUID='
++	udevadm info --query=env --name=$i|grep -F 'ID_FS_UUID='
+     done
+ } >/dev/sda1
+ poweroff -f
+diff --git a/test/TEST-13-ENC-RAID-LVM/test.sh b/test/TEST-13-ENC-RAID-LVM/test.sh
+index b8fc7ff..93d48a5 100755
+--- a/test/TEST-13-ENC-RAID-LVM/test.sh
++++ b/test/TEST-13-ENC-RAID-LVM/test.sh
+@@ -21,7 +21,7 @@ test_run() {
+ 	-net none -kernel /boot/vmlinuz-$KVERSION \
+ 	-append "root=/dev/dracut/root rw rd.auto rd.retry=20 console=ttyS0,115200n81 selinux=0 rd.debug rootwait $LUKSARGS $DEBUGFAIL" \
+ 	-initrd $TESTDIR/initramfs.testing
+-    grep -m 1 -q dracut-root-block-success $TESTDIR/check-success.img || return 1
++    grep -F -m 1 -q dracut-root-block-success $TESTDIR/check-success.img || return 1
+     echo "CLIENT TEST END: [OK]"
+ 
+     dd if=/dev/zero of=$TESTDIR/check-success.img bs=1M count=1
+@@ -34,7 +34,7 @@ test_run() {
+ 	-net none -kernel /boot/vmlinuz-$KVERSION \
+ 	-append "root=/dev/dracut/root rw quiet rd.auto rd.retry=20 rd.info console=ttyS0,115200n81 selinux=0 rd.debug  $DEBUGFAIL" \
+ 	-initrd $TESTDIR/initramfs.testing
+-    grep -m 1 -q dracut-root-block-success $TESTDIR/check-success.img || return 1
++    grep -F -m 1 -q dracut-root-block-success $TESTDIR/check-success.img || return 1
+     echo "CLIENT TEST END: [OK]"
+ 
+     dd if=/dev/zero of=$TESTDIR/check-success.img bs=1M count=1
+@@ -47,7 +47,7 @@ test_run() {
+ 	-net none -kernel /boot/vmlinuz-$KVERSION \
+ 	-append "root=/dev/dracut/root rw quiet rd.auto rd.retry=10 rd.info console=ttyS0,115200n81 selinux=0 rd.debug  $DEBUGFAIL rd.luks.uuid=failme" \
+ 	-initrd $TESTDIR/initramfs.testing
+-    grep -m 1 -q dracut-root-block-success $TESTDIR/check-success.img && return 1
++    grep -F -m 1 -q dracut-root-block-success $TESTDIR/check-success.img && return 1
+     echo "CLIENT TEST END: [OK]"
+ 
+     return 0
+@@ -72,6 +72,7 @@ test_setup() {
+ 	inst "$basedir/modules.d/40network/dhclient-script.sh" "/sbin/dhclient-script"
+ 	inst "$basedir/modules.d/40network/ifup.sh" "/sbin/ifup"
+ 	dracut_install grep
++        inst_simple /etc/os-release
+ 	inst ./test-init.sh /sbin/init
+ 	find_binary plymouth >/dev/null && dracut_install plymouth
+ 	(cd "$initdir"; mkdir -p dev sys proc etc var/run tmp )
+@@ -102,8 +103,8 @@ test_setup() {
+ 	-kernel "/boot/vmlinuz-$kernel" \
+ 	-append "root=/dev/fakeroot rw rootfstype=ext2 quiet console=ttyS0,115200n81 selinux=0" \
+ 	-initrd $TESTDIR/initramfs.makeroot  || return 1
+-    grep -m 1 -q dracut-root-block-created $TESTDIR/root.ext2 || return 1
+-    cryptoUUIDS=$(grep --binary-files=text  -m 3 ID_FS_UUID $TESTDIR/root.ext2)
++    grep -F -m 1 -q dracut-root-block-created $TESTDIR/root.ext2 || return 1
++    cryptoUUIDS=$(grep -F --binary-files=text  -m 3 ID_FS_UUID $TESTDIR/root.ext2)
+     for uuid in $cryptoUUIDS; do
+ 	eval $uuid
+ 	printf ' rd.luks.uuid=luks-%s ' $ID_FS_UUID
+diff --git a/test/TEST-15-BTRFSRAID/create-root.sh b/test/TEST-15-BTRFSRAID/create-root.sh
+index cd51935..69f9280 100755
+--- a/test/TEST-15-BTRFSRAID/create-root.sh
++++ b/test/TEST-15-BTRFSRAID/create-root.sh
+@@ -5,15 +5,15 @@ for x in 64-lvm.rules 70-mdadm.rules 99-mount-rules; do
+ done
+ udevadm control --reload
+ # save a partition at the beginning for future flagging purposes
+-sfdisk -C 655600 -H 2 -S 32 -L /dev/sda <<EOF
++sfdisk  -C 327800 -H 2 -S 32 -L /dev/sda <<EOF
+ ,16
+ ,,E
+ ;
+ ;
+-,10240
+-,10240
+-,10240
+-,10240
++,5120
++,5120
++,5120
++,5120
+ EOF
+ mkfs.btrfs -draid10 -mraid10 -L root /dev/sda5 /dev/sda6 /dev/sda7 /dev/sda8
+ udevadm settle
+diff --git a/test/TEST-15-BTRFSRAID/test.sh b/test/TEST-15-BTRFSRAID/test.sh
+index 8f013d5..6d44fbc 100755
+--- a/test/TEST-15-BTRFSRAID/test.sh
++++ b/test/TEST-15-BTRFSRAID/test.sh
+@@ -13,14 +13,14 @@ test_run() {
+ 	-net none -kernel /boot/vmlinuz-$KVERSION \
+ 	-append "root=LABEL=root rw rd.retry=3 rd.info console=ttyS0,115200n81 selinux=0 $DEBUGFAIL" \
+ 	-initrd $TESTDIR/initramfs.testing
+-    grep -m 1 -q dracut-root-block-success $DISKIMAGE || return 1
++    dd if=$DISKIMAGE bs=512 count=2 | grep -F -m 1 -q dracut-root-block-success $DISKIMAGE || return 1
+ }
+ 
+ test_setup() {
+     # Create the blank file to use as a root filesystem
+     DISKIMAGE=$TESTDIR/TEST-15-BTRFSRAID-root.img
+     rm -f $DISKIMAGE
+-    dd if=/dev/null of=$DISKIMAGE bs=2M seek=1024
++    dd if=/dev/null of=$DISKIMAGE bs=1M seek=1024
+ 
+     kernel=$KVERSION
+     # Create what will eventually be our root filesystem onto an overlay
+@@ -72,7 +72,7 @@ test_setup() {
+ 	-append "root=/dev/fakeroot rw quiet console=ttyS0,115200n81 selinux=0" \
+ 	-initrd $TESTDIR/initramfs.makeroot  || return 1
+ 
+-    grep -m 1 -q dracut-root-block-created $DISKIMAGE || return 1
++    dd if=$DISKIMAGE bs=512 count=2 | grep -F -m 1 -q dracut-root-block-created || return 1
+ 
+    (
+         export initdir=$TESTDIR/overlay
+diff --git a/test/TEST-16-DMSQUASH/test.sh b/test/TEST-16-DMSQUASH/test.sh
+index 1f0854e..074ec28 100755
+--- a/test/TEST-16-DMSQUASH/test.sh
++++ b/test/TEST-16-DMSQUASH/test.sh
+@@ -23,7 +23,7 @@ test_run() {
+ 	-net none -kernel /boot/vmlinuz-$KVERSION \
+ 	-append "root=live:CDLABEL=LiveCD live rw quiet rd.retry=3 rd.info console=ttyS0,115200n81 selinux=0 rd.debug $DEBUGFAIL" \
+ 	-initrd $TESTDIR/initramfs.testing
+-    grep -m 1 -q dracut-root-block-success $TESTDIR/root.img || return 1
++    grep -F -m 1 -q dracut-root-block-success $TESTDIR/root.img || return 1
+ }
+ 
+ test_setup() {
+@@ -62,6 +62,7 @@ test_setup() {
+ 	for f in /usr/share/syslinux/*; do
+ 	    inst_simple "$f"
+ 	done
++        inst_simple /etc/os-release
+ 	inst ./test-init.sh /sbin/init
+ 	inst $TESTDIR/initramfs.testing "/boot/initramfs-$KVERSION.img"
+ 	inst /boot/vmlinuz-$KVERSION
+diff --git a/test/TEST-20-NFS/test.sh b/test/TEST-20-NFS/test.sh
+index 2b8a2ec..859fe06 100755
+--- a/test/TEST-20-NFS/test.sh
++++ b/test/TEST-20-NFS/test.sh
+@@ -62,7 +62,7 @@ client_test() {
+         -append "$cmdline $DEBUGFAIL rd.debug rd.retry=10 rd.info quiet  ro console=ttyS0,115200n81 selinux=0" \
+         -initrd $TESTDIR/initramfs.testing
+ 
+-    if [[ $? -ne 0 ]] || ! grep -m 1 -q nfs-OK $TESTDIR/client.img; then
++    if [[ $? -ne 0 ]] || ! grep -F -m 1 -q nfs-OK $TESTDIR/client.img; then
+         echo "CLIENT TEST END: $test_name [FAILED - BAD EXIT]"
+         return 1
+     fi
+@@ -250,6 +250,7 @@ test_setup() {
+         [ -x /usr/sbin/dhcpd3 ] && inst /usr/sbin/dhcpd3 /usr/sbin/dhcpd
+         instmods nfsd sunrpc ipv6 lockd af_packet
+         inst ./server-init.sh /sbin/init
++        inst_simple /etc/os-release
+         inst ./hosts /etc/hosts
+         inst ./exports /etc/exports
+         inst ./dhcpd.conf /etc/dhcpd.conf
+@@ -296,6 +297,7 @@ test_setup() {
+         done
+         dracut_install -o ${_terminfodir}/l/linux
+         inst ./client-init.sh /sbin/init
++        inst_simple /etc/os-release
+         (
+             cd "$initdir"
+             mkdir -p dev sys proc etc run
+diff --git a/test/TEST-30-ISCSI/test.sh b/test/TEST-30-ISCSI/test.sh
+index f9502e0..990f7ba 100755
+--- a/test/TEST-30-ISCSI/test.sh
++++ b/test/TEST-30-ISCSI/test.sh
+@@ -48,7 +48,7 @@ run_client() {
+         -kernel /boot/vmlinuz-$KVERSION \
+         -append "$* rw quiet rd.auto rd.retry=5 rd.debug rd.info  console=ttyS0,115200n81 selinux=0 $DEBUGFAIL" \
+         -initrd $TESTDIR/initramfs.testing
+-    if ! grep -m 1 -q iscsi-OK $TESTDIR/client.img; then
++    if ! grep -F -m 1 -q iscsi-OK $TESTDIR/client.img; then
+ 	echo "CLIENT TEST END: $test_name [FAILED - BAD EXIT]"
+ 	return 1
+     fi
+@@ -111,6 +111,7 @@ test_setup() {
+             [ -f ${_terminfodir}/l/linux ] && break
+         done
+         dracut_install -o ${_terminfodir}/l/linux
++        inst_simple /etc/os-release
+         inst ./client-init.sh /sbin/init
+         (cd "$initdir"; mkdir -p dev sys proc etc var/run tmp )
+         cp -a /etc/ld.so.conf* $initdir/etc
+@@ -152,7 +153,7 @@ test_setup() {
+         -kernel "/boot/vmlinuz-$kernel" \
+         -append "root=/dev/fakeroot rw rootfstype=ext3 quiet console=ttyS0,115200n81 selinux=0" \
+         -initrd $TESTDIR/initramfs.makeroot  || return 1
+-    grep -m 1 -q dracut-root-block-created $TESTDIR/client.img || return 1
++    grep -F -m 1 -q dracut-root-block-created $TESTDIR/client.img || return 1
+     rm $TESTDIR/client.img
+     (
+         export initdir=$TESTDIR/overlay
+@@ -196,6 +197,7 @@ test_setup() {
+         [ -f /etc/netconfig ] && dracut_install /etc/netconfig
+         type -P dhcpd >/dev/null && dracut_install dhcpd
+         [ -x /usr/sbin/dhcpd3 ] && inst /usr/sbin/dhcpd3 /usr/sbin/dhcpd
++        inst_simple /etc/os-release
+         inst ./server-init.sh /sbin/init
+         inst ./hosts /etc/hosts
+         inst ./dhcpd.conf /etc/dhcpd.conf
+diff --git a/test/TEST-40-NBD/test.sh b/test/TEST-40-NBD/test.sh
+index 88570af..9ad95b9 100755
+--- a/test/TEST-40-NBD/test.sh
++++ b/test/TEST-40-NBD/test.sh
+@@ -64,7 +64,7 @@ client_test() {
+         -append "$cmdline $DEBUGFAIL rd.auto rd.info rd.retry=10 ro console=ttyS0,115200n81  selinux=0  " \
+         -initrd $TESTDIR/initramfs.testing
+ 
+-    if [[ $? -ne 0 ]] || ! grep -m 1 -q nbd-OK $TESTDIR/flag.img; then
++    if [[ $? -ne 0 ]] || ! grep -F -m 1 -q nbd-OK $TESTDIR/flag.img; then
+         echo "CLIENT TEST END: $test_name [FAILED - BAD EXIT]"
+         return 1
+     fi
+@@ -205,6 +205,7 @@ make_encrypted_root() {
+         done
+         dracut_install -o ${_terminfodir}/l/linux
+         inst ./client-init.sh /sbin/init
++        inst_simple /etc/os-release
+         find_binary plymouth >/dev/null && dracut_install plymouth
+         cp -a /etc/ld.so.conf* $initdir/etc
+         sudo ldconfig -r "$initdir"
+@@ -239,8 +240,8 @@ make_encrypted_root() {
+         -kernel "/boot/vmlinuz-$kernel" \
+         -append "root=/dev/fakeroot rw quiet console=ttyS0,115200n81 selinux=0" \
+         -initrd $TESTDIR/initramfs.makeroot  || return 1
+-    grep -m 1 -q dracut-root-block-created $TESTDIR/flag.img || return 1
+-    grep -a -m 1 ID_FS_UUID $TESTDIR/flag.img > $TESTDIR/luks.uuid
++    grep -F -m 1 -q dracut-root-block-created $TESTDIR/flag.img || return 1
++    grep -F -a -m 1 ID_FS_UUID $TESTDIR/flag.img > $TESTDIR/luks.uuid
+ }
+ 
+ make_client_root() {
+@@ -262,6 +263,7 @@ make_client_root() {
+         done
+         dracut_install -o ${_terminfodir}/l/linux
+         inst ./client-init.sh /sbin/init
++        inst_simple /etc/os-release
+         inst /etc/nsswitch.conf /etc/nsswitch.conf
+         inst /etc/passwd /etc/passwd
+         inst /etc/group /etc/group
+@@ -303,6 +305,7 @@ make_server_root() {
+         type -P dhcpd >/dev/null && dracut_install dhcpd
+         [ -x /usr/sbin/dhcpd3 ] && inst /usr/sbin/dhcpd3 /usr/sbin/dhcpd
+         inst ./server-init.sh /sbin/init
++        inst_simple /etc/os-release
+         inst ./hosts /etc/hosts
+         inst ./dhcpd.conf /etc/dhcpd.conf
+         inst /etc/nsswitch.conf /etc/nsswitch.conf
+@@ -356,7 +359,7 @@ test_setup() {
+     sudo $basedir/dracut.sh -l -i $TESTDIR/overlay / \
+         -o "plymouth" \
+         -a "debug watchdog" \
+-        -d "af_packet piix ide-gd_mod ata_piix ext2 ext3 sd_mod e1000 i6300esbwdt" \
++        -d "af_packet piix ide-gd_mod ata_piix ext2 ext3 sd_mod e1000 i6300esb ib700wdt" \
+         -f $TESTDIR/initramfs.testing $KVERSION || return 1
+ }
+ 
+diff --git a/test/TEST-50-MULTINIC/server-init.sh b/test/TEST-50-MULTINIC/server-init.sh
+index 144f83c..5a8359b 100755
+--- a/test/TEST-50-MULTINIC/server-init.sh
++++ b/test/TEST-50-MULTINIC/server-init.sh
+@@ -7,11 +7,53 @@ export PS1='nfstest-server:\w\$ '
+ stty sane
+ echo "made it to the rootfs!"
+ echo server > /proc/sys/kernel/hostname
++
++wait_for_if_link() {
++    local cnt=0
++    local li
++    while [ $cnt -lt 600 ]; do
++        li=$(ip -o link show dev $1 2>/dev/null)
++        [ -n "$li" ] && return 0
++        sleep 0.1
++        cnt=$(($cnt+1))
++    done
++    return 1
++}
++
++wait_for_if_up() {
++    local cnt=0
++    local li
++    while [ $cnt -lt 200 ]; do
++        li=$(ip -o link show up dev $1)
++        [ -n "$li" ] && return 0
++        sleep 0.1
++        cnt=$(($cnt+1))
++    done
++    return 1
++}
++
++wait_for_route_ok() {
++    local cnt=0
++    while [ $cnt -lt 200 ]; do
++        li=$(ip route show)
++        [ -n "$li" ] && [ -z "${li##*$1*}" ] && return 0
++        sleep 0.1
++        cnt=$(($cnt+1))
++    done
++    return 1
++}
++
++linkup() {
++    wait_for_if_link $1 2>/dev/null\
++     && ip link set $1 up 2>/dev/null\
++     && wait_for_if_up $1 2>/dev/null
++}
++
+ >/dev/watchdog
+ ip addr add 127.0.0.1/8 dev lo
+-ip link set lo up
++linkup lo
+ ip addr add 192.168.50.1/24 dev eth0
+-ip link set eth0 up
++linkup eth0
+ >/dev/watchdog
+ modprobe af_packet
+ > /dev/watchdog
+@@ -42,10 +84,14 @@ exportfs -r
+ chmod 777 /var/lib/dhcpd/dhcpd.leases
+ >/dev/watchdog
+ dhcpd -cf /etc/dhcpd.conf -lf /var/lib/dhcpd/dhcpd.leases
+-echo -n 'V' > /dev/watchdog
++#echo -n 'V' > /dev/watchdog
+ #sh -i
++#tcpdump -i eth0
+ # Wait forever for the VM to die
+ echo "Serving NFS mounts"
+-while :; do sleep 30; done
++while :; do
++	sleep 10
++	>/dev/watchdog
++done
+ mount -n -o remount,ro /
+ poweroff -f
+diff --git a/test/TEST-50-MULTINIC/test.sh b/test/TEST-50-MULTINIC/test.sh
+index a3aa679..e2a8ab9 100755
+--- a/test/TEST-50-MULTINIC/test.sh
++++ b/test/TEST-50-MULTINIC/test.sh
+@@ -8,7 +8,6 @@ KVERSION=${KVERSION-$(uname -r)}
+ # Uncomment this to debug failures
+ #DEBUGFAIL="rd.shell"
+ #SERIAL="tcp:127.0.0.1:9999"
+-SERIAL="null"
+ 
+ run_server() {
+     # Start server first
+@@ -19,9 +18,9 @@ run_server() {
+         -hda $TESTDIR/server.ext3 \
+         -m 512M -smp 2 \
+         -display none \
+-        -netdev socket,mcast=230.0.0.1:12320,id=net0 \
+-        -net nic,macaddr=52:54:01:12:34:56,model=e1000,netdev=net0 \
+-        -serial $SERIAL \
++        -net socket,listen=127.0.0.1:12350 \
++        -net nic,macaddr=52:54:01:12:34:56,model=e1000 \
++        ${SERIAL+-serial $SERIAL} \
+         -watchdog i6300esb -watchdog-action poweroff \
+         -kernel /boot/vmlinuz-$KVERSION \
+         -append "loglevel=77 root=/dev/sda rootfstype=ext3 rw console=ttyS0,115200n81 selinux=0" \
+@@ -53,18 +52,16 @@ client_test() {
+     fi
+ 
+     $testdir/run-qemu -hda $TESTDIR/client.img -m 512M -smp 2 -nographic \
+-        -netdev socket,mcast=230.0.0.1:12320,id=net0 \
+-        -net nic,netdev=net0,macaddr=52:54:00:12:34:$mac1,model=e1000 \
+-        -netdev socket,mcast=230.0.0.1:12320,id=net1 \
+-        -net nic,netdev=net1,macaddr=52:54:00:12:34:$mac2,model=e1000 \
+-        -netdev socket,mcast=230.0.0.1:12320,id=net2 \
+-        -net nic,netdev=net2,macaddr=52:54:00:12:34:$mac3,model=e1000 \
++        -net socket,connect=127.0.0.1:12350 \
++        -net nic,macaddr=52:54:00:12:34:$mac1,model=e1000 \
++        -net nic,macaddr=52:54:00:12:34:$mac2,model=e1000 \
++        -net nic,macaddr=52:54:00:12:34:$mac3,model=e1000 \
+         -watchdog i6300esb -watchdog-action poweroff \
+         -kernel /boot/vmlinuz-$KVERSION \
+-        -append "$cmdline $DEBUGFAIL rd.retry=5 rd.info  ro rd.systemd.log_level=debug console=ttyS0,115200n81 selinux=0 rd.copystate rd.chroot init=/sbin/init" \
++        -append "$cmdline $DEBUGFAIL rd.retry=5 rd.info ro console=ttyS0,115200n81 selinux=0 init=/sbin/init" \
+         -initrd $TESTDIR/initramfs.testing
+ 
+-    if [[ $? -ne 0 ]] || ! grep -m 1 -q OK $TESTDIR/client.img; then
++    if [[ $? -ne 0 ]] || ! grep -F -m 1 -q OK $TESTDIR/client.img; then
+         echo "CLIENT TEST END: $test_name [FAILED - BAD EXIT]"
+         return 1
+     fi
+@@ -72,7 +69,7 @@ client_test() {
+ 
+     for i in $check ; do
+         echo $i
+-        if ! grep -m 1 -q $i $TESTDIR/client.img; then
++        if ! grep -F -m 1 -q $i $TESTDIR/client.img; then
+             echo "CLIENT TEST END: $test_name [FAILED - BAD IF]"
+             return 1
+         fi
+@@ -173,6 +170,7 @@ test_setup() {
+         type -P dhcpd >/dev/null && dracut_install dhcpd
+         [ -x /usr/sbin/dhcpd3 ] && inst /usr/sbin/dhcpd3 /usr/sbin/dhcpd
+         instmods nfsd sunrpc ipv6 lockd af_packet
++        inst_simple /etc/os-release
+         inst ./server-init.sh /sbin/init
+         inst ./hosts /etc/hosts
+         inst ./exports /etc/exports
+@@ -211,6 +209,7 @@ test_setup() {
+             [ -f ${_terminfodir}/l/linux ] && break
+         done
+         dracut_install -o ${_terminfodir}/l/linux
++        inst_simple /etc/os-release
+         inst ./client-init.sh /sbin/init
+         (
+             cd "$initdir"
+@@ -252,14 +251,14 @@ test_setup() {
+     # Make server's dracut image
+     $basedir/dracut.sh -l -i $TESTDIR/overlay / \
+         -m "dash udev-rules base rootfs-block debug kernel-modules watchdog" \
+-        -d "af_packet piix ide-gd_mod ata_piix ext3 sd_mod nfsv2 nfsv3 nfsv4 nfs_acl nfs_layout_nfsv41_files nfsd e1000 i6300esbwdt" \
++        -d "af_packet piix ide-gd_mod ata_piix ext3 sd_mod nfsv2 nfsv3 nfsv4 nfs_acl nfs_layout_nfsv41_files nfsd e1000 i6300esb ib700wdt" \
+         -f $TESTDIR/initramfs.server $KVERSION || return 1
+ 
+     # Make client's dracut image
+     $basedir/dracut.sh -l -i $TESTDIR/overlay / \
+         -o "plymouth" \
+         -a "debug" \
+-        -d "af_packet piix sd_mod sr_mod ata_piix ide-gd_mod e1000 nfsv2 nfsv3 nfsv4 nfs_acl nfs_layout_nfsv41_files sunrpc i6300esbwdt" \
++        -d "af_packet piix sd_mod sr_mod ata_piix ide-gd_mod e1000 nfsv2 nfsv3 nfsv4 nfs_acl nfs_layout_nfsv41_files sunrpc i6300esb ib700wdt" \
+         -f $TESTDIR/initramfs.testing $KVERSION || return 1
+ }
+ 
+diff --git a/test/TEST-99-RPM/test.sh b/test/TEST-99-RPM/test.sh
+index 66f0beb..e774168 100755
+--- a/test/TEST-99-RPM/test.sh
++++ b/test/TEST-99-RPM/test.sh
+@@ -50,9 +50,12 @@ find / -xdev -type f -not -path '/var/*' \
+   -not -path '/test.output' \
+   -not -path '/etc/nsswitch.conf.bak' \
+   -not -path '/etc/iscsi/initiatorname.iscsi' \
++  -not -path '/boot/*0-rescue*' \
+   -not -path '/dev/null' \
++  -not -path "/boot/loader/entries/\$(cat /etc/machine-id)-*" \
++  -not -path "/boot/\$(cat /etc/machine-id)/*" \
+   -exec rpm -qf '{}' ';' | \
+-  fgrep 'not owned' &> /test.output
++  grep -F 'not owned' &> /test.output
+ exit
+ EOF
+ 
+diff --git a/test/old.TEST-14-IMSM/test.sh b/test/old.TEST-14-IMSM/test.sh
+index cd2d715..d69f00d 100755
+--- a/test/old.TEST-14-IMSM/test.sh
++++ b/test/old.TEST-14-IMSM/test.sh
+@@ -17,7 +17,7 @@ client_run() {
+ 	-net none -kernel /boot/vmlinuz-$KVERSION \
+ 	-append "$@ root=LABEL=root rw quiet rd.retry=5 rd.debug console=ttyS0,115200n81 selinux=0 rd.info $DEBUGFAIL" \
+ 	-initrd $TESTDIR/initramfs.testing
+-    if ! grep -m 1 -q dracut-root-block-success $TESTDIR/root.ext2; then
++    if ! grep -F -m 1 -q dracut-root-block-success $TESTDIR/root.ext2; then
+ 	echo "CLIENT TEST END: $@ [FAIL]"
+ 	return 1;
+     fi
+@@ -102,7 +102,7 @@ test_setup() {
+ 	-kernel "/boot/vmlinuz-$kernel" \
+ 	-append "root=/dev/dracut/root rw rootfstype=ext2 quiet console=ttyS0,115200n81 selinux=0" \
+ 	-initrd $TESTDIR/initramfs.makeroot  || return 1
+-    grep -m 1 -q dracut-root-block-created $TESTDIR/root.ext2 || return 1
++    grep -F -m 1 -q dracut-root-block-created $TESTDIR/root.ext2 || return 1
+     (
+ 	export initdir=$TESTDIR/overlay
+ 	. $basedir/dracut-functions.sh

@@ -1,10 +1,11 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	027
-Release:	6
+Release:	7
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
+# http://git.kernel.org/cgit/boot/dracut/dracut.git/
 Source0:	http://www.kernel.org/pub/linux/utils/boot/dracut/%{name}-%{version}.tar.xz
 Source3:	50-dracut-mandriva.conf
 # (tpg) simple script to provide a backup for current working initrd file
@@ -17,8 +18,8 @@ Patch1001:	dracut-007-undisable_bootchart.patch
 Patch1002:	dracut-010-mkinitrd.patch
 # (bor) Add support for KEYTABLE to dynamically determine whether to install UNICODE or non-UNICODE keymap version.
 Patch1003:	dracut-007-aufs-mount.patch
-# (anssi) handle gzip compressed KMS kernel modules
-Patch1004:	dracut-024.rosa.patch
+Patch1005:	dracut-027-modprobe-dm-mod.patch
+Patch1006:	dracut-027-modprobe-loop.patch
 
 #Patch1005:	dracut-013-ld.so.conf.workaround.patch
 #Patch1006:	dracut-014-multipath-udev-rules.patch
@@ -31,6 +32,7 @@ Patch1012:	dracut-024-dont-compress-kernel-modules-within-initramfs.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
+Patch1013:	0001-tag-027to-snap-af6292f0fc8be31af54e9588f063ce570f1c8f2d.patch
 
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
@@ -100,7 +102,11 @@ install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/dracut.conf.d
 
 %if %mdvver >= 201200
 # (tpg) default image name in 2012 has changed
-sed -i -e 's/welcome.png/background.png/' %{buildroot}%{_prefix}/lib/dracut/modules.d/50plymouth/plymouth-populate-initrd.sh
+sed -i -e 's@PLYMOUTH_LOGO_FILE=.*@PLYMOUTH_LOGO_FILE="/usr/share/plymouth/themes/Mandriva-*/background.png"@' \
+    %{buildroot}%{_prefix}/lib/dracut/modules.d/50plymouth/plymouth-populate-initrd.sh
+%else
+sed -i -e 's@PLYMOUTH_LOGO_FILE=.*@PLYMOUTH_LOGO_FILE="/usr/share/plymouth/themes/Mandriva-*/welcome.png"@' \
+    %{buildroot}%{_prefix}/lib/dracut/modules.d/50plymouth/plymouth-populate-initrd.sh
 %endif
 
 # bluca remove patch backup files

@@ -1,0 +1,10 @@
+diff -Naur dracut-027/modules.d/90dm/dm-pre-udev.sh dracut-027.tpg/modules.d/90dm/dm-pre-udev.sh
+--- dracut-027/modules.d/90dm/dm-pre-udev.sh	2013-03-26 15:55:03.000000000 +0000
++++ dracut-027.tpg/modules.d/90dm/dm-pre-udev.sh	2013-06-06 18:22:59.333234905 +0000
+@@ -1,5 +1,5 @@
+ #!/bin/sh
+ # -*- mode: shell-script; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
+ # ex: ts=8 sw=4 sts=4 et filetype=sh
+-strstr "$(cat /proc/misc)" device-mapper || modprobe dm_mod
++strstr "$(cat /proc/misc)" device-mapper || modprobe dm-mod
+ modprobe dm_mirror 2>/dev/null
