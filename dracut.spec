@@ -201,6 +201,7 @@ fi
 %{_prefix}/lib/dracut/dracut-initramfs-restore
 %{_prefix}/lib/dracut/dracut-logger.sh
 %{_datadir}/bash-completion/completions/dracut
+%{_datadir}/bash-completion/completions/lsinitrd
 %{_mandir}/man1/lsinitrd.1.*
 %{_mandir}/man5/dracut.conf.5*
 %{_mandir}/man7/dracut.bootup.7.xz
