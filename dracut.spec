@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	027
-Release:	7
+Version:	029
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -32,7 +32,6 @@ Patch1012:	dracut-024-dont-compress-kernel-modules-within-initramfs.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
-Patch1013:	0001-tag-027to-snap-af6292f0fc8be31af54e9588f063ce570f1c8f2d.patch
 
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
@@ -41,6 +40,7 @@ BuildRequires:	dash
 BuildRequires:	bash
 BuildRequires:	asciidoc
 BuildRequires:	systemd-units
+BuildRequires:	bash-completion
 
 Requires:	systemd >= 198
 Provides:	mkinitrd-command
@@ -99,6 +99,8 @@ sed -i -e 's,\$(strip),,g' install/Makefile
 %makeinstall_std
 
 install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/dracut.conf.d
+
+echo "DRACUT_VERSION=%{version}-%{release}" > %{buildroot}%{_prefix}/lib/dracut/dracut-version.sh
 
 %if %mdvver >= 201200
 # (tpg) default image name in 2012 has changed
