@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	029
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -86,6 +86,7 @@ NFS, iSCSI, NBD, FCoE with the dracut-network package.
 sed -i -e 's,\$(strip),,g' install/Makefile
 
 %build
+%global optflags %{optflags} -Os
 %serverbuild_hardened
 
 %configure2_5x \
