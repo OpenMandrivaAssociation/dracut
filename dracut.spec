@@ -33,14 +33,14 @@ Patch1012:	dracut-024-dont-compress-kernel-modules-within-initramfs.patch
 ### GIT PATCHES GOES HERE  ###
 ###
 
-#BuildRequires:	docbook-dtd45-xml
-#BuildRequires:	docbook-style-xsl
-#BuildRequires:	xsltproc
-#BuildRequires:	dash
-#BuildRequires:	bash
-#BuildRequires:	asciidoc
-#BuildRequires:	systemd-units
-#BuildRequires:	bash-completion
+BuildRequires:	docbook-dtd45-xml
+BuildRequires:	docbook-style-xsl
+BuildRequires:	xsltproc
+BuildRequires:	dash
+BuildRequires:	bash
+BuildRequires:	asciidoc
+BuildRequires:	systemd-units
+BuildRequires:	bash-completion
 
 Requires:	systemd >= 198
 Provides:	mkinitrd-command
