@@ -1,13 +1,13 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	030
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
 # http://git.kernel.org/cgit/boot/dracut/dracut.git/
 Source0:	http://www.kernel.org/pub/linux/utils/boot/dracut/%{name}-%{version}.tar.xz
-Source3:	50-dracut-mandriva.conf
+Source3:	50-dracut-distro.conf
 # (tpg) simple script to provide a backup for current working initrd file
 Source4:	initrd-backup.sh
 # (bor) mdv-specific fixes
@@ -140,7 +140,7 @@ mv %{buildroot}%{_sbindir}/lsinitrd %{buildroot}%{_sbindir}/lsinitrd-dracut
 mv %{buildroot}%{_sbindir}/mkinitrd %{buildroot}%{_sbindir}/mkinitrd-dracut
 
 cat > README.urpmi << EOF
-dracut is the default mkinitrd replacement in mandriva
+dracut is the default mkinitrd replacement in %{distribution}
 
 If you relly want to use old mkinitrd instead of dracut run
 update-alternatives --set mkinitrd /sbin/mkinitrd-mkinitrd
@@ -184,7 +184,7 @@ fi
 %config %{_sysconfdir}/dracut.conf
 %config %{_sysconfdir}/logrotate.d/dracut
 %attr(0644,root,root) %ghost %config(missingok,noreplace) %{_localstatedir}/log/dracut.log
-%{_sysconfdir}/dracut.conf.d/50-dracut-mandriva.conf
+%{_sysconfdir}/dracut.conf.d/50-dracut-distro.conf
 /sbin/dracut
 %{_sbindir}/dracut
 %{_bindir}/dracut
