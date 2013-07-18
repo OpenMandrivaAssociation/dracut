@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	029
-Release:	2
+Version:	030
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -33,14 +33,14 @@ Patch1012:	dracut-024-dont-compress-kernel-modules-within-initramfs.patch
 ### GIT PATCHES GOES HERE  ###
 ###
 
-BuildRequires:	docbook-dtd45-xml
-BuildRequires:	docbook-style-xsl
-BuildRequires:	xsltproc
-BuildRequires:	dash
-BuildRequires:	bash
-BuildRequires:	asciidoc
-BuildRequires:	systemd-units
-BuildRequires:	bash-completion
+#BuildRequires:	docbook-dtd45-xml
+#BuildRequires:	docbook-style-xsl
+#BuildRequires:	xsltproc
+#BuildRequires:	dash
+#BuildRequires:	bash
+#BuildRequires:	asciidoc
+#BuildRequires:	systemd-units
+#BuildRequires:	bash-completion
 
 Requires:	systemd >= 198
 Provides:	mkinitrd-command
@@ -211,19 +211,3 @@ fi
 %{_mandir}/man7/dracut.kernel.7*
 %{_mandir}/man7/dracut.cmdline.7*
 %{_mandir}/man8/dracut*.8*
-
-
-
-
-
-%changelog
-* Fri Oct 19 2012 Tomasz Pawel Gajc <tpg@mandriva.org> 024-2
-+ Revision: 819042
-- reupload
-- update to new version 024
-- remove duplicate requires on mount
-- provide a initd-backup.sh script which should store as a backup current working initrd file and recreates new one
-  o just add the script, in next step i'll have to figure out a best mechanism to execute the script on every systemd, dracut on any other core package update
-- fix udevadm path
-- do not suggest plymouth theme
-
