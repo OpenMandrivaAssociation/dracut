@@ -29,10 +29,9 @@ Patch1006:	dracut-027-modprobe-loop.patch
 Patch1010:	dracut-024-busybox-fallback-to-busybox.static-if-no-busybox.patch
 Patch1011:	dracut-024-use-busybox--list.patch
 Patch1012:	dracut-024-dont-compress-kernel-modules-within-initramfs.patch
-# (tpg) this sould be fixed soon in upstream git
-Patch1013:	dracut-032-dracut-functions.sh-remove-non-existent-dev-nodes.patch
 ### GIT PATCHES GOES HERE  ###
 ###
+Patch1013:	dracut-032-git2b9d8f65a6.patch
 
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
