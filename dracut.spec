@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	032
-Release:	3
+Version:	033
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -31,7 +31,6 @@ Patch1011:	dracut-024-use-busybox--list.patch
 Patch1012:	dracut-024-dont-compress-kernel-modules-within-initramfs.patch
 ### GIT PATCHES GOES HERE  ###
 ###
-Patch1013:	dracut-032-git2b9d8f65a6.patch
 
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
