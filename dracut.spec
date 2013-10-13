@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	034
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -29,6 +29,7 @@ Patch1006:	dracut-027-modprobe-loop.patch
 Patch1010:	dracut-024-busybox-fallback-to-busybox.static-if-no-busybox.patch
 Patch1011:	dracut-024-use-busybox--list.patch
 Patch1012:	dracut-024-dont-compress-kernel-modules-within-initramfs.patch
+Patch1013:	dracut-034-fix-prelink.patch
 ### GIT PATCHES GOES HERE  ###
 ###
 

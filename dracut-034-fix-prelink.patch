@@ -1,0 +1,19 @@
+--- dracut-034/dracut.sh	2013-10-08 07:55:26.000000000 +0000
++++ dracut-034/dracut.sh.tpg	2013-10-13 11:18:57.438896598 +0000
+@@ -1266,13 +1266,14 @@
+     if [[ $UID = 0 ]] && [[ $PRELINK_BIN ]]; then
+         if [[ $DRACUT_FIPS_MODE ]]; then
+             dinfo "*** Installing prelink files ***"
+-            inst_multiple -o prelink /etc/prelink.conf /etc/prelink.conf.d/*.conf /etc/prelink.cache
++            inst_multiple -o prelink /etc/prelink.conf /etc/prelink.conf.d/*.conf /etc/prelink.cache /lib*/libelf*.so*
+         else
+             dinfo "*** Pre-linking files ***"
+-            inst_multiple -o prelink /etc/prelink.conf /etc/prelink.conf.d/*.conf
++            inst_multiple -o prelink /etc/prelink.conf /etc/prelink.conf.d/*.conf /lib*/libelf*.so*
+             chroot "$initdir" "$PRELINK_BIN" -a
+             rm -f -- "$initdir/$PRELINK_BIN"
+             rm -fr -- "$initdir"/etc/prelink.*
++            rm -f -- "$initdir"/lib*/libelf*.so*
+             dinfo "*** Pre-linking files done ***"
+         fi
+     fi
