@@ -1,0 +1,26 @@
+--- dracut-034/modules.d/50plymouth/plymouth-pretrigger.sh.omv~	2013-10-13 23:16:27.178285182 +0200
++++ dracut-034/modules.d/50plymouth/plymouth-pretrigger.sh	2013-10-13 23:16:49.545284246 +0200
+@@ -4,13 +4,6 @@
+ 
+ if type plymouthd >/dev/null 2>&1 && [ -z "$DRACUT_SYSTEMD" ]; then
+     if getargbool 1 plymouth.enable && getargbool 1 rd.plymouth -d -n rd_NO_PLYMOUTH; then
+-        # first trigger graphics subsystem
+-        udevadm trigger --action=add --attr-match=class=0x030000 >/dev/null 2>&1
+-        # first trigger graphics and tty subsystem
+-        udevadm trigger --action=add --subsystem-match=graphics --subsystem-match=drm --subsystem-match=tty >/dev/null 2>&1
+-
+-        udevadm settle --timeout=30 2>&1 | vinfo
+-
+         info "Starting plymouth daemon"
+         mkdir -m 0755 /run/plymouth
+         read consoledev rest < /sys/class/tty/console/active
+--- dracut-034/modules.d/50drm/module-setup.sh.omv~	2013-10-14 01:04:40.173845610 +0200
++++ dracut-034/modules.d/50drm/module-setup.sh	2013-10-14 01:05:38.631842892 +0200
+@@ -61,3 +61,7 @@ installkernel() {
+         instmods $_modname
+     done
+ }
++
++install() {
++    inst_hook pre-trigger 08 "$moddir/drm-pretrigger.sh"
++}

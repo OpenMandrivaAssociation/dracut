@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	034
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -10,6 +10,11 @@ Source0:	http://www.kernel.org/pub/linux/utils/boot/dracut/%{name}-%{version}.ta
 Source3:	50-dracut-distro.conf
 # (tpg) simple script to provide a backup for current working initrd file
 Source4:	initrd-backup.sh
+# (bero) uvesafb support scripts
+Source10:	uvesafb-module-setup.sh
+Source11:	uvesafb-pretrigger.sh
+# (bero) load KMS drivers if possible (and before uvesafb is tried as an alternative)
+Source12:	drm-pretrigger.sh
 # (bor) mdv-specific fixes
 #Patch1000:	dracut-011-mdv.patch
 # (bor) Restore original Mandriva behaviour of adding bootchart if RPM is installed.
@@ -30,6 +35,11 @@ Patch1010:	dracut-024-busybox-fallback-to-busybox.static-if-no-busybox.patch
 Patch1011:	dracut-024-use-busybox--list.patch
 Patch1012:	dracut-024-dont-compress-kernel-modules-within-initramfs.patch
 Patch1013:	dracut-034-fix-prelink.patch
+
+# (bero) Don't let plymouth run the graphics system triggers -- graphics
+# driver related bits (drm, uvesafb) should take care of themselves
+Patch1014:	dracut-034-gpu-driver-triggers.patch
+
 ### GIT PATCHES GOES HERE  ###
 ###
 
@@ -43,6 +53,7 @@ BuildRequires:	systemd-units
 BuildRequires:	bash-completion
 
 Requires:	systemd >= 198
+Requires:	v86d
 Provides:	mkinitrd-command
 Requires(pre):	filesystem
 Requires(pre):	coreutils
@@ -85,6 +96,19 @@ NFS, iSCSI, NBD, FCoE with the dracut-network package.
 # We don't want to strip dracut-install, that's debuginfo's job
 sed -i -e 's,\$(strip),,g' install/Makefile
 
+# Splash screen bits require a framebuffer module -- loaded at 50drm
+# or (now, after OMV changes) 51uvesafb
+# So they should be loaded later than 51...
+# Moving to 59 because we may want to do more GPU initialization later.
+mv modules.d/50gensplash modules.d/59gensplash
+mv modules.d/50plymouth modules.d/59plymouth
+
+# Push in uvesafb support
+mkdir modules.d/51uvesafb
+install -c -m 755 %{SOURCE10} modules.d/51uvesafb/module-setup.sh
+install -c -m 755 %{SOURCE11} modules.d/51uvesafb/uvesafb-pretrigger.sh
+install -c -m 755 %{SOURCE12} modules.d/50drm/drm-pretrigger.sh
+
 %build
 %global optflags %{optflags} -Os
 %serverbuild_hardened
@@ -106,10 +130,10 @@ echo "DRACUT_VERSION=%{version}-%{release}" > %{buildroot}%{_prefix}/lib/dracut/
 %if %mdvver >= 201200
 # (tpg) default image name in 2012 has changed
 sed -i -e 's@PLYMOUTH_LOGO_FILE=.*@PLYMOUTH_LOGO_FILE="/usr/share/plymouth/themes/Mandriva-*/background.png"@' \
-    %{buildroot}%{_prefix}/lib/dracut/modules.d/50plymouth/plymouth-populate-initrd.sh
+    %{buildroot}%{_prefix}/lib/dracut/modules.d/??plymouth/plymouth-populate-initrd.sh
 %else
 sed -i -e 's@PLYMOUTH_LOGO_FILE=.*@PLYMOUTH_LOGO_FILE="/usr/share/plymouth/themes/Mandriva-*/welcome.png"@' \
-    %{buildroot}%{_prefix}/lib/dracut/modules.d/50plymouth/plymouth-populate-initrd.sh
+    %{buildroot}%{_prefix}/lib/dracut/modules.d/??plymouth/plymouth-populate-initrd.sh
 %endif
 
 # bluca remove patch backup files
