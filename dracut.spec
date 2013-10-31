@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	034
-Release:	7
+Release:	8
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -53,7 +53,9 @@ BuildRequires:	systemd-units
 BuildRequires:	bash-completion
 
 Requires:	systemd >= 198
+%ifarch %{ix86} x86_64
 Requires:	v86d
+%endif
 Provides:	mkinitrd-command
 Requires(pre):	filesystem
 Requires(pre):	coreutils
