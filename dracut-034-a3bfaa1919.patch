@@ -9,9 +9,9 @@ https://bugzilla.redhat.com/show_bug.cgi?id=1029786
 
 [Edited-by: Harald Hoyer: use getconf for cpu_count]
 ---
-diff -Naur dracut-034\dracut.sh dracut-034.tpg\dracut.sh
---- dracut-034\dracut.sh	Tue Oct 08 08:55:26 2013
-+++ dracut-034.tpg\dracut.sh	Tue Nov 19 10:26:53 2013
+diff -Naur dracut-034/dracut.sh dracut-034.tpg/dracut.sh
+--- dracut-034/dracut.sh	Tue Oct 08 08:55:26 2013
++++ dracut-034.tpg/dracut.sh	Tue Nov 19 10:26:53 2013
 @@ -681,12 +681,14 @@
  # eliminate IFS hackery when messing with fw_dir
  fw_dir=${fw_dir//:/ }
