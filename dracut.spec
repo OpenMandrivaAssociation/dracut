@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	034
-Release:	10
+Release:	11
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -15,6 +15,10 @@ Source10:	uvesafb-module-setup.sh
 Source11:	uvesafb-pretrigger.sh
 # (bero) load KMS drivers if possible (and before uvesafb is tried as an alternative)
 Source12:	drm-pretrigger.sh
+# (bero) xorg.blacklist support
+Source15:	xorgblacklist-module-setup.sh
+Source16:	xorgblacklist-pre.sh
+Source17:	xorgblacklist.sh
 # (bor) mdv-specific fixes
 #Patch1000:	dracut-011-mdv.patch
 # (bor) Restore original Mandriva behaviour of adding bootchart if RPM is installed.
@@ -110,7 +114,15 @@ mv modules.d/50plymouth modules.d/59plymouth
 mkdir modules.d/51uvesafb
 install -c -m 755 %{SOURCE10} modules.d/51uvesafb/module-setup.sh
 install -c -m 755 %{SOURCE11} modules.d/51uvesafb/uvesafb-pretrigger.sh
+
+# drm pretriggers
 install -c -m 755 %{SOURCE12} modules.d/50drm/drm-pretrigger.sh
+
+# And xorg.blacklist support
+mkdir modules.d/01xorgblacklist
+install -c -m 755 %{SOURCE15} modules.d/01xorgblacklist/module-setup.sh
+install -c -m 755 %{SOURCE16} modules.d/01xorgblacklist/xorgblacklist-pre.sh
+install -c -m 755 %{SOURCE17} modules.d/01xorgblacklist/xorgblacklist.sh
 
 %build
 %global optflags %{optflags} -Os
