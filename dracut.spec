@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	034
-Release:	11
+Release:	12
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -47,6 +47,8 @@ Patch1014:	dracut-034-gpu-driver-triggers.patch
 ### GIT PATCHES GOES HERE  ###
 ###
 Patch1015:	dracut-034-0001-dracut-functions.sh:-Avoid-loading-unnecessary-32-bit-libraries-for-64-bit-initrds.patch
+Patch1016:	dracut-034-a3bfaa1919.patch
+Patch1017:	dracut-034-28609baf6e.patch
 
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
