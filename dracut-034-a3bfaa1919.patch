@@ -9,11 +9,10 @@ https://bugzilla.redhat.com/show_bug.cgi?id=1029786
 
 [Edited-by: Harald Hoyer: use getconf for cpu_count]
 ---
-diff --git a/dracut.sh b/dracut.sh
-index 03472ba..bce2662 100755
---- a/dracut.sh
-+++ b/dracut.sh
-@@ -693,12 +693,14 @@ stdloglvl=$((stdloglvl + verbosity_mod_l))
+diff -Naur dracut-034\dracut.sh dracut-034.tpg\dracut.sh
+--- dracut-034\dracut.sh	Tue Oct 08 08:55:26 2013
++++ dracut-034.tpg\dracut.sh	Tue Nov 19 10:26:53 2013
+@@ -681,12 +681,14 @@
  # eliminate IFS hackery when messing with fw_dir
  fw_dir=${fw_dir//:/ }
  
@@ -28,7 +27,7 @@ index 03472ba..bce2662 100755
 +    lzma)  compress="lzma -9 ${cpu_count:+-T$cpu_count}";;
 +    xz)    compress="xz --check=crc32 --lzma2=dict=1MiB ${cpu_count:+-T$cpu_count}";;
      gzip)  compress="gzip -9"; command -v pigz > /dev/null 2>&1 && compress="pigz -9";;
-     lzo)   compress="lzop -9";;
-     lz4)   compress="lz4 -9";;
+ esac
+ if [[ $_no_compress_l = "cat" ]]; then
 --
 cgit v0.9.2

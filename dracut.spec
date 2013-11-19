@@ -48,7 +48,6 @@ Patch1014:	dracut-034-gpu-driver-triggers.patch
 ###
 Patch1015:	dracut-034-0001-dracut-functions.sh:-Avoid-loading-unnecessary-32-bit-libraries-for-64-bit-initrds.patch
 Patch1016:	dracut-034-a3bfaa1919.patch
-Patch1017:	dracut-034-28609baf6e.patch
 
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
