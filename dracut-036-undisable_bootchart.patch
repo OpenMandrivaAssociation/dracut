@@ -1,0 +1,11 @@
+diff -Naur dracut-036/modules.d/00bootchart/module-setup.sh dracut-036.tpg/modules.d/00bootchart/module-setup.sh
+--- dracut-036/modules.d/00bootchart/module-setup.sh	2014-01-29 07:35:47.000000000 +0000
++++ dracut-036.tpg/modules.d/00bootchart/module-setup.sh	2014-02-12 19:34:22.565734447 +0000
+@@ -6,7 +6,6 @@
+ check() {
+     [[ "$mount_needs" ]] && return 1
+     [ -x /sbin/bootchartd ] || return 1
+-    return 255
+ }
+ 
+ # called by dracut

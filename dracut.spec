@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	034
-Release:	16
+Version:	036
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -22,21 +22,21 @@ Source17:	xorgblacklist.sh
 # (bor) mdv-specific fixes
 #Patch1000:	dracut-011-mdv.patch
 # (bor) Restore original Mandriva behaviour of adding bootchart if RPM is installed.
-Patch1001:	dracut-007-undisable_bootchart.patch
+Patch1001:	dracut-036-undisable_bootchart.patch
 # (bor) compatibility with mkinitrd
 Patch1002:	dracut-010-mkinitrd.patch
 # (bor) Add support for KEYTABLE to dynamically determine whether to install UNICODE or non-UNICODE keymap version.
 Patch1003:	dracut-007-aufs-mount.patch
 Patch1005:	dracut-027-modprobe-dm-mod.patch
-Patch1006:	dracut-027-modprobe-loop.patch
+Patch1006:	dracut-036-modprobe-loop.patch
 
 #Patch1005:	dracut-013-ld.so.conf.workaround.patch
 #Patch1006:	dracut-014-multipath-udev-rules.patch
 #Patch1007:	dracut-018-check-for-tty-and-use-it.patch
 #Patch1008:	dracut-018-do-not-remount-twice-disk-partitions.patch
 #Patch1009:	dracut-018-install-var-run-and-var-lock.patch
-Patch1010:	dracut-024-busybox-fallback-to-busybox.static-if-no-busybox.patch
-Patch1011:	dracut-024-use-busybox--list.patch
+Patch1010:	dracut-036-busybox-fallback-to-busybox.static-if-no-busybox.patch
+Patch1011:	dracut-036-use-busybox--list.patch
 Patch1012:	dracut-024-dont-compress-kernel-modules-within-initramfs.patch
 Patch1013:	dracut-034-fix-prelink.patch
 
@@ -46,17 +46,15 @@ Patch1014:	dracut-034-gpu-driver-triggers.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
-Patch1015:	dracut-034-0001-dracut-functions.sh:-Avoid-loading-unnecessary-32-bit-libraries-for-64-bit-initrds.patch
-Patch1016:	dracut-034-a3bfaa1919.patch
 
-BuildRequires:	docbook-dtd45-xml
-BuildRequires:	docbook-style-xsl
-BuildRequires:	xsltproc
-BuildRequires:	dash
-BuildRequires:	bash
-BuildRequires:	asciidoc
-BuildRequires:	systemd-units
-BuildRequires:	bash-completion
+#BuildRequires:	docbook-dtd45-xml
+#BuildRequires:	docbook-style-xsl
+#BuildRequires:	xsltproc
+#BuildRequires:	dash
+#BuildRequires:	bash
+#BuildRequires:	asciidoc
+#BuildRequires:	systemd-units
+#BuildRequires:	bash-completion
 
 Requires:	systemd >= 198
 %ifarch %{ix86} x86_64
@@ -236,6 +234,7 @@ fi
 %{_unitdir}/*.service
 %{_unitdir}/*/*.service
 %{_prefix}/lib/kernel/install.d/5*-dracut*.install
+%{_prefix}/lib/dracut/skipcpio
 %{_prefix}/lib/dracut/dracut-install
 %{_prefix}/lib/dracut/dracut-version.sh
 %{_prefix}/lib/dracut/dracut-functions.sh
@@ -250,4 +249,6 @@ fi
 %{_mandir}/man7/dracut.bootup.7.xz
 %{_mandir}/man7/dracut.kernel.7*
 %{_mandir}/man7/dracut.cmdline.7*
+%{_mandir}/man7/dracut.modules.7*
 %{_mandir}/man8/dracut*.8*
+%{_mandir}/man8//mkinitrd-suse.8*
