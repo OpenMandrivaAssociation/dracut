@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	036
-Release:	3
+Release:	4
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -42,7 +42,8 @@ Patch1013:	dracut-034-fix-prelink.patch
 
 # (bero) Don't let plymouth run the graphics system triggers -- graphics
 # driver related bits (drm, uvesafb) should take care of themselves
-Patch1014:	dracut-034-gpu-driver-triggers.patch
+#(tpg) disable this as it can trigger plymouth issues see bug #578
+#Patch1014:	dracut-034-gpu-driver-triggers.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
@@ -106,16 +107,19 @@ sed -i -e 's,\$(strip),,g' install/Makefile
 # or (now, after OMV changes) 51uvesafb
 # So they should be loaded later than 51...
 # Moving to 59 because we may want to do more GPU initialization later.
-mv modules.d/50gensplash modules.d/59gensplash
-mv modules.d/50plymouth modules.d/59plymouth
+#(tpg) disable this as it can trigger plymouth issues see bug #578
+#mv modules.d/50gensplash modules.d/59gensplash
+#mv modules.d/50plymouth modules.d/59plymouth
 
 # Push in uvesafb support
-mkdir modules.d/51uvesafb
-install -c -m 755 %{SOURCE10} modules.d/51uvesafb/module-setup.sh
-install -c -m 755 %{SOURCE11} modules.d/51uvesafb/uvesafb-pretrigger.sh
+#(tpg) disable this as it can trigger plymouth issues see bug #578
+#mkdir modules.d/51uvesafb
+#install -c -m 755 %{SOURCE10} modules.d/51uvesafb/module-setup.sh
+#install -c -m 755 %{SOURCE11} modules.d/51uvesafb/uvesafb-pretrigger.sh
 
 # drm pretriggers
-install -c -m 755 %{SOURCE12} modules.d/50drm/drm-pretrigger.sh
+#(tpg) disable this as it can trigger plymouth issues see bug #578
+#install -c -m 755 %{SOURCE12} modules.d/50drm/drm-pretrigger.sh
 
 # And xorg.blacklist support
 mkdir modules.d/01xorgblacklist
