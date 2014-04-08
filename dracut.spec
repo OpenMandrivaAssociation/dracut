@@ -22,27 +22,30 @@ Source17:	xorgblacklist.sh
 # (bor) mdv-specific fixes
 #Patch1000:	dracut-011-mdv.patch
 # (bor) Restore original Mandriva behaviour of adding bootchart if RPM is installed.
-Patch1001:	dracut-036-undisable_bootchart.patch
+Patch1001:	dracut-037-undisable_bootchart.patch
 # (bor) compatibility with mkinitrd
 Patch1002:	dracut-010-mkinitrd.patch
 # (bor) Add support for KEYTABLE to dynamically determine whether to install UNICODE or non-UNICODE keymap version.
 Patch1003:	dracut-007-aufs-mount.patch
 Patch1005:	dracut-027-modprobe-dm-mod.patch
-Patch1006:	dracut-036-modprobe-loop.patch
+Patch1006:	dracut-037-modprobe-loop.patch
 
 #Patch1005:	dracut-013-ld.so.conf.workaround.patch
 #Patch1006:	dracut-014-multipath-udev-rules.patch
 #Patch1007:	dracut-018-check-for-tty-and-use-it.patch
 #Patch1008:	dracut-018-do-not-remount-twice-disk-partitions.patch
 #Patch1009:	dracut-018-install-var-run-and-var-lock.patch
-Patch1010:	dracut-036-busybox-fallback-to-busybox.static-if-no-busybox.patch
-Patch1011:	dracut-036-use-busybox--list.patch
+Patch1010:	dracut-037-busybox-fallback-to-busybox.static-if-no-busybox.patch
+Patch1011:	dracut-037-use-busybox--list.patch
 Patch1012:	dracut-024-dont-compress-kernel-modules-within-initramfs.patch
 Patch1013:	dracut-034-fix-prelink.patch
 
 # (bero) Don't let plymouth run the graphics system triggers -- graphics
 # driver related bits (drm, uvesafb) should take care of themselves
-Patch1014:	dracut-034-gpu-driver-triggers.patch
+#(tpg) disable this as it can trigger plymouth issues see bug #578
+#Patch1014:	dracut-034-gpu-driver-triggers.patch
+
+Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
@@ -106,16 +109,19 @@ sed -i -e 's,\$(strip),,g' install/Makefile
 # or (now, after OMV changes) 51uvesafb
 # So they should be loaded later than 51...
 # Moving to 59 because we may want to do more GPU initialization later.
-mv modules.d/50gensplash modules.d/59gensplash
-mv modules.d/50plymouth modules.d/59plymouth
+#(tpg) disable this as it can trigger plymouth issues see bug #578
+#mv modules.d/50gensplash modules.d/59gensplash
+#mv modules.d/50plymouth modules.d/59plymouth
 
 # Push in uvesafb support
-mkdir modules.d/51uvesafb
-install -c -m 755 %{SOURCE10} modules.d/51uvesafb/module-setup.sh
-install -c -m 755 %{SOURCE11} modules.d/51uvesafb/uvesafb-pretrigger.sh
+#(tpg) disable this as it can trigger plymouth issues see bug #578
+#mkdir modules.d/51uvesafb
+#install -c -m 755 %{SOURCE10} modules.d/51uvesafb/module-setup.sh
+#install -c -m 755 %{SOURCE11} modules.d/51uvesafb/uvesafb-pretrigger.sh
 
 # drm pretriggers
-install -c -m 755 %{SOURCE12} modules.d/50drm/drm-pretrigger.sh
+#(tpg) disable this as it can trigger plymouth issues see bug #578
+#install -c -m 755 %{SOURCE12} modules.d/50drm/drm-pretrigger.sh
 
 # And xorg.blacklist support
 mkdir modules.d/01xorgblacklist
