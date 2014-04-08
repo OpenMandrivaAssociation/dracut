@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	036
-Release:	5
+Version:	037
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -22,21 +22,21 @@ Source17:	xorgblacklist.sh
 # (bor) mdv-specific fixes
 #Patch1000:	dracut-011-mdv.patch
 # (bor) Restore original Mandriva behaviour of adding bootchart if RPM is installed.
-Patch1001:	dracut-036-undisable_bootchart.patch
+Patch1001:	dracut-037-undisable_bootchart.patch
 # (bor) compatibility with mkinitrd
 Patch1002:	dracut-010-mkinitrd.patch
 # (bor) Add support for KEYTABLE to dynamically determine whether to install UNICODE or non-UNICODE keymap version.
 Patch1003:	dracut-007-aufs-mount.patch
 Patch1005:	dracut-027-modprobe-dm-mod.patch
-Patch1006:	dracut-036-modprobe-loop.patch
+Patch1006:	dracut-037-modprobe-loop.patch
 
 #Patch1005:	dracut-013-ld.so.conf.workaround.patch
 #Patch1006:	dracut-014-multipath-udev-rules.patch
 #Patch1007:	dracut-018-check-for-tty-and-use-it.patch
 #Patch1008:	dracut-018-do-not-remount-twice-disk-partitions.patch
 #Patch1009:	dracut-018-install-var-run-and-var-lock.patch
-Patch1010:	dracut-036-busybox-fallback-to-busybox.static-if-no-busybox.patch
-Patch1011:	dracut-036-use-busybox--list.patch
+Patch1010:	dracut-037-busybox-fallback-to-busybox.static-if-no-busybox.patch
+Patch1011:	dracut-037-use-busybox--list.patch
 Patch1012:	dracut-024-dont-compress-kernel-modules-within-initramfs.patch
 Patch1013:	dracut-034-fix-prelink.patch
 

@@ -1,0 +1,21 @@
+diff -Naur dracut-037/modules.d/05busybox/module-setup.sh dracut-037.tpg/modules.d/05busybox/module-setup.sh
+--- dracut-037/modules.d/05busybox/module-setup.sh	2014-03-19 16:16:08.000000000 +0000
++++ dracut-037.tpg/modules.d/05busybox/module-setup.sh	2014-04-08 22:37:59.876049761 +0000
+@@ -4,7 +4,7 @@
+ 
+ # called by dracut
+ check() {
+-    require_binaries busybox || return 1
++    require_binaries busybox || require_binaries busybox.static || return 1
+ 
+     return 255
+ }
+@@ -17,7 +17,7 @@
+ # called by dracut
+ install() {
+     local _i _progs _path _busybox
+-    _busybox=$(type -P busybox)
++    _busybox=$(type -P busybox || type -P busybox.static )
+     inst $_busybox /usr/bin/busybox
+     for _i in $($_busybox | sed -ne '1,/Currently/!{s/,//g; s/busybox//g; p}')
+     do
