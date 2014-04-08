@@ -45,7 +45,7 @@ Patch1013:	dracut-034-fix-prelink.patch
 #(tpg) disable this as it can trigger plymouth issues see bug #578
 #Patch1014:	dracut-034-gpu-driver-triggers.patch
 
-Patch1015:	dracut-036-use-intrd-in-stead-of-initramfs-filename.patch
+Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
