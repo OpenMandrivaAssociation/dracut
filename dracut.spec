@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	036
-Release:	4
+Release:	5
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -44,6 +44,8 @@ Patch1013:	dracut-034-fix-prelink.patch
 # driver related bits (drm, uvesafb) should take care of themselves
 #(tpg) disable this as it can trigger plymouth issues see bug #578
 #Patch1014:	dracut-034-gpu-driver-triggers.patch
+
+Patch1015:	dracut-036-use-intrd-in-stead-of-initramfs-filename.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
