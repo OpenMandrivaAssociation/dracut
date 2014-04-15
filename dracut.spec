@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	037
-Release:	1
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -46,6 +46,7 @@ Patch1013:	dracut-034-fix-prelink.patch
 #Patch1014:	dracut-034-gpu-driver-triggers.patch
 
 Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
+Patch1016:	dracut-037-fix-keyctl-path.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
