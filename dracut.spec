@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	037
-Release:	4
+Release:	5
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -48,7 +48,7 @@ Patch1013:	dracut-034-fix-prelink.patch
 Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
 Patch1016:	dracut-037-fix-keyctl-path.patch
 # (tpg) workaround for bug https://issues.openmandriva.org/show_bug.cgi?id=669
-Patch1017:	dracut-037-fix-missing-locale-settings.patch
+#Patch1017:	dracut-037-fix-missing-locale-settings.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
