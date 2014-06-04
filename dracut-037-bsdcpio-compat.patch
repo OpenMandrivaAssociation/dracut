@@ -1,0 +1,25 @@
+--- dracut-037/dracut-catimages.sh.omv~	2014-06-04 21:02:56.138289382 +0200
++++ dracut-037/dracut-catimages.sh	2014-06-04 21:03:04.626128262 +0200
+@@ -106,7 +106,7 @@ if [[ ! $no_overlay ]]; then
+     ofile="$imagedir/90-overlay.img"
+     dinfo "Creating image $ofile from directory $overlay"
+     type pigz &>/dev/null && gzip=pigz || gzip=gzip
+-    ( cd "$overlay"; find . |cpio --quiet -H newc -o |$gzip -9 > "$ofile"; )
++    ( cd "$overlay"; find . |cpio -o --quiet -H newc |$gzip -9 > "$ofile"; )
+ fi
+ 
+ if [[ ! $no_imagedir ]]; then
+--- dracut-037/dracut.sh.omv~	2014-06-04 21:10:38.340504255 +0200
++++ dracut-037/dracut.sh	2014-06-04 21:12:27.038434991 +0200
+@@ -1486,9 +1486,9 @@ dinfo "*** Creating image file ***"
+ if [[ $create_early_cpio = yes ]]; then
+     echo 1 > "$early_cpio_dir/d/early_cpio"
+     # The microcode blob is _before_ the initramfs blob, not after
+-    (cd "$early_cpio_dir/d";     find . -print0 | cpio --null $cpio_owner_root -H newc -o --quiet > $outfile)
++    (cd "$early_cpio_dir/d";     find . -print0 | cpio -o --null $cpio_owner_root -H newc --quiet > $outfile)
+ fi
+-if ! ( umask 077; cd "$initdir"; find . -print0 | cpio --null $cpio_owner_root -H newc -o --quiet | \
++if ! ( umask 077; cd "$initdir"; find . -print0 | cpio -o --null $cpio_owner_root -H newc --quiet | \
+     $compress >> "$outfile"; ); then
+     dfatal "dracut: creation of $outfile failed"
+     exit 1

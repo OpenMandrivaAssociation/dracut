@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	037
-Release:	6
+Release:	7
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -49,6 +49,9 @@ Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
 Patch1016:	dracut-037-fix-keyctl-path.patch
 # (tpg) workaround for bug https://issues.openmandriva.org/show_bug.cgi?id=669
 #Patch1017:	dracut-037-fix-missing-locale-settings.patch
+# Make cpio invocations more compatible with bsdcpio -- the mode
+# indicator has to be the first argument
+Patch1018:	dracut-037-bsdcpio-compat.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
