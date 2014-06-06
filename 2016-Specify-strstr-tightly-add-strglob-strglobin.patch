@@ -1,0 +1,388 @@
+From 2c19a5fa78fe7c75f050ec9547c87663ee15b04b Mon Sep 17 00:00:00 2001
+From: Chapman Flack <g2@anastigmatix.net>
+Date: Fri, 4 Apr 2014 21:11:38 -0400
+Subject: [PATCH 2016/2038] Specify strstr tightly, add strglob/strglobin.
+
+By convention, strstr should be a literal string match. Previously, it
+would match as a glob pattern. Some code used that, so add new
+functions strglob and strglobin to do what that code expects, and
+specify them tightly too. strglob tests whether the glob pattern
+matches the entire string (the name strglob is also used in the yorick
+language, and that's what it does there), while strglobin tests whether
+the glob pattern matches anywhere in the string.
+
+Also tightens str_starts, str_ends, and str_replace to deal with
+literal strings only. In a quick grep I did not find code that depended
+on these functions matching globs.
+
+Changes the call sites where strstr was used with glob patterns to use
+strglobin or strglob as the intention seemed to be (or, in one case,
+strstr with the * removed as it did not affect the result anyway).
+---
+ dracut-functions.sh                    |  6 +++++-
+ modules.d/40network/ifup.sh            |  4 ++--
+ modules.d/40network/net-lib.sh         |  2 +-
+ modules.d/45ifcfg/write-ifcfg.sh       |  6 +++---
+ modules.d/80cms/cms-write-ifcfg.sh     |  2 +-
+ modules.d/80cms/cmsifup.sh             |  2 +-
+ modules.d/95nfs/nfs-lib.sh             |  2 +-
+ modules.d/99base/dracut-lib.sh         | 32 +++++++++++++++++++++++---------
+ test/TEST-01-BASIC/test-init.sh        |  2 +-
+ test/TEST-02-SYSTEMD/test-init.sh      |  2 +-
+ test/TEST-03-USR-MOUNT/test-init.sh    |  2 +-
+ test/TEST-04-FULL-SYSTEMD/test-init.sh |  2 +-
+ test/TEST-10-RAID/test-init.sh         |  2 +-
+ test/TEST-11-LVM/test-init.sh          |  2 +-
+ test/TEST-12-RAID-DEG/test-init.sh     |  2 +-
+ test/TEST-14-IMSM/test-init.sh         |  2 +-
+ test/TEST-16-DMSQUASH/test-init.sh     |  2 +-
+ test/TEST-17-LVM-THIN/test-init.sh     |  2 +-
+ test/TEST-20-NFS/client-init.sh        |  2 +-
+ test/TEST-50-MULTINIC/client-init.sh   |  5 +++--
+ 20 files changed, 51 insertions(+), 32 deletions(-)
+
+diff --git a/dracut-functions.sh b/dracut-functions.sh
+index 391b549..c758029 100755
+--- a/dracut-functions.sh
++++ b/dracut-functions.sh
+@@ -33,7 +33,11 @@ if [[ $initdir ]] && ! [[ -d $initdir ]]; then
+ fi
+ 
+ # Generic substring function.  If $2 is in $1, return 0.
+-strstr() { [[ $1 = *$2* ]]; }
++strstr() { [[ $1 = *"$2"* ]]; }
++# Generic glob matching function. If glob pattern $2 matches anywhere in $1, OK
++strglobin() { [[ $1 = *$2* ]]; }
++# Generic glob matching function. If glob pattern $2 matches all of $1, OK
++strglob() { [[ $1 = $2 ]]; }
+ 
+ # helper function for check() in module-setup.sh
+ # to check for required installed binaries
+diff --git a/modules.d/40network/ifup.sh b/modules.d/40network/ifup.sh
+index ede0188..7740be5 100755
+--- a/modules.d/40network/ifup.sh
++++ b/modules.d/40network/ifup.sh
+@@ -130,12 +130,12 @@ do_ipv6auto() {
+ 
+ # Handle static ip configuration
+ do_static() {
+-    strstr $ip '*:*:*' && load_ipv6
++    strglobin $ip '*:*:*' && load_ipv6
+ 
+     linkup $netif
+     [ -n "$macaddr" ] && ip link set address $macaddr dev $netif
+     [ -n "$mtu" ] && ip link set mtu $mtu dev $netif
+-    if strstr $ip '*:*:*'; then
++    if strglobin $ip '*:*:*'; then
+         # note no ip addr flush for ipv6
+         ip addr add $ip/$mask ${srv:+peer $srv} dev $netif
+         wait_for_ipv6_dad $netif
+diff --git a/modules.d/40network/net-lib.sh b/modules.d/40network/net-lib.sh
+index d53e1a6..a82f1a8 100755
+--- a/modules.d/40network/net-lib.sh
++++ b/modules.d/40network/net-lib.sh
+@@ -377,7 +377,7 @@ ip_to_var() {
+     # ip=<ipv4-address> means anaconda-style static config argument cluster:
+     # ip=<ip> gateway=<gw> netmask=<nm> hostname=<host> mtu=<mtu>
+     # ksdevice={link|bootif|ibft|<MAC>|<ifname>}
+-    if strstr "$autoconf" "*.*.*.*"; then
++    if strglob "$autoconf" "*.*.*.*"; then
+         ip="$autoconf"
+         gw=$(getarg gateway=)
+         mask=$(getarg netmask=)
+diff --git a/modules.d/45ifcfg/write-ifcfg.sh b/modules.d/45ifcfg/write-ifcfg.sh
+index 5dc351d..5de2e90 100755
+--- a/modules.d/45ifcfg/write-ifcfg.sh
++++ b/modules.d/45ifcfg/write-ifcfg.sh
+@@ -85,7 +85,7 @@ for netup in /tmp/net.*.did-setup ; do
+ 
+     netif=${netup%%.did-setup}
+     netif=${netif##*/net.}
+-    strstr "$netif" ":*:*:*:*:" && continue
++    strglobin "$netif" ":*:*:*:*:" && continue
+     [ -e /tmp/ifcfg/ifcfg-$netif ] && continue
+     unset bridge
+     unset bond
+@@ -132,7 +132,7 @@ for netup in /tmp/net.*.did-setup ; do
+         else
+             # If we've booted with static ip= lines, the override file is there
+             [ -e /tmp/net.$netif.override ] && . /tmp/net.$netif.override
+-            if strstr "$ip" '*:*:*'; then
++            if strglobin "$ip" '*:*:*'; then
+                 echo "IPV6INIT=yes"
+                 echo "IPV6_AUTOCONF=no"
+                 echo "IPV6ADDR=\"$ip/$mask\""
+@@ -149,7 +149,7 @@ for netup in /tmp/net.*.did-setup ; do
+                     fi
+                 fi
+             fi
+-            if strstr "$gw" '*:*:*'; then
++            if strglobin "$gw" '*:*:*'; then
+                 echo "IPV6_DEFAULTGW=\"$gw\""
+             elif [ -n "$gw" ]; then
+                 echo "GATEWAY=\"$gw\""
+diff --git a/modules.d/80cms/cms-write-ifcfg.sh b/modules.d/80cms/cms-write-ifcfg.sh
+index c0623a4..924be1d 100755
+--- a/modules.d/80cms/cms-write-ifcfg.sh
++++ b/modules.d/80cms/cms-write-ifcfg.sh
+@@ -26,7 +26,7 @@ function cms_write_config()
+ 
+     IFCFGFILE=/run/initramfs/state/etc/sysconfig/network-scripts/ifcfg-$DEVICE
+ 
+-    strstr "$IPADDR" '*:*:*' && ipv6=1
++    strglobin "$IPADDR" '*:*:*' && ipv6=1
+ 
+ # to please NetworkManager on startup in loader before loader reconfigures net
+     cat > /etc/sysconfig/network << EOF
+diff --git a/modules.d/80cms/cmsifup.sh b/modules.d/80cms/cmsifup.sh
+index b361650..926340e 100755
+--- a/modules.d/80cms/cmsifup.sh
++++ b/modules.d/80cms/cmsifup.sh
+@@ -8,7 +8,7 @@ DEVICE=$1
+ 
+ . /tmp/cms.conf
+ 
+-strstr "$IPADDR" '*:*:*' && ipv6=1
++strglobin "$IPADDR" '*:*:*' && ipv6=1
+ 
+ if [ "$ipv6" ] && ! str_starts "$IPADDR" "["; then
+     IPADDR="[$IPADDR]"
+diff --git a/modules.d/95nfs/nfs-lib.sh b/modules.d/95nfs/nfs-lib.sh
+index 9ced2e6..d5377fe 100755
+--- a/modules.d/95nfs/nfs-lib.sh
++++ b/modules.d/95nfs/nfs-lib.sh
+@@ -40,7 +40,7 @@ nfsroot_to_var() {
+     arg="${arg##$nfs:}"
+ 
+     # check if we have a server
+-    if strstr "$arg" ':/*' ; then
++    if strstr "$arg" ':/' ; then
+         server="${arg%%:/*}"
+         arg="/${arg##*:/}"
+     fi
+diff --git a/modules.d/99base/dracut-lib.sh b/modules.d/99base/dracut-lib.sh
+index e4d7da8..127287c 100755
+--- a/modules.d/99base/dracut-lib.sh
++++ b/modules.d/99base/dracut-lib.sh
+@@ -20,19 +20,33 @@ debug_on() {
+     [ "$RD_DEBUG" = "yes" ] && set -x
+ }
+ 
+-# returns OK if $1 contains $2
++# returns OK if $1 contains literal string $2 (and isn't empty)
+ strstr() {
+-    [ "${1#*$2*}" != "$1" ]
++    [ "${1##*"$2"*}" != "$1" ]
+ }
+ 
+-# returns OK if $1 contains $2 at the beginning
++# returns OK if $1 matches (completely) glob pattern $2
++# An empty $1 will not be considered matched, even if $2 is * which technically
++# matches; as it would match anything, it's not an interesting case.
++strglob() {
++    [ -n "$1" -a -z "${1##$2}" ]
++}
++
++# returns OK if $1 contains (anywhere) a match of glob pattern $2
++# An empty $1 will not be considered matched, even if $2 is * which technically
++# matches; as it would match anything, it's not an interesting case.
++strglobin() {
++    [ -n "$1" -a -z "${1##*$2*}" ]
++}
++
++# returns OK if $1 contains literal string $2 at the beginning, and isn't empty
+ str_starts() {
+-    [ "${1#$2*}" != "$1" ]
++    [ "${1#"$2"*}" != "$1" ]
+ }
+ 
+-# returns OK if $1 contains $2 at the end
++# returns OK if $1 contains literal string $2 at the end, and isn't empty
+ str_ends() {
+-    [ "${1%*$2}" != "$1" ]
++    [ "${1%*"$2"}" != "$1" ]
+ }
+ 
+ if [ -z "$DRACUT_SYSTEMD" ]; then
+@@ -85,9 +99,9 @@ str_replace() {
+     local out=''
+ 
+     while strstr "${in}" "$s"; do
+-        chop="${in%%$s*}"
++        chop="${in%%"$s"*}"
+         out="${out}${chop}$r"
+-        in="${in#*$s}"
++        in="${in#*"$s"}"
+     done
+     echo "${out}${in}"
+ }
+@@ -555,7 +569,7 @@ nfsroot_to_var() {
+     arg="${arg##$nfs:}"
+ 
+     # check if we have a server
+-    if strstr "$arg" ':/*' ; then
++    if strstr "$arg" ':/' ; then
+         server="${arg%%:/*}"
+         arg="/${arg##*:/}"
+     fi
+diff --git a/test/TEST-01-BASIC/test-init.sh b/test/TEST-01-BASIC/test-init.sh
+index 5fc02d9..6e3a31a 100755
+--- a/test/TEST-01-BASIC/test-init.sh
++++ b/test/TEST-01-BASIC/test-init.sh
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+ >/dev/watchdog
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*$2*}" != "$1" ]; }
++strstr() { [ "${1#*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ plymouth --quit
+ exec >/dev/console 2>&1
+diff --git a/test/TEST-02-SYSTEMD/test-init.sh b/test/TEST-02-SYSTEMD/test-init.sh
+index ff17b6b..43d7a21 100755
+--- a/test/TEST-02-SYSTEMD/test-init.sh
++++ b/test/TEST-02-SYSTEMD/test-init.sh
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*$2*}" != "$1" ]; }
++strstr() { [ "${1#*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ plymouth --quit
+ exec </dev/console >/dev/console 2>&1
+diff --git a/test/TEST-03-USR-MOUNT/test-init.sh b/test/TEST-03-USR-MOUNT/test-init.sh
+index 63520ab..e4f3779 100755
+--- a/test/TEST-03-USR-MOUNT/test-init.sh
++++ b/test/TEST-03-USR-MOUNT/test-init.sh
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+ >/dev/watchdog
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*$2*}" != "$1" ]; }
++strstr() { [ "${1#*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ plymouth --quit
+ exec </dev/console >/dev/console 2>&1
+diff --git a/test/TEST-04-FULL-SYSTEMD/test-init.sh b/test/TEST-04-FULL-SYSTEMD/test-init.sh
+index dcda926..c2ed7b9 100755
+--- a/test/TEST-04-FULL-SYSTEMD/test-init.sh
++++ b/test/TEST-04-FULL-SYSTEMD/test-init.sh
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+ >/dev/watchdog
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*$2*}" != "$1" ]; }
++strstr() { [ "${1#*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ plymouth --quit
+ exec </dev/console >/dev/console 2>&1
+diff --git a/test/TEST-10-RAID/test-init.sh b/test/TEST-10-RAID/test-init.sh
+index 62afcee..c64523f 100755
+--- a/test/TEST-10-RAID/test-init.sh
++++ b/test/TEST-10-RAID/test-init.sh
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*$2*}" != "$1" ]; }
++strstr() { [ "${1#*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ command -v plymouth >/dev/null && plymouth --quit
+ exec >/dev/console 2>&1
+diff --git a/test/TEST-11-LVM/test-init.sh b/test/TEST-11-LVM/test-init.sh
+index fd03aa5..2afeeb9 100755
+--- a/test/TEST-11-LVM/test-init.sh
++++ b/test/TEST-11-LVM/test-init.sh
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*$2*}" != "$1" ]; }
++strstr() { [ "${1#*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ plymouth --quit
+ exec >/dev/console 2>&1
+diff --git a/test/TEST-12-RAID-DEG/test-init.sh b/test/TEST-12-RAID-DEG/test-init.sh
+index 62afcee..c64523f 100755
+--- a/test/TEST-12-RAID-DEG/test-init.sh
++++ b/test/TEST-12-RAID-DEG/test-init.sh
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*$2*}" != "$1" ]; }
++strstr() { [ "${1#*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ command -v plymouth >/dev/null && plymouth --quit
+ exec >/dev/console 2>&1
+diff --git a/test/TEST-14-IMSM/test-init.sh b/test/TEST-14-IMSM/test-init.sh
+index f434f13..616b73c 100755
+--- a/test/TEST-14-IMSM/test-init.sh
++++ b/test/TEST-14-IMSM/test-init.sh
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*$2*}" != "$1" ]; }
++strstr() { [ "${1#*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ plymouth --quit
+ exec >/dev/console 2>&1
+diff --git a/test/TEST-16-DMSQUASH/test-init.sh b/test/TEST-16-DMSQUASH/test-init.sh
+index 616bf68..e8c8e70 100755
+--- a/test/TEST-16-DMSQUASH/test-init.sh
++++ b/test/TEST-16-DMSQUASH/test-init.sh
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*$2*}" != "$1" ]; }
++strstr() { [ "${1#*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ plymouth --quit
+ exec >/dev/console 2>&1
+diff --git a/test/TEST-17-LVM-THIN/test-init.sh b/test/TEST-17-LVM-THIN/test-init.sh
+index fd03aa5..2afeeb9 100755
+--- a/test/TEST-17-LVM-THIN/test-init.sh
++++ b/test/TEST-17-LVM-THIN/test-init.sh
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*$2*}" != "$1" ]; }
++strstr() { [ "${1#*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ plymouth --quit
+ exec >/dev/console 2>&1
+diff --git a/test/TEST-20-NFS/client-init.sh b/test/TEST-20-NFS/client-init.sh
+index ad6a656..f6bbdd9 100755
+--- a/test/TEST-20-NFS/client-init.sh
++++ b/test/TEST-20-NFS/client-init.sh
+@@ -4,7 +4,7 @@ exec >/dev/console 2>&1
+ export TERM=linux
+ export PS1='initramfs-test:\w\$ '
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+-strstr() { [ "${1#*$2*}" != "$1" ]; }
++strstr() { [ "${1#*"$2"*}" != "$1" ]; }
+ 
+ stty sane
+ strstr "$CMDLINE" "rd.shell" && sh -i
+diff --git a/test/TEST-50-MULTINIC/client-init.sh b/test/TEST-50-MULTINIC/client-init.sh
+index 51f8b64..9320963 100755
+--- a/test/TEST-50-MULTINIC/client-init.sh
++++ b/test/TEST-50-MULTINIC/client-init.sh
+@@ -2,14 +2,15 @@
+ exec >/dev/console 2>&1
+ set -x
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*$2*}" != "$1" ]; }
++strstr() { [ "${1#*"$2"*}" != "$1" ]; }
++strglobin() { [ -n "$1" -a -z "${1#*$2*}" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ export TERM=linux
+ export PS1='initramfs-test:\w\$ '
+ stty sane
+ echo "made it to the rootfs! Powering down."
+ for i in /run/initramfs/net.*.did-setup; do
+-	strstr "$i" ":*:*:*:*:" && continue
++	strglobin "$i" ":*:*:*:*:" && continue
+ 	i=${i%.did-setup}
+ 	IFACES+="${i##*/net.} "
+ done
+-- 
+1.9.0
+

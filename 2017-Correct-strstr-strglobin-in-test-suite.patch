@@ -1,0 +1,176 @@
+From 9cf339ada3110f4f366c373dab4d5f27f57ca6f3 Mon Sep 17 00:00:00 2001
+From: Chapman Flack <g2@anastigmatix.net>
+Date: Fri, 4 Apr 2014 21:24:51 -0400
+Subject: [PATCH 2017/2038] Correct strstr/strglobin in test suite.
+
+Previous commit included versions of strstr/strglobin in the test
+suite files that did not match those in dracut-lib.sh.
+---
+ test/TEST-01-BASIC/test-init.sh        | 2 +-
+ test/TEST-02-SYSTEMD/test-init.sh      | 2 +-
+ test/TEST-03-USR-MOUNT/test-init.sh    | 2 +-
+ test/TEST-04-FULL-SYSTEMD/test-init.sh | 2 +-
+ test/TEST-10-RAID/test-init.sh         | 2 +-
+ test/TEST-11-LVM/test-init.sh          | 2 +-
+ test/TEST-12-RAID-DEG/test-init.sh     | 2 +-
+ test/TEST-14-IMSM/test-init.sh         | 2 +-
+ test/TEST-16-DMSQUASH/test-init.sh     | 2 +-
+ test/TEST-17-LVM-THIN/test-init.sh     | 2 +-
+ test/TEST-20-NFS/client-init.sh        | 2 +-
+ test/TEST-50-MULTINIC/client-init.sh   | 4 ++--
+ 12 files changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/test/TEST-01-BASIC/test-init.sh b/test/TEST-01-BASIC/test-init.sh
+index 6e3a31a..cf5a026 100755
+--- a/test/TEST-01-BASIC/test-init.sh
++++ b/test/TEST-01-BASIC/test-init.sh
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+ >/dev/watchdog
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*"$2"*}" != "$1" ]; }
++strstr() { [ "${1##*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ plymouth --quit
+ exec >/dev/console 2>&1
+diff --git a/test/TEST-02-SYSTEMD/test-init.sh b/test/TEST-02-SYSTEMD/test-init.sh
+index 43d7a21..3fc24f5 100755
+--- a/test/TEST-02-SYSTEMD/test-init.sh
++++ b/test/TEST-02-SYSTEMD/test-init.sh
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*"$2"*}" != "$1" ]; }
++strstr() { [ "${1##*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ plymouth --quit
+ exec </dev/console >/dev/console 2>&1
+diff --git a/test/TEST-03-USR-MOUNT/test-init.sh b/test/TEST-03-USR-MOUNT/test-init.sh
+index e4f3779..99e109a 100755
+--- a/test/TEST-03-USR-MOUNT/test-init.sh
++++ b/test/TEST-03-USR-MOUNT/test-init.sh
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+ >/dev/watchdog
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*"$2"*}" != "$1" ]; }
++strstr() { [ "${1##*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ plymouth --quit
+ exec </dev/console >/dev/console 2>&1
+diff --git a/test/TEST-04-FULL-SYSTEMD/test-init.sh b/test/TEST-04-FULL-SYSTEMD/test-init.sh
+index c2ed7b9..3012213 100755
+--- a/test/TEST-04-FULL-SYSTEMD/test-init.sh
++++ b/test/TEST-04-FULL-SYSTEMD/test-init.sh
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+ >/dev/watchdog
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*"$2"*}" != "$1" ]; }
++strstr() { [ "${1##*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ plymouth --quit
+ exec </dev/console >/dev/console 2>&1
+diff --git a/test/TEST-10-RAID/test-init.sh b/test/TEST-10-RAID/test-init.sh
+index c64523f..4b4977a 100755
+--- a/test/TEST-10-RAID/test-init.sh
++++ b/test/TEST-10-RAID/test-init.sh
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*"$2"*}" != "$1" ]; }
++strstr() { [ "${1##*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ command -v plymouth >/dev/null && plymouth --quit
+ exec >/dev/console 2>&1
+diff --git a/test/TEST-11-LVM/test-init.sh b/test/TEST-11-LVM/test-init.sh
+index 2afeeb9..db3c52a 100755
+--- a/test/TEST-11-LVM/test-init.sh
++++ b/test/TEST-11-LVM/test-init.sh
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*"$2"*}" != "$1" ]; }
++strstr() { [ "${1##*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ plymouth --quit
+ exec >/dev/console 2>&1
+diff --git a/test/TEST-12-RAID-DEG/test-init.sh b/test/TEST-12-RAID-DEG/test-init.sh
+index c64523f..4b4977a 100755
+--- a/test/TEST-12-RAID-DEG/test-init.sh
++++ b/test/TEST-12-RAID-DEG/test-init.sh
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*"$2"*}" != "$1" ]; }
++strstr() { [ "${1##*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ command -v plymouth >/dev/null && plymouth --quit
+ exec >/dev/console 2>&1
+diff --git a/test/TEST-14-IMSM/test-init.sh b/test/TEST-14-IMSM/test-init.sh
+index 616b73c..932bd26 100755
+--- a/test/TEST-14-IMSM/test-init.sh
++++ b/test/TEST-14-IMSM/test-init.sh
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*"$2"*}" != "$1" ]; }
++strstr() { [ "${1##*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ plymouth --quit
+ exec >/dev/console 2>&1
+diff --git a/test/TEST-16-DMSQUASH/test-init.sh b/test/TEST-16-DMSQUASH/test-init.sh
+index e8c8e70..55a5321 100755
+--- a/test/TEST-16-DMSQUASH/test-init.sh
++++ b/test/TEST-16-DMSQUASH/test-init.sh
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*"$2"*}" != "$1" ]; }
++strstr() { [ "${1##*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ plymouth --quit
+ exec >/dev/console 2>&1
+diff --git a/test/TEST-17-LVM-THIN/test-init.sh b/test/TEST-17-LVM-THIN/test-init.sh
+index 2afeeb9..db3c52a 100755
+--- a/test/TEST-17-LVM-THIN/test-init.sh
++++ b/test/TEST-17-LVM-THIN/test-init.sh
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*"$2"*}" != "$1" ]; }
++strstr() { [ "${1##*"$2"*}" != "$1" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ plymouth --quit
+ exec >/dev/console 2>&1
+diff --git a/test/TEST-20-NFS/client-init.sh b/test/TEST-20-NFS/client-init.sh
+index f6bbdd9..a16db3c 100755
+--- a/test/TEST-20-NFS/client-init.sh
++++ b/test/TEST-20-NFS/client-init.sh
+@@ -4,7 +4,7 @@ exec >/dev/console 2>&1
+ export TERM=linux
+ export PS1='initramfs-test:\w\$ '
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+-strstr() { [ "${1#*"$2"*}" != "$1" ]; }
++strstr() { [ "${1##*"$2"*}" != "$1" ]; }
+ 
+ stty sane
+ strstr "$CMDLINE" "rd.shell" && sh -i
+diff --git a/test/TEST-50-MULTINIC/client-init.sh b/test/TEST-50-MULTINIC/client-init.sh
+index 9320963..13affc4 100755
+--- a/test/TEST-50-MULTINIC/client-init.sh
++++ b/test/TEST-50-MULTINIC/client-init.sh
+@@ -2,8 +2,8 @@
+ exec >/dev/console 2>&1
+ set -x
+ export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+-strstr() { [ "${1#*"$2"*}" != "$1" ]; }
+-strglobin() { [ -n "$1" -a -z "${1#*$2*}" ]; }
++strstr() { [ "${1##*"$2"*}" != "$1" ]; }
++strglobin() { [ -n "$1" -a -z "${1##*$2*}" ]; }
+ CMDLINE=$(while read line; do echo $line;done < /proc/cmdline)
+ export TERM=linux
+ export PS1='initramfs-test:\w\$ '
+-- 
+1.9.0
+

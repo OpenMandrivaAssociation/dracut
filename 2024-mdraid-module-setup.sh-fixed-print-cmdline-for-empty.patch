@@ -1,0 +1,32 @@
+From 19bb14c3467233f8c98f76b3fa57047a3a31e1a3 Mon Sep 17 00:00:00 2001
+From: Harald Hoyer <harald@redhat.com>
+Date: Wed, 14 May 2014 16:38:49 +0200
+Subject: [PATCH 2024/2038] mdraid/module-setup.sh: fixed print-cmdline for
+ empty UUID
+
+fixes
+
+/usr/lib/dracut/modules.d/90mdraid/module-setup.sh: line 60:
+_activated["${UUID}"]: bad array subscript
+
+Thanks to Jan ONDREJ for spotting this!
+---
+ modules.d/90mdraid/module-setup.sh | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/modules.d/90mdraid/module-setup.sh b/modules.d/90mdraid/module-setup.sh
+index ac745d1..81c94f2 100755
+--- a/modules.d/90mdraid/module-setup.sh
++++ b/modules.d/90mdraid/module-setup.sh
+@@ -54,6 +54,8 @@ cmdline() {
+             done
+         )
+ 
++        [[ -z "$UUID" ]] && continue
++
+         if ! [[ ${_activated[${UUID}]} ]]; then
+             printf "%s" " rd.md.uuid=${UUID}"
+             _activated["${UUID}"]=1
+-- 
+1.9.0
+

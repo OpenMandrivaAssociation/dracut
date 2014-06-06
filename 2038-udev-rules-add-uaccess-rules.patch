@@ -1,0 +1,26 @@
+From ba9f3d33266d472f2cefa43a2453b9f6fce53cc9 Mon Sep 17 00:00:00 2001
+From: Harald Hoyer <harald@redhat.com>
+Date: Thu, 5 Jun 2014 12:30:22 +0200
+Subject: [PATCH 2038/2038] udev-rules: add uaccess rules
+
+plymouth needs the seat rules, also without systemd
+---
+ modules.d/95udev-rules/module-setup.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/modules.d/95udev-rules/module-setup.sh b/modules.d/95udev-rules/module-setup.sh
+index 76e86fa..4e75c0b 100755
+--- a/modules.d/95udev-rules/module-setup.sh
++++ b/modules.d/95udev-rules/module-setup.sh
+@@ -33,7 +33,7 @@ install() {
+         50-udev.rules 95-late.rules \
+         50-firmware.rules \
+         59-scsi-sg3_utils.rules \
+-        71-seat.rules 73-seat-late.rules \
++        70-uaccess.rules 71-seat.rules 73-seat-late.rules \
+         75-net-description.rules \
+         80-net-name-slot.rules 80-net-setup-link.rules \
+         "$moddir/59-persistent-storage.rules" \
+-- 
+1.9.0
+
