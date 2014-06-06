@@ -85,7 +85,7 @@ Requires:	mktemp
 Requires:	bash
 Requires:	dash
 Requires:	kbd
-Requires:	bsdtar
+Requires:	tar
 Requires:	gzip
 Requires:	bzip2
 Requires:	file
