@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	037
-Release:	7
+Version:	038
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -55,45 +55,6 @@ Patch1018:	dracut-037-bsdcpio-compat.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
-Patch2000:	2000-dracut-initramfs-restore-fix-unpacking-with-early-mi.patch
-Patch2001:	2001-systemd-add-systemd-gpt-auto-generator.patch
-Patch2002:	2002-fcoe-wait-for-lldpad-to-be-ready.patch
-Patch2003:	2003-network-handle-ip-dhcp6-for-all-interfaces.patch
-Patch2004:	2004-lsinitrd.sh-prevent-construct.patch
-Patch2005:	2005-network-DCHPv6-set-valid_lft-and-preferred_lft.patch
-Patch2006:	2006-dm-add-dm-cache-modules.patch
-Patch2007:	2007-fcoe-workaround-fcoe-timing-issues.patch
-Patch2008:	2008-fstab-do-not-mount-and-fsck-from-fstab-if-using-syst.patch
-Patch2009:	2009-ifcfg-write-ifcfg.sh-turn-on-IPV6INIT-if-any-inet6-a.patch
-Patch2010:	2010-lvm-module-setup.sh-check-for-existance-of-69-dm-lvm.patch
-Patch2011:	2011-Break-at-switch_root-only-for-bare-rd.break.patch
-Patch2012:	2012-dracut-initqueue-service-runs-before-remote-fs-pre.t.patch
-Patch2013:	2013-fs-lib-always-install-fsck.-fs-if-present.patch
-Patch2014:	2014-ifcfg-do-not-bind-persistent-interface-names-to-HWAD.patch
-Patch2015:	2015-ifcfg-only-bind-to-HWADDR-if-addr_assign_type-0.patch
-Patch2016:	2016-Specify-strstr-tightly-add-strglob-strglobin.patch
-Patch2017:	2017-Correct-strstr-strglobin-in-test-suite.patch
-Patch2018:	2018-i18n-parse-i18n.sh-fixed-typo-s-key-_key.patch
-Patch2019:	2019-dracut-lib.sh-fixed-return-value-of-pidof.patch
-Patch2020:	2020-Do-not-log-to-kmsg-syslog-and-files-for-print-cmdlin.patch
-Patch2021:	2021-resume-parse-resume.sh-correctly-write-timeout-hook.patch
-Patch2022:	2022-ifcfg-write-ifcfg.sh-IPV6INIT-yes-check-also-for-non.patch
-Patch2023:	2023-cms-cmssetup.sh-convert-SUBCHANNELS-to-lowercase.patch
-Patch2024:	2024-mdraid-module-setup.sh-fixed-print-cmdline-for-empty.patch
-Patch2025:	2025-ifcfg-write-ifcfg.sh-include-net-lib.sh.patch
-Patch2026:	2026-nbd-nbdroot.sh-call-nbd-client-with-systemd-mark.patch
-Patch2027:	2027-fcoe-uefi-parse-uefifcoe.sh-fixed-parameter-generati.patch
-Patch2028:	2028-dracut-functions.sh-print_vars-fix-for-values-with-s.patch
-Patch2029:	2029-98systemd-fixup-rootfs-generator-installation-path.patch
-Patch2030:	2030-udev-rules-include-59-scsi-sg3_utils.rules.patch
-Patch2031:	2031-resume-module-setup.sh-filter-out-empty-resume-optio.patch
-Patch2032:	2032-dracut-pre-pivot-pulls-in-remote-fs.target.patch
-Patch2033:	2033-dracut-functions.sh-require_binaries-clarify-message.patch
-Patch2034:	2034-kernel-modules-Fix-storage-module-selection-for-sdhc.patch
-Patch2035:	2035-bonding-use-hwaddr-of-the-slave-rather-than-the-mast.patch
-Patch2036:	2036-network-ifup.sh-Don-t-try-to-modprobe-ipv6-if-alread.patch
-Patch2037:	2037-udev-rules-added-seat-rules.patch
-Patch2038:	2038-udev-rules-add-uaccess-rules.patch
 
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
@@ -178,7 +139,7 @@ install -c -m 755 %{SOURCE17} modules.d/01xorgblacklist/xorgblacklist.sh
 %global optflags %{optflags} -Os
 %serverbuild_hardened
 
-%configure\
+%configure \
 	--systemdsystemunitdir=%{_unitdir} \
 	--bashcompletiondir=$(pkg-config --variable=completionsdir bash-completion) \
 	--libdir=%{_prefix}/lib
