@@ -1,2 +1,4 @@
-sources:
+removed_sources:
   dracut-037.tar.xz: c749fe1419dcd70dda5017ceac63f8d1ee5016d1
+sources:
+  dracut-038.tar.xz: 8319bdbc0b7b5f027c08e48958b91a254330a591
