@@ -10,11 +10,6 @@ Source0:	http://www.kernel.org/pub/linux/utils/boot/dracut/%{name}-%{version}.ta
 Source3:	50-dracut-distro.conf
 # (tpg) simple script to provide a backup for current working initrd file
 Source4:	initrd-backup.sh
-# (bero) uvesafb support scripts
-Source10:	uvesafb-module-setup.sh
-Source11:	uvesafb-pretrigger.sh
-# (bero) load KMS drivers if possible (and before uvesafb is tried as an alternative)
-Source12:	drm-pretrigger.sh
 # (bero) xorg.blacklist support
 Source15:	xorgblacklist-module-setup.sh
 Source16:	xorgblacklist-pre.sh
@@ -40,10 +35,6 @@ Patch1011:	dracut-037-use-busybox--list.patch
 Patch1012:	dracut-024-dont-compress-kernel-modules-within-initramfs.patch
 Patch1013:	dracut-034-fix-prelink.patch
 
-# (bero) Don't let plymouth run the graphics system triggers -- graphics
-# driver related bits (drm, uvesafb) should take care of themselves
-#(tpg) disable this as it can trigger plymouth issues see bug #578
-#Patch1014:	dracut-034-gpu-driver-triggers.patch
 
 Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
 Patch1016:	dracut-037-fix-keyctl-path.patch
@@ -110,24 +101,6 @@ NFS, iSCSI, NBD, FCoE with the dracut-network package.
 %apply_patches
 # We don't want to strip dracut-install, that's debuginfo's job
 sed -i -e 's,\$(strip),,g' install/Makefile
-
-# Splash screen bits require a framebuffer module -- loaded at 50drm
-# or (now, after OMV changes) 51uvesafb
-# So they should be loaded later than 51...
-# Moving to 59 because we may want to do more GPU initialization later.
-#(tpg) disable this as it can trigger plymouth issues see bug #578
-#mv modules.d/50gensplash modules.d/59gensplash
-#mv modules.d/50plymouth modules.d/59plymouth
-
-# Push in uvesafb support
-#(tpg) disable this as it can trigger plymouth issues see bug #578
-#mkdir modules.d/51uvesafb
-#install -c -m 755 %{SOURCE10} modules.d/51uvesafb/module-setup.sh
-#install -c -m 755 %{SOURCE11} modules.d/51uvesafb/uvesafb-pretrigger.sh
-
-# drm pretriggers
-#(tpg) disable this as it can trigger plymouth issues see bug #578
-#install -c -m 755 %{SOURCE12} modules.d/50drm/drm-pretrigger.sh
 
 # And xorg.blacklist support
 mkdir modules.d/01xorgblacklist
