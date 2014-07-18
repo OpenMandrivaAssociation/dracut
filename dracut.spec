@@ -187,8 +187,12 @@ install -m755 %{SOURCE4} %{buildroot}%{_bindir}/initrd-backup.sh
 %post
 update-alternatives --install /sbin/mkinitrd mkinitrd %{_sbindir}/mkinitrd-dracut 110 || :
 update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracut 110 || :
-if [ -d /lib/modules/$(uname -r) ]; then
-    %{_sbindir}/dracut -f /boot/initrd-$(uname -r).img $(uname -r)
+
+# (tpg) run initrd rebuild only on dracut update
+if [ $1 -ge 2 ]; then
+ if [ -d /lib/modules/$(uname -r) ]; then
+     %{_sbindir}/dracut -f /boot/initrd-$(uname -r).img $(uname -r)
+ fi
 fi
 
 %postun
