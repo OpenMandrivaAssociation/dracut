@@ -87,7 +87,7 @@ Requires(pre):	rpm-helper
 Requires(post,postun):	update-alternatives
 %ifarch %{ix86} x86_64
 Requires(post): kernel
-$endif
+%endif
 Conflicts:	mkinitrd < 6.0.93-10
 Conflicts:	nash < 6.0.93-11
 Obsoletes:	dracut < 013
