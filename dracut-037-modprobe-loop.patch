@@ -1,7 +1,7 @@
-diff -Naur dracut-037/modules.d/90dmsquash-live/dmsquash-live-genrules.sh dracut-037.tpg/modules.d/90dmsquash-live/dmsquash-live-genrules.sh
---- dracut-037/modules.d/90dmsquash-live/dmsquash-live-genrules.sh	2014-03-19 16:16:08.000000000 +0000
-+++ dracut-037.tpg/modules.d/90dmsquash-live/dmsquash-live-genrules.sh	2014-04-08 22:33:14.048384910 +0000
-@@ -12,6 +12,7 @@
+diff -Naur dracut-040/modules.d/90dmsquash-live/dmsquash-live-genrules.sh dracut-040.tpg/modules.d/90dmsquash-live/dmsquash-live-genrules.sh
+--- dracut-040/modules.d/90dmsquash-live/dmsquash-live-genrules.sh	2014-10-24 11:19:58.000000000 +0000
++++ dracut-040.tpg/modules.d/90dmsquash-live/dmsquash-live-genrules.sh	2014-11-02 11:57:41.269586867 +0000
+@@ -11,6 +11,7 @@
      wait_for_dev -n "${root#live:}"
    ;;
    live:*)
@@ -9,13 +9,12 @@ diff -Naur dracut-037/modules.d/90dmsquash-live/dmsquash-live-genrules.sh dracut
      if [ -f "${root#live:}" ]; then
          /sbin/initqueue --settled --onetime --unique /sbin/dmsquash-live-root "${root#live:}"
      fi
-diff -Naur dracut-037/modules.d/90dmsquash-live/dmsquash-liveiso-genrules.sh dracut-037.tpg/modules.d/90dmsquash-live/dmsquash-liveiso-genrules.sh
---- dracut-037/modules.d/90dmsquash-live/dmsquash-liveiso-genrules.sh	2014-03-19 16:16:08.000000000 +0000
-+++ dracut-037.tpg/modules.d/90dmsquash-live/dmsquash-liveiso-genrules.sh	2014-04-08 22:34:25.144290704 +0000
-@@ -1,6 +1,7 @@
+diff -Naur dracut-040/modules.d/90dmsquash-live/dmsquash-liveiso-genrules.sh dracut-040.tpg/modules.d/90dmsquash-live/dmsquash-liveiso-genrules.sh
+--- dracut-040/modules.d/90dmsquash-live/dmsquash-liveiso-genrules.sh	2014-10-24 11:19:58.000000000 +0000
++++ dracut-040.tpg/modules.d/90dmsquash-live/dmsquash-liveiso-genrules.sh	2014-11-02 11:58:44.478329585 +0000
+@@ -1,5 +1,6 @@
  #!/bin/sh
- # -*- mode: shell-script; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
- # ex: ts=8 sw=4 sts=4 et filetype=sh
+ 
 +modprobe loop
  if [ "${root%%:*}" = "liveiso" ]; then
      {

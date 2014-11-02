@@ -22,7 +22,6 @@ Patch1001:	dracut-037-undisable_bootchart.patch
 Patch1002:	dracut-010-mkinitrd.patch
 # (bor) Add support for KEYTABLE to dynamically determine whether to install UNICODE or non-UNICODE keymap version.
 Patch1003:	dracut-007-aufs-mount.patch
-Patch1005:	dracut-027-modprobe-dm-mod.patch
 Patch1006:	dracut-037-modprobe-loop.patch
 
 #Patch1005:	dracut-013-ld.so.conf.workaround.patch
@@ -37,7 +36,6 @@ Patch1013:	dracut-034-fix-prelink.patch
 
 
 Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
-Patch1016:	dracut-037-fix-keyctl-path.patch
 # (tpg) workaround for bug https://issues.openmandriva.org/show_bug.cgi?id=669
 #Patch1017:	dracut-037-fix-missing-locale-settings.patch
 # Make cpio invocations more compatible with bsdcpio -- the mode
@@ -47,14 +45,14 @@ Patch1018:	dracut-037-bsdcpio-compat.patch
 ### GIT PATCHES GOES HERE  ###
 ###
 
-BuildRequires:	docbook-dtd45-xml
-BuildRequires:	docbook-style-xsl
-BuildRequires:	xsltproc
-BuildRequires:	dash
-BuildRequires:	bash
-BuildRequires:	asciidoc
-BuildRequires:	systemd-units
-BuildRequires:	bash-completion
+#BuildRequires:	docbook-dtd45-xml
+#BuildRequires:	docbook-style-xsl
+#BuildRequires:	xsltproc
+#BuildRequires:	dash
+#BuildRequires:	bash
+#BuildRequires:	asciidoc
+#BuildRequires:	systemd-units
+#BuildRequires:	bash-completion
 
 Requires:	systemd >= 198
 %ifarch %{ix86} x86_64
@@ -102,6 +100,7 @@ NFS, iSCSI, NBD, FCoE with the dracut-network package.
 %prep
 %setup -q
 %apply_patches
+
 # We don't want to strip dracut-install, that's debuginfo's job
 sed -i -e 's,\$(strip),,g' install/Makefile
 
@@ -112,7 +111,6 @@ install -c -m 755 %{SOURCE16} modules.d/01xorgblacklist/xorgblacklist-pre.sh
 install -c -m 755 %{SOURCE17} modules.d/01xorgblacklist/xorgblacklist.sh
 
 %build
-%global optflags %{optflags} -Os
 %serverbuild_hardened
 
 %configure \
