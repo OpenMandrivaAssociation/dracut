@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	038
-Release:	1.1
+Version:	040
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -10,11 +10,6 @@ Source0:	http://www.kernel.org/pub/linux/utils/boot/dracut/%{name}-%{version}.ta
 Source3:	50-dracut-distro.conf
 # (tpg) simple script to provide a backup for current working initrd file
 Source4:	initrd-backup.sh
-# (bero) uvesafb support scripts
-Source10:	uvesafb-module-setup.sh
-Source11:	uvesafb-pretrigger.sh
-# (bero) load KMS drivers if possible (and before uvesafb is tried as an alternative)
-Source12:	drm-pretrigger.sh
 # (bero) xorg.blacklist support
 Source15:	xorgblacklist-module-setup.sh
 Source16:	xorgblacklist-pre.sh
@@ -27,7 +22,6 @@ Patch1001:	dracut-037-undisable_bootchart.patch
 Patch1002:	dracut-010-mkinitrd.patch
 # (bor) Add support for KEYTABLE to dynamically determine whether to install UNICODE or non-UNICODE keymap version.
 Patch1003:	dracut-007-aufs-mount.patch
-Patch1005:	dracut-027-modprobe-dm-mod.patch
 Patch1006:	dracut-037-modprobe-loop.patch
 
 #Patch1005:	dracut-013-ld.so.conf.workaround.patch
@@ -40,13 +34,8 @@ Patch1011:	dracut-037-use-busybox--list.patch
 Patch1012:	dracut-024-dont-compress-kernel-modules-within-initramfs.patch
 Patch1013:	dracut-034-fix-prelink.patch
 
-# (bero) Don't let plymouth run the graphics system triggers -- graphics
-# driver related bits (drm, uvesafb) should take care of themselves
-#(tpg) disable this as it can trigger plymouth issues see bug #578
-#Patch1014:	dracut-034-gpu-driver-triggers.patch
 
 Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
-Patch1016:	dracut-037-fix-keyctl-path.patch
 # (tpg) workaround for bug https://issues.openmandriva.org/show_bug.cgi?id=669
 #Patch1017:	dracut-037-fix-missing-locale-settings.patch
 # Make cpio invocations more compatible with bsdcpio -- the mode
@@ -56,14 +45,14 @@ Patch1018:	dracut-037-bsdcpio-compat.patch
 ### GIT PATCHES GOES HERE  ###
 ###
 
-BuildRequires:	docbook-dtd45-xml
-BuildRequires:	docbook-style-xsl
-BuildRequires:	xsltproc
-BuildRequires:	dash
-BuildRequires:	bash
-BuildRequires:	asciidoc
-BuildRequires:	systemd-units
-BuildRequires:	bash-completion
+#BuildRequires:	docbook-dtd45-xml
+#BuildRequires:	docbook-style-xsl
+#BuildRequires:	xsltproc
+#BuildRequires:	dash
+#BuildRequires:	bash
+#BuildRequires:	asciidoc
+#BuildRequires:	systemd-units
+#BuildRequires:	bash-completion
 
 Requires:	systemd >= 198
 %ifarch %{ix86} x86_64
@@ -94,7 +83,9 @@ Requires:	initscripts
 #Requires:	bootloader-utils
 Requires(pre):	rpm-helper
 Requires(post,postun):	update-alternatives
+%ifarch %{ix86} x86_64
 Requires(post): kernel
+%endif
 Conflicts:	mkinitrd < 6.0.93-10
 Conflicts:	nash < 6.0.93-11
 Obsoletes:	dracut < 013
@@ -109,26 +100,9 @@ NFS, iSCSI, NBD, FCoE with the dracut-network package.
 %prep
 %setup -q
 %apply_patches
+
 # We don't want to strip dracut-install, that's debuginfo's job
 sed -i -e 's,\$(strip),,g' install/Makefile
-
-# Splash screen bits require a framebuffer module -- loaded at 50drm
-# or (now, after OMV changes) 51uvesafb
-# So they should be loaded later than 51...
-# Moving to 59 because we may want to do more GPU initialization later.
-#(tpg) disable this as it can trigger plymouth issues see bug #578
-#mv modules.d/50gensplash modules.d/59gensplash
-#mv modules.d/50plymouth modules.d/59plymouth
-
-# Push in uvesafb support
-#(tpg) disable this as it can trigger plymouth issues see bug #578
-#mkdir modules.d/51uvesafb
-#install -c -m 755 %{SOURCE10} modules.d/51uvesafb/module-setup.sh
-#install -c -m 755 %{SOURCE11} modules.d/51uvesafb/uvesafb-pretrigger.sh
-
-# drm pretriggers
-#(tpg) disable this as it can trigger plymouth issues see bug #578
-#install -c -m 755 %{SOURCE12} modules.d/50drm/drm-pretrigger.sh
 
 # And xorg.blacklist support
 mkdir modules.d/01xorgblacklist
@@ -137,7 +111,6 @@ install -c -m 755 %{SOURCE16} modules.d/01xorgblacklist/xorgblacklist-pre.sh
 install -c -m 755 %{SOURCE17} modules.d/01xorgblacklist/xorgblacklist.sh
 
 %build
-%global optflags %{optflags} -Os
 %serverbuild_hardened
 
 %configure \
