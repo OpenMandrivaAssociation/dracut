@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	040
-Release:	1.1
+Version:	041
+Release:	0.1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -45,14 +45,14 @@ Patch1018:	dracut-037-bsdcpio-compat.patch
 ### GIT PATCHES GOES HERE  ###
 ###
 
-#BuildRequires:	docbook-dtd45-xml
-#BuildRequires:	docbook-style-xsl
-#BuildRequires:	xsltproc
-#BuildRequires:	dash
-#BuildRequires:	bash
-#BuildRequires:	asciidoc
-#BuildRequires:	systemd-units
-#BuildRequires:	bash-completion
+BuildRequires:	docbook-dtd45-xml
+BuildRequires:	docbook-style-xsl
+BuildRequires:	xsltproc
+BuildRequires:	dash
+BuildRequires:	bash
+BuildRequires:	asciidoc
+BuildRequires:	systemd-units
+BuildRequires:	bash-completion
 
 Requires:	systemd >= 198
 %ifarch %{ix86} x86_64
@@ -77,9 +77,10 @@ Requires:	kbd
 Requires:	tar
 Requires:	gzip
 Requires:	bzip2
+Requires:	lzop
 Requires:	file
 Requires:	bridge-utils
-Requires:	initscripts
+Requires:	xz
 #Requires:	bootloader-utils
 Requires(pre):	rpm-helper
 Requires(post,postun):	update-alternatives
