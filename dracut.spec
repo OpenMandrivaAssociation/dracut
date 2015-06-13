@@ -78,6 +78,7 @@ Requires:	tar
 Requires:	gzip
 Requires:	bzip2
 Requires:	lzop
+Requires:	lz4
 Requires:	file
 Requires:	bridge-utils
 Requires:	xz
