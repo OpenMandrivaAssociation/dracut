@@ -1,6 +1,6 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	041
+Version:	042
 Release:	0.1
 Group:		System/Base
 License:	GPLv2+
@@ -78,6 +78,7 @@ Requires:	tar
 Requires:	gzip
 Requires:	bzip2
 Requires:	lzop
+Requires:	lz4
 Requires:	file
 Requires:	bridge-utils
 Requires:	xz
@@ -176,9 +177,9 @@ chmod 755 %{buildroot}%{_prefix}/lib/dracut/modules.d/99aufs-mount/install
 
 # (tpg) don't follow this usr madness
 # systemctl sits in /bin, and it symlinks to /usr/bin
-sed -i -e 's#/usr/bin/systemctl#/bin/systemctl#g' %{buildroot}%{_prefix}/lib/dracut/modules.d/98systemd/*.service
+sed -i -e 's#/usr/bin/systemctl#/bin/systemctl#g' %{buildroot}%{_prefix}/lib/dracut/modules.d/98dracut-systemd/*.service
 # (tpg) use real path for udevadm
-sed -i -e 's#/usr/bin/udevadm#/sbin/udevadm#g' %{buildroot}%{_prefix}/lib/dracut/modules.d/98systemd/*.service
+sed -i -e 's#/usr/bin/udevadm#/sbin/udevadm#g' %{buildroot}%{_prefix}/lib/dracut/modules.d/98dracut-systemd/*.service
 
 # (tpg) this conflicts with mkinitrd
 rm -rf %{buildroot}%{_mandir}/man8/mkinitrd.8*
