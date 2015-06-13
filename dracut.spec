@@ -185,6 +185,8 @@ sed -i -e 's#/usr/bin/udevadm#/sbin/udevadm#g' %{buildroot}%{_prefix}/lib/dracut
 rm -rf %{buildroot}%{_mandir}/man8/mkinitrd.8*
 
 install -m755 %{SOURCE4} %{buildroot}%{_bindir}/initrd-backup.sh
+# (tpg) not needed for now
+rm -rf %{buildroot}%{_datadir}/pkgconfig/dracut.pc
 
 %post
 update-alternatives --install /sbin/mkinitrd mkinitrd %{_sbindir}/mkinitrd-dracut 110 || :
