@@ -18,7 +18,7 @@ diff -Naur dracut-031/dracut-functions.sh dracut-031.tpg/dracut-functions.sh
 +    for mod in $(find ${initdir}${srcmods} -type f); do
 +        case ${mod} in
 +            *.ko.gz) gunzip ${mod} ;;
-+            *.ko.xz) unxz ${mod} ;;
++            *.ko.xz) unxz -T0 ${mod} ;;
 +        esac
 +    done
 +
