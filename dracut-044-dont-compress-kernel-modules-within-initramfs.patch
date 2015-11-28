@@ -1,7 +1,7 @@
-diff -Naur dracut-031/dracut-functions.sh dracut-031.tpg/dracut-functions.sh
---- dracut-031/dracut-functions.sh	2013-07-31 12:24:25.000000000 +0000
-+++ dracut-031.tpg/dracut-functions.sh	2013-08-01 08:01:50.751177240 +0000
-@@ -1468,6 +1468,7 @@
+diff -Naur dracut-044/dracut-init.sh dracut-044.tpg/dracut-init.sh
+--- dracut-044/dracut-init.sh	2015-11-25 14:22:28.000000000 +0100
++++ dracut-044.tpg/dracut-init.sh	2015-11-28 05:11:02.654214461 +0100
+@@ -933,6 +933,7 @@
  
  dracut_kernel_post() {
      local _moddirname=${srcmods%%/lib/modules/*}
@@ -9,7 +9,7 @@ diff -Naur dracut-031/dracut-functions.sh dracut-031.tpg/dracut-functions.sh
      local _pid
  
      if [[ $DRACUT_KERNEL_LAZY_HASHDIR ]] && [[ -f "$DRACUT_KERNEL_LAZY_HASHDIR/lazylist" ]]; then
-@@ -1527,6 +1528,15 @@
+@@ -984,6 +985,15 @@
          [[ $srcmods/$_f ]] && inst_simple "$srcmods/$_f" "/lib/modules/$kernel/$_f"
      done
  
@@ -25,15 +25,3 @@ diff -Naur dracut-031/dracut-functions.sh dracut-031.tpg/dracut-functions.sh
      # generate module dependencies for the initrd
      if [[ -d $initdir/lib/modules/$kernel ]] && \
          ! depmod -a -b "$initdir" $kernel; then
-diff -Naur dracut-031/dracut.sh dracut-031.tpg/dracut.sh
---- dracut-031/dracut.sh	2013-07-31 12:24:25.000000000 +0000
-+++ dracut-031.tpg/dracut.sh	2013-08-01 08:00:55.754634687 +0000
-@@ -1089,7 +1089,7 @@
-     fi
- 
-     dinfo "*** Installing kernel module dependencies and firmware ***"
--    dracut_kernel_post
-+    dracut_kernel_post $compress
-     dinfo "*** Installing kernel module dependencies and firmware done ***"
- 
-     if [[ $noimageifnotneeded == yes ]] && [[ $hostonly ]]; then
