@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	044
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -53,9 +53,6 @@ BuildRequires:	systemd-units
 BuildRequires:	bash-completion
 
 Requires:	systemd >= 228
-%ifarch %{ix86} x86_64
-Requires:	v86d
-%endif
 Provides:	mkinitrd-command
 Requires(pre):	filesystem
 Requires(pre):	coreutils
@@ -80,15 +77,16 @@ Requires:	lz4
 Requires:	file
 Requires:	bridge-utils
 Requires:	xz
-#Requires:	bootloader-utils
 Requires(pre):	rpm-helper
-Requires(post,postun):	update-alternatives
 %ifarch %{ix86} x86_64
 Requires(post): kernel
 %endif
 Conflicts:	mkinitrd < 6.0.93-10
-Conflicts:	nash < 6.0.93-11
+Conflicts:	nash < 6.0.93-10
 Obsoletes:	dracut < 013
+Obsoletes:	mkinitrd < 6.0.93-32
+Provides:	mkinitrd = 6.0.93-32
+Obsoletes:	nash < 6.0.93-32
 
 %description
 Dracut contains tools to create a bootable initramfs for 2.6 Linux kernels.
@@ -160,14 +158,8 @@ touch %{buildroot}%{_localstatedir}/log/dracut.log
 mkdir -p %{buildroot}%{_sysconfdir}/logrotate.d
 install -m 0644 dracut.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/dracut
 
-mv %{buildroot}%{_sbindir}/lsinitrd %{buildroot}%{_sbindir}/lsinitrd-dracut
-mv %{buildroot}%{_sbindir}/mkinitrd %{buildroot}%{_sbindir}/mkinitrd-dracut
-
 cat > README.urpmi << EOF
 dracut is the default mkinitrd replacement in %{distribution}
-
-If you relly want to use old mkinitrd instead of dracut run
-update-alternatives --set mkinitrd /sbin/mkinitrd-mkinitrd
 EOF
 
 # rpmlint madness
@@ -179,27 +171,22 @@ sed -i -e 's#/usr/bin/systemctl#/bin/systemctl#g' %{buildroot}%{_prefix}/lib/dra
 # (tpg) use real path for udevadm
 sed -i -e 's#/usr/bin/udevadm#/sbin/udevadm#g' %{buildroot}%{_prefix}/lib/dracut/modules.d/98dracut-systemd/*.service
 
-# (tpg) this conflicts with mkinitrd
-rm -rf %{buildroot}%{_mandir}/man8/mkinitrd.8*
-
 install -m755 %{SOURCE4} %{buildroot}%{_bindir}/initrd-backup.sh
+
 # (tpg) not needed for now
 rm -rf %{buildroot}%{_datadir}/pkgconfig/dracut.pc
 
-%post
-update-alternatives --install /sbin/mkinitrd mkinitrd %{_sbindir}/mkinitrd-dracut 110 || :
-update-alternatives --install /sbin/lsinitrd lsinitrd %{_sbindir}/lsinitrd-dracut 110 || :
+# (tpg) compat symlinks to old mkinitrd
+ln -sf  %{_sbindir}/mkinitrd %{buildroot}/sbin/mkinitrd
+ln -sf  %{_sbindir}/lsinitrd %{buildroot}/sbin/lsinitrd
 
+%post
 # (tpg) run initrd rebuild only on dracut update
 if [ $1 -ge 2 ]; then
  if [ -d /lib/modules/$(uname -r) ]; then
      %{_sbindir}/dracut -f /boot/initrd-$(uname -r).img $(uname -r)
  fi
 fi
-
-%postun
-[ ! -e /usr/sbin/mkinitrd-dracut ] && update-alternatives --remove mkinitrd %{_sbindir}/mkinitrd-dracut || :
-[ ! -e /usr/sbin/lsinitrd-dracut ] && update-alternatives --remove lsinitrd %{_sbindir}/lsinitrd-dracut || :
 
 %files
 %doc README.generic README.modules README.kernel HACKING TODO AUTHORS
@@ -216,6 +203,8 @@ fi
 %attr(0644,root,root) %ghost %config(missingok,noreplace) %{_localstatedir}/log/dracut.log
 %{_sysconfdir}/dracut.conf.d/50-dracut-distro.conf
 /sbin/dracut
+/sbin/mkinitrd
+/sbin/lsinitrd
 %{_sbindir}/dracut
 %{_bindir}/dracut
 %{_bindir}/initrd-backup.sh
@@ -244,4 +233,4 @@ fi
 %{_mandir}/man7/dracut.cmdline.7*
 %{_mandir}/man7/dracut.modules.7*
 %{_mandir}/man8/dracut*.8*
-%{_mandir}/man8//mkinitrd-suse.8*
+%{_mandir}/man8//mkinitrd*.8*
