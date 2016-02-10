@@ -210,8 +210,8 @@ fi
 %{_bindir}/initrd-backup.sh
 %{_sbindir}/dracut-catimages
 %{_sbindir}/dracut-install
-%{_sbindir}/lsinitrd-dracut
-%{_sbindir}/mkinitrd-dracut
+%{_sbindir}/lsinitrd
+%{_sbindir}/mkinitrd
 %{_unitdir}/*.service
 %{_unitdir}/*/*.service
 %{_prefix}/lib/kernel/install.d/5*-dracut*.install
