@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	044
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -77,6 +77,7 @@ Requires:	lz4
 Requires:	file
 Requires:	bridge-utils
 Requires:	xz
+Requires:	dmraid
 Requires(pre):	rpm-helper
 %ifarch %{ix86} x86_64
 Requires(post): kernel
