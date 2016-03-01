@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	044
-Release:	3
+Release:	4
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -39,6 +39,8 @@ Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
 # Make cpio invocations more compatible with bsdcpio -- the mode
 # indicator has to be the first argument
 Patch1018:	dracut-044-bsdcpio-compat.patch
+# (tpg) https://github.com/haraldh/dracut/issues/118
+Patch1019:	dracut-044-strip-NUL-bytes.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
@@ -49,7 +51,7 @@ BuildRequires:	xsltproc
 BuildRequires:	dash
 BuildRequires:	bash
 BuildRequires:	asciidoc
-BuildRequires:	systemd-units
+BuildRequires:	systemd
 BuildRequires:	bash-completion
 
 Requires:	systemd >= 228
