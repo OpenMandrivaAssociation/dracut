@@ -81,8 +81,8 @@ Requires:	lzop
 Requires:	file
 Requires:	bridge-utils
 Requires:	xz
-Requires:	dmraid
-Requires(pre):	rpm-helper
+Requires(post):	dmraid
+Requires(post):	rpm-helper
 Requires(post,postun):	update-alternatives
 %ifarch %{ix86} x86_64
 Requires(post): kernel
