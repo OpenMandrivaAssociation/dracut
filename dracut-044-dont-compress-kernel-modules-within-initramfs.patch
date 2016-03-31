@@ -1,0 +1,27 @@
+diff -Naur dracut-044/dracut-init.sh dracut-044.tpg/dracut-init.sh
+--- dracut-044/dracut-init.sh	2015-11-25 14:22:28.000000000 +0100
++++ dracut-044.tpg/dracut-init.sh	2015-11-28 05:11:02.654214461 +0100
+@@ -933,6 +933,7 @@
+ 
+ dracut_kernel_post() {
+     local _moddirname=${srcmods%%/lib/modules/*}
++    local _compress=$1
+     local _pid
+ 
+     if [[ $DRACUT_KERNEL_LAZY_HASHDIR ]] && [[ -f "$DRACUT_KERNEL_LAZY_HASHDIR/lazylist" ]]; then
+@@ -984,6 +985,15 @@
+         [[ $srcmods/$_f ]] && inst_simple "$srcmods/$_f" "/lib/modules/$kernel/$_f"
+     done
+ 
++    # we get better compression ratio if we don't compress files twice, while also
++    # saving ourself from the overhead of decompressing twice as well..
++    for mod in $(find ${initdir}${srcmods} -type f); do
++        case ${mod} in
++            *.ko.gz) gunzip ${mod} ;;
++            *.ko.xz) unxz -T0 ${mod} ;;
++        esac
++    done
++
+     # generate module dependencies for the initrd
+     if [[ -d $initdir/lib/modules/$kernel ]] && \
+         ! depmod -a -b "$initdir" $kernel; then

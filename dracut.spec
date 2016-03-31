@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	043
-Release:	0.3
+Version:	044
+Release:	0.1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -31,7 +31,7 @@ Patch1006:	dracut-037-modprobe-loop.patch
 #Patch1009:	dracut-018-install-var-run-and-var-lock.patch
 Patch1010:	dracut-037-busybox-fallback-to-busybox.static-if-no-busybox.patch
 Patch1011:	dracut-037-use-busybox--list.patch
-Patch1012:	dracut-024-dont-compress-kernel-modules-within-initramfs.patch
+Patch1012:	dracut-044-dont-compress-kernel-modules-within-initramfs.patch
 Patch1013:	dracut-034-fix-prelink.patch
 
 
@@ -40,7 +40,7 @@ Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
 #Patch1017:	dracut-037-fix-missing-locale-settings.patch
 # Make cpio invocations more compatible with bsdcpio -- the mode
 # indicator has to be the first argument
-Patch1018:	dracut-037-bsdcpio-compat.patch
+Patch1018:	dracut-044-bsdcpio-compat.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
@@ -81,6 +81,7 @@ Requires:	lzop
 Requires:	file
 Requires:	bridge-utils
 Requires:	xz
+Requires:	dmraid
 Requires(pre):	rpm-helper
 Requires(post,postun):	update-alternatives
 %ifarch %{ix86} x86_64
