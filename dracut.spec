@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	044
-Release:	5
+Release:	6
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -144,7 +144,6 @@ find %{buildroot} -type f -name '*~' -exec rm {} \;
 # fix permission of module files
 chmod +x %{buildroot}%{_prefix}/lib/dracut/modules.d/*/*.sh
 
-mkdir -p %{buildroot}/boot/dracut
 mkdir -p %{buildroot}%{_var}/lib/dracut/overlay
 install -m 755 -d %{buildroot}%{_datadir}/dracut
 
@@ -186,15 +185,16 @@ ln -sf  %{_sbindir}/lsinitrd %{buildroot}/sbin/lsinitrd
 %post
 # (tpg) run initrd rebuild only on dracut update
 if [ $1 -ge 2 ]; then
- if [ -d /lib/modules/$(uname -r) ]; then
-     %{_sbindir}/dracut -f /boot/initrd-$(uname -r).img $(uname -r)
- fi
+    kver=$(uname -r)
+    if [ -d /lib/modules/${kver} -a -x /usr/bin/kernel-install ]; then
+	/usr/bin/kernel-install remove ${kver} ||:
+	/usr/bin/kernel-install add ${kver} vmlinuz-${kver} ||:
+    fi
 fi
 
 %files
 %doc README.generic README.modules README.kernel HACKING TODO AUTHORS
 %doc README.urpmi
-%dir /boot/dracut
 %dir %{_datadir}/dracut
 %dir %{_var}/lib/dracut
 %dir %{_var}/lib/dracut/overlay
