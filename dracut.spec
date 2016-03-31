@@ -228,6 +228,7 @@ fi
 %{_unitdir}/*.service
 %{_unitdir}/*/*.service
 %{_prefix}/lib/kernel/install.d/5*-dracut*.install
+%{_prefix}/lib/dracut/dracut-init.sh
 %{_prefix}/lib/dracut/skipcpio
 %{_prefix}/lib/dracut/dracut-install
 %{_prefix}/lib/dracut/dracut-version.sh
