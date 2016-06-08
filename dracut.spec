@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	044
-Release:	6
+Release:	7
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -188,7 +188,7 @@ if [ $1 -ge 2 ]; then
     kver=$(uname -r)
     if [ -d /lib/modules/${kver} -a -x /usr/bin/kernel-install ]; then
 	/usr/bin/kernel-install remove ${kver} ||:
-	/usr/bin/kernel-install add ${kver} vmlinuz-${kver} ||:
+	/usr/bin/kernel-install add ${kver} /boot/vmlinuz-${kver} ||:
     fi
 fi
 
