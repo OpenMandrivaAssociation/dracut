@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	044
-Release:	7
+Release:	8
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -41,6 +41,7 @@ Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
 Patch1018:	dracut-044-bsdcpio-compat.patch
 # (tpg) https://github.com/haraldh/dracut/issues/118
 Patch1019:	dracut-044-strip-NUL-bytes.patch
+Patch1020:	dracut-044-add-support-for-F2FS.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###

@@ -1,0 +1,60 @@
+diff -Naur dracut-044/modules.d/03rescue/module-setup.sh dracut-044.tpg/modules.d/03rescue/module-setup.sh
+--- dracut-044/modules.d/03rescue/module-setup.sh	2015-11-25 13:22:28.000000000 +0000
++++ dracut-044.tpg/modules.d/03rescue/module-setup.sh	2016-06-30 19:36:37.332989133 +0000
+@@ -15,6 +15,6 @@
+ install() {
+     inst_multiple -o ps grep more cat rm strace free showmount \
+         ping netstat rpcinfo vi scp ping6 ssh \
+-        fsck fsck.ext2 fsck.ext4 fsck.ext3 fsck.ext4dev fsck.vfat e2fsck
++        fsck fsck.ext2 fsck.ext4 fsck.ext3 fsck.ext4dev fsck.f2fs fsck.vfat e2fsck
+ }
+ 
+diff -Naur dracut-044/modules.d/95debug/module-setup.sh dracut-044.tpg/modules.d/95debug/module-setup.sh
+--- dracut-044/modules.d/95debug/module-setup.sh	2015-11-25 13:22:28.000000000 +0000
++++ dracut-044.tpg/modules.d/95debug/module-setup.sh	2016-06-30 19:36:37.332989133 +0000
+@@ -16,7 +16,7 @@
+     inst_multiple -o cat ls ps grep more cat rm strace free showmount \
+                   ping netstat rpcinfo vi scp ping6 ssh find vi \
+                   tcpdump cp less hostname mkdir \
+-                  fsck fsck.ext2 fsck.ext4 fsck.ext3 fsck.ext4dev fsck.vfat e2fsck
++                  fsck fsck.ext2 fsck.ext4 fsck.ext3 fsck.ext4dev fsck.f2fs fsck.vfat e2fsck
+ 
+     egrep '^tcpdump:' /etc/passwd 2>/dev/null >> "$initdir/etc/passwd"
+ }
+diff -Naur dracut-044/modules.d/99fs-lib/fs-lib.sh dracut-044.tpg/modules.d/99fs-lib/fs-lib.sh
+--- dracut-044/modules.d/99fs-lib/fs-lib.sh	2015-11-25 13:22:28.000000000 +0000
++++ dracut-044.tpg/modules.d/99fs-lib/fs-lib.sh	2016-06-30 19:36:37.333989213 +0000
+@@ -47,6 +47,11 @@
+             _drv="_drv=e2fsck fsck_drv_com" &&
+             return 0
+             ;;
++        f2fs)
++    	    type fsck.f2fs >/dev/null 2>&1 &&
++    	    _drv="_drv=fsck.f2fs fsck_drv_com" &&
++    	    return 0
++    	    ;;
+         jfs)
+             type jfs_fsck >/dev/null 2>&1 &&
+             _drv="_drv=jfs_fsck fsck_drv_com" &&
+diff -Naur dracut-044/modules.d/99fs-lib/module-setup.sh dracut-044.tpg/modules.d/99fs-lib/module-setup.sh
+--- dracut-044/modules.d/99fs-lib/module-setup.sh	2015-11-25 13:22:28.000000000 +0000
++++ dracut-044.tpg/modules.d/99fs-lib/module-setup.sh	2016-06-30 19:36:37.333989213 +0000
+@@ -20,6 +20,9 @@
+         ext?)
+             echo -n " e2fsck "
+             ;;
++        f2fs)
++    	    echo -n " fsck.f2fs "
++    	    ;;
+         jfs)
+             echo -n " jfs_fsck "
+             ;;
+@@ -68,7 +71,7 @@
+         _helpers="\
+             umount mount /sbin/fsck*
+             xfs_db xfs_check xfs_repair xfs_metadump
+-            e2fsck jfs_fsck reiserfsck btrfsck
++            e2fsck fsck.f2fs jfs_fsck reiserfsck btrfsck
+         "
+         if [[ $hostonly ]]; then
+             _helpers="umount mount "
