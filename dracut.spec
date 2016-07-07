@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	044
-Release:	8
+Release:	9
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
