@@ -1,6 +1,6 @@
 diff -Naur dracut-044/modules.d/03rescue/module-setup.sh dracut-044.tpg/modules.d/03rescue/module-setup.sh
 --- dracut-044/modules.d/03rescue/module-setup.sh	2015-11-25 13:22:28.000000000 +0000
-+++ dracut-044.tpg/modules.d/03rescue/module-setup.sh	2016-07-07 16:26:41.006376316 +0000
++++ dracut-044.tpg/modules.d/03rescue/module-setup.sh	2016-07-09 07:29:25.873731508 +0000
 @@ -15,6 +15,6 @@
  install() {
      inst_multiple -o ps grep more cat rm strace free showmount \
@@ -11,7 +11,7 @@ diff -Naur dracut-044/modules.d/03rescue/module-setup.sh dracut-044.tpg/modules.
  
 diff -Naur dracut-044/modules.d/95debug/module-setup.sh dracut-044.tpg/modules.d/95debug/module-setup.sh
 --- dracut-044/modules.d/95debug/module-setup.sh	2015-11-25 13:22:28.000000000 +0000
-+++ dracut-044.tpg/modules.d/95debug/module-setup.sh	2016-07-07 16:26:41.007376259 +0000
++++ dracut-044.tpg/modules.d/95debug/module-setup.sh	2016-07-09 07:29:25.873731508 +0000
 @@ -16,7 +16,7 @@
      inst_multiple -o cat ls ps grep more cat rm strace free showmount \
                    ping netstat rpcinfo vi scp ping6 ssh find vi \
@@ -23,7 +23,7 @@ diff -Naur dracut-044/modules.d/95debug/module-setup.sh dracut-044.tpg/modules.d
  }
 diff -Naur dracut-044/modules.d/99fs-lib/fs-lib.sh dracut-044.tpg/modules.d/99fs-lib/fs-lib.sh
 --- dracut-044/modules.d/99fs-lib/fs-lib.sh	2015-11-25 13:22:28.000000000 +0000
-+++ dracut-044.tpg/modules.d/99fs-lib/fs-lib.sh	2016-07-07 16:26:41.007376259 +0000
++++ dracut-044.tpg/modules.d/99fs-lib/fs-lib.sh	2016-07-09 07:29:25.874731607 +0000
 @@ -47,6 +47,11 @@
              _drv="_drv=e2fsck fsck_drv_com" &&
              return 0
@@ -38,7 +38,7 @@ diff -Naur dracut-044/modules.d/99fs-lib/fs-lib.sh dracut-044.tpg/modules.d/99fs
              _drv="_drv=jfs_fsck fsck_drv_com" &&
 diff -Naur dracut-044/modules.d/99fs-lib/module-setup.sh dracut-044.tpg/modules.d/99fs-lib/module-setup.sh
 --- dracut-044/modules.d/99fs-lib/module-setup.sh	2015-11-25 13:22:28.000000000 +0000
-+++ dracut-044.tpg/modules.d/99fs-lib/module-setup.sh	2016-07-07 16:27:23.574068816 +0000
++++ dracut-044.tpg/modules.d/99fs-lib/module-setup.sh	2016-07-09 07:29:59.329210629 +0000
 @@ -20,6 +20,9 @@
          ext?)
              echo -n " e2fsck "
@@ -49,16 +49,17 @@ diff -Naur dracut-044/modules.d/99fs-lib/module-setup.sh dracut-044.tpg/modules.
          jfs)
              echo -n " jfs_fsck "
              ;;
-@@ -38,7 +41,7 @@
- include_fs_helper_modules() {
-     local dev=$1 fs=$2
-     case "$fs" in
--        xfs|btrfs)
-+        xfs|btrfs|f2fs)
+@@ -41,6 +44,9 @@
+         xfs|btrfs)
              instmods crc32c
              ;;
++        f2fs)
++            instmods crc32
++            ;;
      esac
-@@ -68,7 +71,7 @@
+ }
+ 
+@@ -68,7 +74,7 @@
          _helpers="\
              umount mount /sbin/fsck*
              xfs_db xfs_check xfs_repair xfs_metadump
