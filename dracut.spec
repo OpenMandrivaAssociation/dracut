@@ -14,8 +14,6 @@ Source4:	initrd-backup.sh
 Source15:	xorgblacklist-module-setup.sh
 Source16:	xorgblacklist-pre.sh
 Source17:	xorgblacklist.sh
-# (bor) mdv-specific fixes
-#Patch1000:	dracut-011-mdv.patch
 # (bor) Restore original Mandriva behaviour of adding bootchart if RPM is installed.
 Patch1001:	dracut-037-undisable_bootchart.patch
 # (bor) compatibility with mkinitrd
@@ -23,25 +21,15 @@ Patch1002:	dracut-010-mkinitrd.patch
 # (bor) Add support for KEYTABLE to dynamically determine whether to install UNICODE or non-UNICODE keymap version.
 Patch1003:	dracut-007-aufs-mount.patch
 Patch1006:	dracut-037-modprobe-loop.patch
-
-#Patch1005:	dracut-013-ld.so.conf.workaround.patch
-#Patch1006:	dracut-014-multipath-udev-rules.patch
-#Patch1007:	dracut-018-check-for-tty-and-use-it.patch
-#Patch1008:	dracut-018-do-not-remount-twice-disk-partitions.patch
-#Patch1009:	dracut-018-install-var-run-and-var-lock.patch
 Patch1010:	dracut-037-busybox-fallback-to-busybox.static-if-no-busybox.patch
 Patch1011:	dracut-037-use-busybox--list.patch
 Patch1012:	dracut-044-dont-compress-kernel-modules-within-initramfs.patch
-Patch1013:	dracut-034-fix-prelink.patch
 Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
 # (tpg) workaround for bug https://issues.openmandriva.org/show_bug.cgi?id=669
 #Patch1017:	dracut-037-fix-missing-locale-settings.patch
 # Make cpio invocations more compatible with bsdcpio -- the mode
 # indicator has to be the first argument
 Patch1018:	dracut-044-bsdcpio-compat.patch
-# (tpg) https://github.com/haraldh/dracut/issues/118
-Patch1019:	dracut-044-strip-NUL-bytes.patch
-Patch1020:	dracut-044-add-support-for-F2FS.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###

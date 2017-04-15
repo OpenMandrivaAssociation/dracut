@@ -1,16 +1,16 @@
-diff -Naur dracut-044/dracut.sh dracut-044.tpg/dracut.sh
---- dracut-044/dracut.sh	2015-11-28 05:13:04.000000000 +0100
-+++ dracut-044.tpg/dracut.sh	2015-11-28 05:16:02.987497748 +0100
-@@ -1700,7 +1700,7 @@
+diff -Naur dracut-045/dracut.sh dracut-045.tpg/dracut.sh
+--- dracut-045/dracut.sh	2017-04-15 11:09:59.749643388 +0000
++++ dracut-045.tpg/dracut.sh	2017-04-15 11:13:29.703819495 +0000
+@@ -1731,7 +1731,7 @@
      if ! (
-             cd "$early_cpio_dir/d"
+             umask 077; cd "$early_cpio_dir/d"
              find . -print0 | sort -z \
 -                | cpio ${CPIO_REPRODUCIBLE:+--reproducible} --null $cpio_owner_root -H newc -o --quiet > "${DRACUT_TMPDIR}/initramfs.img"
 +                | cpio -o ${CPIO_REPRODUCIBLE:+--reproducible} --null $cpio_owner_root -H newc --quiet > "${DRACUT_TMPDIR}/initramfs.img"
          ); then
          dfatal "dracut: creation of $outfile failed"
          exit 1
-@@ -1710,7 +1710,7 @@
+@@ -1741,7 +1741,7 @@
  if ! (
          umask 077; cd "$initdir"
          find . -print0 | sort -z \
