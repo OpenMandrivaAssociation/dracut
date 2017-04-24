@@ -42,7 +42,7 @@ BuildRequires:	bash
 BuildRequires:	asciidoc
 BuildRequires:	systemd
 BuildRequires:	bash-completion
-
+BuildRequires:	pkgconfig(libkmod)
 Requires:	systemd >= 228
 Provides:	mkinitrd-command
 Requires(pre):	filesystem
