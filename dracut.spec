@@ -30,6 +30,9 @@ Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
 # Make cpio invocations more compatible with bsdcpio -- the mode
 # indicator has to be the first argument
 Patch1018:	dracut-044-bsdcpio-compat.patch
+# (tpg) this should be merged soon
+# https://github.com/dracutdevs/dracut/pull/219
+Patch1019:	dracut-045-fix-build-with-KMOD.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
