@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	045
-Release:	3
+Release:	4
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -20,6 +20,8 @@ Patch1001:	dracut-037-undisable_bootchart.patch
 Patch1002:	dracut-010-mkinitrd.patch
 # (bor) Add support for KEYTABLE to dynamically determine whether to install UNICODE or non-UNICODE keymap version.
 Patch1003:	dracut-007-aufs-mount.patch
+# Create a ld-linux-aarch64.so.1 symlink in /lib
+Patch0004:	dracut-045-aarch64-ld-linux-workaround.patch
 Patch1006:	dracut-037-modprobe-loop.patch
 Patch1010:	dracut-037-busybox-fallback-to-busybox.static-if-no-busybox.patch
 Patch1011:	dracut-037-use-busybox--list.patch
