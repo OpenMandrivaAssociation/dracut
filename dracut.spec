@@ -33,6 +33,7 @@ Patch1018:	dracut-044-bsdcpio-compat.patch
 # (tpg) this should be merged soon
 # https://github.com/dracutdevs/dracut/pull/219
 Patch1019:	dracut-045-fix-build-with-KMOD.patch
+Patch1020:	dracut-045-fix-dash-syntax.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
