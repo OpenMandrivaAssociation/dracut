@@ -1,14 +1,7 @@
-diff -Naur dracut-045/dracut-init.sh dracut-045.tpg/dracut-init.sh
---- dracut-045/dracut-init.sh	2017-04-03 08:26:25.000000000 +0000
-+++ dracut-045.tpg/dracut-init.sh	2017-04-15 11:04:04.007344797 +0000
-@@ -936,12 +936,22 @@
- 
- dracut_kernel_post() {
-     local _moddirname=${srcmods%%/lib/modules/*}
-+    local _compress=$1
-     local _pid
- 
-     for _f in modules.builtin.bin modules.builtin modules.order; do
+diff -Naur dracut-046/dracut-init.sh dracut-046.tpg/dracut-init.sh
+--- dracut-046/dracut-init.sh	2017-08-11 11:44:06.000000000 +0000
++++ dracut-046.tpg/dracut-init.sh	2017-09-04 21:57:05.201409486 +0000
+@@ -939,6 +939,15 @@
          [[ $srcmods/$_f ]] && inst_simple "$srcmods/$_f" "/lib/modules/$kernel/$_f"
      done
  

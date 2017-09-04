@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	045
-Release:	3
+Version:	046
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -20,6 +20,8 @@ Patch1001:	dracut-037-undisable_bootchart.patch
 Patch1002:	dracut-010-mkinitrd.patch
 # (bor) Add support for KEYTABLE to dynamically determine whether to install UNICODE or non-UNICODE keymap version.
 Patch1003:	dracut-007-aufs-mount.patch
+# Create a ld-linux-aarch64.so.1 symlink in /lib
+Patch0004:	dracut-045-aarch64-ld-linux-workaround.patch
 Patch1006:	dracut-037-modprobe-loop.patch
 Patch1010:	dracut-037-busybox-fallback-to-busybox.static-if-no-busybox.patch
 Patch1011:	dracut-037-use-busybox--list.patch
@@ -30,9 +32,6 @@ Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
 # Make cpio invocations more compatible with bsdcpio -- the mode
 # indicator has to be the first argument
 Patch1018:	dracut-044-bsdcpio-compat.patch
-# (tpg) this should be merged soon
-# https://github.com/dracutdevs/dracut/pull/219
-Patch1019:	dracut-045-fix-build-with-KMOD.patch
 Patch1020:	dracut-045-fix-dash-syntax.patch
 
 ### GIT PATCHES GOES HERE  ###
