@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	046
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -58,7 +58,6 @@ Requires:	e2fsprogs
 Requires:	f2fs-tools
 Requires:	cpio
 Requires:	findutils
-Requires:	binutils
 Requires:	grep
 Requires:	mktemp
 Requires:	bash
