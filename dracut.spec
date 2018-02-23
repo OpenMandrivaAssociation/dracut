@@ -92,7 +92,7 @@ NFS, iSCSI, NBD, FCoE with the dracut-network package.
 %prep
 %setup -q
 %apply_patches
-exit 1
+
 # We don't want to strip dracut-install, that's debuginfo's job
 sed -i -e 's,\$(strip),,g' install/Makefile
 
