@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	046
-Release:	3
+Version:	047
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -32,11 +32,10 @@ Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
 # Make cpio invocations more compatible with bsdcpio -- the mode
 # indicator has to be the first argument
 Patch1018:	dracut-044-bsdcpio-compat.patch
-Patch1020:	dracut-045-fix-dash-syntax.patch
+#Patch1020:	dracut-045-fix-dash-syntax.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
-
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
@@ -46,10 +45,6 @@ BuildRequires:	asciidoc
 BuildRequires:	systemd
 BuildRequires:	bash-completion
 BuildRequires:	pkgconfig(libkmod)
-Requires:	systemd >= 228
-Provides:	mkinitrd-command
-Requires(pre):	filesystem
-Requires(pre):	coreutils
 Suggests:	plymouth
 Requires:	udev
 Requires:	util-linux
@@ -72,15 +67,19 @@ Requires:	file
 Requires:	bridge-utils
 Requires:	xz
 Requires:	dmraid
-Requires(pre):	rpm-helper
+Requires(post):	systemd >= 228
+Requires(post):	filesystem
+Requires(post):	coreutils
+Requires(post):	rpm-helper
 %ifarch %{ix86} x86_64
-Requires(post): kernel
+Requires(post):	kernel
 %endif
 Conflicts:	mkinitrd < 6.0.93-10
 Conflicts:	nash < 6.0.93-10
 Obsoletes:	dracut < 013
 Obsoletes:	mkinitrd < 6.0.93-32
 Provides:	mkinitrd = 6.0.93-32
+Provides:	mkinitrd-command
 Obsoletes:	nash < 6.0.93-32
 
 %description
@@ -93,7 +92,7 @@ NFS, iSCSI, NBD, FCoE with the dracut-network package.
 %prep
 %setup -q
 %apply_patches
-
+exit 1
 # We don't want to strip dracut-install, that's debuginfo's job
 sed -i -e 's,\$(strip),,g' install/Makefile
 
@@ -174,6 +173,7 @@ rm -rf %{buildroot}%{_datadir}/pkgconfig/dracut.pc
 ln -sf  %{_sbindir}/mkinitrd %{buildroot}/sbin/mkinitrd
 ln -sf  %{_sbindir}/lsinitrd %{buildroot}/sbin/lsinitrd
 
+%ifarch %{ix86} x86_64
 %post
 # (tpg) run initrd rebuild only on dracut update
 if [ $1 -ge 2 ]; then
@@ -183,6 +183,7 @@ if [ $1 -ge 2 ]; then
 	/usr/bin/kernel-install add ${kver} /boot/vmlinuz-${kver} ||:
     fi
 fi
+%endif
 
 %files
 %doc README.generic README.modules README.kernel HACKING TODO AUTHORS
