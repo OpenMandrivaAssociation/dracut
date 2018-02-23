@@ -1,30 +1,30 @@
-diff -Naur dracut-045/dracut-initramfs-restore.sh dracut-045.tpg/dracut-initramfs-restore.sh
---- dracut-045/dracut-initramfs-restore.sh	2017-04-03 08:26:25.000000000 +0000
-+++ dracut-045.tpg/dracut-initramfs-restore.sh	2017-04-15 11:09:25.173654640 +0000
+diff -Naur dracut-047/dracut-initramfs-restore.sh dracut-047.tpg/dracut-initramfs-restore.sh
+--- dracut-047/dracut-initramfs-restore.sh	2018-02-19 09:00:33.000000000 +0000
++++ dracut-047.tpg/dracut-initramfs-restore.sh	2018-02-23 20:12:10.301234000 +0000
 @@ -19,7 +19,7 @@
  if [[ $MACHINE_ID ]] && [[ -d /boot/${MACHINE_ID} || -L /boot/${MACHINE_ID} ]] ; then
      IMG="/boot/${MACHINE_ID}/${KERNEL_VERSION}/initrd"
  fi
 -[[ -f $IMG ]] || IMG="/boot/initramfs-${KERNEL_VERSION}.img"
-+[[ -f $IMG ]] || IMG="/boot/initrd-${KERNEL_VERSION}.img
++[[ -f $IMG ]] || IMG="/boot/initrd-${KERNEL_VERSION}.img"
  
  cd /run/initramfs
  
-diff -Naur dracut-045/dracut.sh dracut-045.tpg/dracut.sh
---- dracut-045/dracut.sh	2017-04-03 08:26:25.000000000 +0000
-+++ dracut-045.tpg/dracut.sh	2017-04-15 11:09:59.749643388 +0000
-@@ -770,7 +770,7 @@
-         if [[ $MACHINE_ID ]] && ( [[ -d /boot/${MACHINE_ID} ]] || [[ -L /boot/${MACHINE_ID} ]] ); then
-             outfile="/boot/${MACHINE_ID}/$kernel/initrd"
-         else
+diff -Naur dracut-047/dracut.sh dracut-047.tpg/dracut.sh
+--- dracut-047/dracut.sh	2018-02-19 09:00:33.000000000 +0000
++++ dracut-047.tpg/dracut.sh	2018-02-23 20:13:46.650419000 +0000
+@@ -778,7 +778,7 @@
+         outfile="$efidir/Linux/linux-$kernel${MACHINE_ID:+-${MACHINE_ID}}${BUILD_ID:+-${BUILD_ID}}.efi"
+     else
+         if [[ -e "/boot/vmlinuz-$kernel" ]]; then
 -            outfile="/boot/initramfs-$kernel.img"
 +            outfile="/boot/initrd-$kernel.img"
-         fi
-     fi
- fi
-diff -Naur dracut-045/lsinitrd.sh dracut-045.tpg/lsinitrd.sh
---- dracut-045/lsinitrd.sh	2017-04-03 08:26:25.000000000 +0000
-+++ dracut-045.tpg/lsinitrd.sh	2017-04-15 11:10:36.588917162 +0000
+         elif [[ $MACHINE_ID ]] && ( [[ -d /boot/${MACHINE_ID} ]] || [[ -L /boot/${MACHINE_ID} ]] ); then
+             outfile="/boot/${MACHINE_ID}/$kernel/initrd"
+         else
+diff -Naur dracut-047/lsinitrd.sh dracut-047.tpg/lsinitrd.sh
+--- dracut-047/lsinitrd.sh	2018-02-19 09:00:33.000000000 +0000
++++ dracut-047.tpg/lsinitrd.sh	2018-02-23 20:14:10.893465000 +0000
 @@ -99,7 +99,7 @@
          && [[ -d /boot/${MACHINE_ID} || -L /boot/${MACHINE_ID} ]] ; then
          image="/boot/${MACHINE_ID}/${KERNEL_VERSION}/initrd"
