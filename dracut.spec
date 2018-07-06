@@ -1,6 +1,6 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	047
+Version:	048
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -178,9 +178,9 @@ ln -sf  %{_sbindir}/lsinitrd %{buildroot}/sbin/lsinitrd
 # (tpg) run initrd rebuild only on dracut update
 if [ $1 -ge 2 ]; then
     kver=$(uname -r)
-    if [ -d /lib/modules/${kver} -a -x /usr/bin/kernel-install ]; then
-	/usr/bin/kernel-install remove ${kver} ||:
-	/usr/bin/kernel-install add ${kver} /boot/vmlinuz-${kver} ||:
+    if [ -d /lib/modules/"${kver}" ] && [ -x /usr/bin/kernel-install ]; then
+	/usr/bin/kernel-install remove "${kver}" ||:
+	/usr/bin/kernel-install add "${kver}" /boot/vmlinuz-"${kver}" ||:
     fi
 fi
 %endif
