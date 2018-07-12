@@ -1,8 +1,8 @@
-diff -Naur dracut-046/dracut-init.sh dracut-046.tpg/dracut-init.sh
---- dracut-046/dracut-init.sh	2017-08-11 11:44:06.000000000 +0000
-+++ dracut-046.tpg/dracut-init.sh	2017-09-04 21:57:05.201409486 +0000
-@@ -939,6 +939,15 @@
-         [[ $srcmods/$_f ]] && inst_simple "$srcmods/$_f" "/lib/modules/$kernel/$_f"
+diff -Naur dracut-048/dracut-init.sh dracut-048.tpg/dracut-init.sh
+--- dracut-048/dracut-init.sh	2018-07-06 08:37:51.000000000 +0000
++++ dracut-048.tpg/dracut-init.sh	2018-07-12 13:14:11.908773703 +0000
+@@ -957,6 +957,16 @@
+         [[ -e $srcmods/$_f ]] && inst_simple "$srcmods/$_f" "/lib/modules/$kernel/$_f"
      done
  
 +    # we get better compression ratio if we don't compress files twice, while also
@@ -11,6 +11,7 @@ diff -Naur dracut-046/dracut-init.sh dracut-046.tpg/dracut-init.sh
 +        case ${mod} in
 +            *.ko.gz) gunzip ${mod} ;;
 +            *.ko.xz) unxz -T0 ${mod} ;;
++            *.ko.zst) unzstd ${mod} ;;
 +        esac
 +    done
 +

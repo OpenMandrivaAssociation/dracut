@@ -27,6 +27,7 @@ Patch1010:	dracut-037-busybox-fallback-to-busybox.static-if-no-busybox.patch
 Patch1011:	dracut-037-use-busybox--list.patch
 Patch1012:	dracut-044-dont-compress-kernel-modules-within-initramfs.patch
 Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
+
 # (tpg) workaround for bug https://issues.openmandriva.org/show_bug.cgi?id=669
 #Patch1017:	dracut-037-fix-missing-locale-settings.patch
 # Make cpio invocations more compatible with bsdcpio -- the mode
@@ -36,6 +37,7 @@ Patch1018:	dracut-044-bsdcpio-compat.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
+
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
