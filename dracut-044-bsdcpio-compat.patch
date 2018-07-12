@@ -1,7 +1,7 @@
-diff -Naur dracut-047/dracut.sh dracut-047.tpg/dracut.sh
---- dracut-047/dracut.sh	2018-02-23 20:18:55.445924000 +0000
-+++ dracut-047.tpg/dracut.sh	2018-02-23 20:23:48.914318775 +0000
-@@ -1761,7 +1761,7 @@
+diff -Naur dracut-048/dracut.sh dracut-048.tpg/dracut.sh
+--- dracut-048/dracut.sh	2018-07-12 13:16:10.194766000 +0000
++++ dracut-048.tpg/dracut.sh	2018-07-12 13:17:40.293760058 +0000
+@@ -1777,7 +1777,7 @@
      if ! (
              umask 077; cd "$early_cpio_dir/d"
              find . -print0 | sort -z \
@@ -10,7 +10,7 @@ diff -Naur dracut-047/dracut.sh dracut-047.tpg/dracut.sh
          ); then
          dfatal "dracut: creation of $outfile failed"
          exit 1
-@@ -1771,7 +1771,7 @@
+@@ -1787,7 +1787,7 @@
  if ! (
          umask 077; cd "$initdir"
          find . -print0 | sort -z \

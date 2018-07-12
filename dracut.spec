@@ -1,6 +1,6 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	047
+Version:	048
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -27,6 +27,7 @@ Patch1010:	dracut-037-busybox-fallback-to-busybox.static-if-no-busybox.patch
 Patch1011:	dracut-037-use-busybox--list.patch
 Patch1012:	dracut-044-dont-compress-kernel-modules-within-initramfs.patch
 Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
+
 # (tpg) workaround for bug https://issues.openmandriva.org/show_bug.cgi?id=669
 #Patch1017:	dracut-037-fix-missing-locale-settings.patch
 # Make cpio invocations more compatible with bsdcpio -- the mode
@@ -36,6 +37,7 @@ Patch1018:	dracut-044-bsdcpio-compat.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
+
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
@@ -178,9 +180,9 @@ ln -sf  %{_sbindir}/lsinitrd %{buildroot}/sbin/lsinitrd
 # (tpg) run initrd rebuild only on dracut update
 if [ $1 -ge 2 ]; then
     kver=$(uname -r)
-    if [ -d /lib/modules/${kver} -a -x /usr/bin/kernel-install ]; then
-	/usr/bin/kernel-install remove ${kver} ||:
-	/usr/bin/kernel-install add ${kver} /boot/vmlinuz-${kver} ||:
+    if [ -d /lib/modules/"${kver}" ] && [ -x /usr/bin/kernel-install ]; then
+	/usr/bin/kernel-install remove "${kver}" ||:
+	/usr/bin/kernel-install add "${kver}" /boot/vmlinuz-"${kver}" ||:
     fi
 fi
 %endif
