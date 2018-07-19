@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	048
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -44,7 +44,7 @@ BuildRequires:	xsltproc
 BuildRequires:	dash
 BuildRequires:	bash
 BuildRequires:	asciidoc
-BuildRequires:	systemd
+BuildRequires:	systemd-macros
 BuildRequires:	bash-completion
 BuildRequires:	pkgconfig(libkmod)
 Suggests:	plymouth
@@ -73,7 +73,7 @@ Requires(post):	systemd >= 228
 Requires(post):	filesystem
 Requires(post):	coreutils
 Requires(post):	rpm-helper
-%ifarch %{ix86} x86_64
+%ifarch %{ix86} x86_64 znver1
 Requires(post):	kernel
 %endif
 Conflicts:	mkinitrd < 6.0.93-10
@@ -108,7 +108,7 @@ install -c -m 755 %{SOURCE17} modules.d/01xorgblacklist/xorgblacklist.sh
 %serverbuild_hardened
 
 %configure \
-	--systemdsystemunitdir=%{_unitdir} \
+	--systemdsystemunitdir=%{_systemunitdir} \
 	--bashcompletiondir=$(pkg-config --variable=completionsdir bash-completion) \
 	--libdir=%{_prefix}/lib
 
@@ -175,7 +175,7 @@ rm -rf %{buildroot}%{_datadir}/pkgconfig/dracut.pc
 ln -sf  %{_sbindir}/mkinitrd %{buildroot}/sbin/mkinitrd
 ln -sf  %{_sbindir}/lsinitrd %{buildroot}/sbin/lsinitrd
 
-%ifarch %{ix86} x86_64
+%ifarch %{ix86} x86_64 znver1
 %post
 # (tpg) run initrd rebuild only on dracut update
 if [ $1 -ge 2 ]; then
