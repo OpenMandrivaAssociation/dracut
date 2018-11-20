@@ -109,7 +109,7 @@ install -c -m 755 %{SOURCE17} modules.d/01xorgblacklist/xorgblacklist.sh
 %serverbuild_hardened
 
 %configure \
-	--systemdsystemunitdir=%{_systemunitdir} \
+	--systemdsystemunitdir=%{_unitdir} \
 	--bashcompletiondir=$(pkg-config --variable=completionsdir bash-completion) \
 	--libdir=%{_prefix}/lib
 
