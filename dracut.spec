@@ -1,12 +1,12 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	048
-Release:	3
+Version:	049
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
 # http://git.kernel.org/cgit/boot/dracut/dracut.git/
-Source0:	http://www.kernel.org/pub/linux/utils/boot/dracut/%{name}-%{version}.tar.xz
+Source0:	https://github.com/dracutdevs/dracut/archive/%{name}-%{version}.tar.gz
 Source3:	50-dracut-distro.conf
 # (tpg) simple script to provide a backup for current working initrd file
 Source4:	initrd-backup.sh
@@ -93,8 +93,7 @@ event-based udev. Having root on MD, DM, LVM2, LUKS is supported as well as
 NFS, iSCSI, NBD, FCoE with the dracut-network package.
 
 %prep
-%setup -q
-%apply_patches
+%autosetup -p1
 
 # We don't want to strip dracut-install, that's debuginfo's job
 sed -i -e 's,\$(strip),,g' install/Makefile
@@ -113,10 +112,10 @@ install -c -m 755 %{SOURCE17} modules.d/01xorgblacklist/xorgblacklist.sh
 	--bashcompletiondir=$(pkg-config --variable=completionsdir bash-completion) \
 	--libdir=%{_prefix}/lib
 
-%make CC=%{__cc}
+%make_build CC=%{__cc}
 
 %install
-%makeinstall_std
+%make_install
 
 install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/dracut.conf.d
 
