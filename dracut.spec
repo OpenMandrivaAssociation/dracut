@@ -1,7 +1,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	049
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -34,10 +34,11 @@ Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
 # indicator has to be the first argument
 Patch1018:	dracut-044-bsdcpio-compat.patch
 #Patch1020:	dracut-045-fix-dash-syntax.patch
+# (tpg) https://github.com/dracutdevs/dracut/issues/506
+Patch1021:	dracut-049-Check-usr-sbin-for-fsck-programs.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
-
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
@@ -74,7 +75,7 @@ Requires(post):	systemd >= 228
 Requires(post):	filesystem
 Requires(post):	coreutils
 Requires(post):	rpm-helper
-%ifarch %{ix86} x86_64 znver1
+%ifarch %{ix86} %{x86_64}
 Requires(post):	kernel
 %endif
 Conflicts:	mkinitrd < 6.0.93-10
@@ -175,7 +176,7 @@ rm -rf %{buildroot}%{_datadir}/pkgconfig/dracut.pc
 ln -sf  %{_sbindir}/mkinitrd %{buildroot}/sbin/mkinitrd
 ln -sf  %{_sbindir}/lsinitrd %{buildroot}/sbin/lsinitrd
 
-%ifarch %{ix86} x86_64 znver1
+%ifarch %{ix86} %{x86_64}
 %post
 # (tpg) run initrd rebuild only on dracut update
 if [ $1 -ge 2 ]; then
