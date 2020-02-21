@@ -1,3 +1,9 @@
+# We ship a .pc file but don't want to have a dep on pkg-config. We
+# strip the automatically generated dep here and instead co-own the
+# directory.
+%global __requires_exclude pkg-config
+
+
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	049
@@ -169,9 +175,6 @@ sed -i -e 's#/usr/bin/udevadm#/sbin/udevadm#g' %{buildroot}%{_prefix}/lib/dracut
 
 install -m755 %{SOURCE4} %{buildroot}%{_bindir}/initrd-backup.sh
 
-# (tpg) not needed for now
-rm -rf %{buildroot}%{_datadir}/pkgconfig/dracut.pc
-
 # (tpg) compat symlinks to old mkinitrd
 ln -sf  %{_sbindir}/mkinitrd %{buildroot}/sbin/mkinitrd
 ln -sf  %{_sbindir}/lsinitrd %{buildroot}/sbin/lsinitrd
@@ -234,3 +237,5 @@ fi
 %{_mandir}/man7/dracut.modules.7*
 %{_mandir}/man8/dracut*.8*
 %{_mandir}/man8//mkinitrd*.8*
+%dir %{_datadir}/pkgconfig
+%{_datadir}/pkgconfig/dracut.pc
