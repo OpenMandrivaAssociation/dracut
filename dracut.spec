@@ -6,8 +6,8 @@
 
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	049
-Release:	4
+Version:	050
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -65,11 +65,10 @@ Requires:	findutils
 Requires:	grep
 Requires:	coreutils
 Requires:	bash
-Recommends:	dash
 Requires:	kbd
 Requires:	tar
-Requires:	gzip
-Requires:	bzip2
+Recommends:	gzip
+Recommends:	bzip2
 Recommends:	lzop
 Recommends:	lz4
 Requires:	file
