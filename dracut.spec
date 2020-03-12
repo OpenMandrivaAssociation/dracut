@@ -40,11 +40,10 @@ Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
 # indicator has to be the first argument
 Patch1018:	dracut-044-bsdcpio-compat.patch
 #Patch1020:	dracut-045-fix-dash-syntax.patch
-# (tpg) https://github.com/dracutdevs/dracut/issues/506
-Patch1021:	dracut-049-Check-usr-sbin-for-fsck-programs.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
+%if 0
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
@@ -69,8 +68,6 @@ Requires:	kbd
 Requires:	tar
 Recommends:	gzip
 Recommends:	bzip2
-Recommends:	lzop
-Recommends:	lz4
 Requires:	file
 Requires:	bridge-utils
 Requires:	zstd
@@ -90,6 +87,7 @@ Obsoletes:	mkinitrd < 6.0.93-32
 Provides:	mkinitrd = 6.0.93-32
 Provides:	mkinitrd-command
 Obsoletes:	nash < 6.0.93-32
+%endif
 
 %description
 Dracut contains tools to create a bootable initramfs for 2.6 Linux kernels.
@@ -127,14 +125,8 @@ install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/dracut.conf.d
 
 echo "DRACUT_VERSION=%{version}-%{release}" > %{buildroot}%{_prefix}/lib/dracut/dracut-version.sh
 
-%if %mdvver >= 201200
-# (tpg) default image name in 2012 has changed
-sed -i -e 's@PLYMOUTH_LOGO_FILE=.*@PLYMOUTH_LOGO_FILE="/usr/share/plymouth/themes/Mandriva-*/background.png"@' \
+sed -i -e 's@PLYMOUTH_LOGO_FILE=.*@PLYMOUTH_LOGO_FILE="/boot/grub2/themes/OpenMandriva/icons/openmandriva.png"@' \
     %{buildroot}%{_prefix}/lib/dracut/modules.d/??plymouth/plymouth-populate-initrd.sh
-%else
-sed -i -e 's@PLYMOUTH_LOGO_FILE=.*@PLYMOUTH_LOGO_FILE="/usr/share/plymouth/themes/Mandriva-*/welcome.png"@' \
-    %{buildroot}%{_prefix}/lib/dracut/modules.d/??plymouth/plymouth-populate-initrd.sh
-%endif
 
 # bluca remove patch backup files
 find %{buildroot} -type f -name '*.orig' -exec rm {} \;
@@ -159,10 +151,6 @@ touch %{buildroot}%{_localstatedir}/log/dracut.log
 mkdir -p %{buildroot}%{_sysconfdir}/logrotate.d
 install -m 0644 dracut.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/dracut
 
-cat > README.urpmi << EOF
-dracut is the default mkinitrd replacement in %{distribution}
-EOF
-
 # rpmlint madness
 chmod 755 %{buildroot}%{_prefix}/lib/dracut/modules.d/99aufs-mount/install
 
@@ -178,16 +166,17 @@ install -m755 %{SOURCE4} %{buildroot}%{_bindir}/initrd-backup.sh
 ln -sf  %{_sbindir}/mkinitrd %{buildroot}/sbin/mkinitrd
 ln -sf  %{_sbindir}/lsinitrd %{buildroot}/sbin/lsinitrd
 
+# (tpg) remove not needed modules
+for i in 00bootchart 00dash 05busybox 95dasd 95zfcp 95znet 50gensplash; do
+    rm -rf %{buildroot}%{_prefix}/lib/dracut/modules.d/$i
+done
+
 %ifarch %{ix86} %{x86_64}
 %post
 # (tpg) run initrd rebuild only on dracut update
-if [ $1 -ge 2 ]; then
-	cd /boot > /dev/null
-	for i in $(ls vmlinuz-[0-9]*| sed 's/.*vmlinuz-//g')
-	do
-		/sbin/depmod -a "$i"
-		/usr/bin/dracut -f --kver "$i"
-	done
+if [ $1 -ge 2 ] && [ -e /boot/vmlinuz-$(uname -r) ]; then
+    /sbin/depmod -a "$(uname -r)"
+    /sbin/dracut -f --kver "$(uname -r)"
 fi
 %endif
 

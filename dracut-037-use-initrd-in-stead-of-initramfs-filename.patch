@@ -1,6 +1,42 @@
-diff -Naur dracut-047/dracut-initramfs-restore.sh dracut-047.tpg/dracut-initramfs-restore.sh
---- dracut-047/dracut-initramfs-restore.sh	2018-02-19 09:00:33.000000000 +0000
-+++ dracut-047.tpg/dracut-initramfs-restore.sh	2018-02-23 20:12:10.301234000 +0000
+diff -Naur dracut-050/50-dracut.install dracut-050.tpg/50-dracut.install
+--- dracut-050/50-dracut.install	2020-03-04 10:43:22.000000000 +0000
++++ dracut-050.tpg/50-dracut.install	2020-03-12 10:47:00.098049900 +0000
+@@ -15,7 +15,7 @@
+     INITRD="initrd"
+ else
+     BOOT_DIR_ABS="/boot"
+-    INITRD="initramfs-${KERNEL_VERSION}.img"
++    INITRD="initrd-${KERNEL_VERSION}.img"
+ fi
+ 
+ ret=0
+diff -Naur dracut-050/51-dracut-rescue-postinst.sh dracut-050.tpg/51-dracut-rescue-postinst.sh
+--- dracut-050/51-dracut-rescue-postinst.sh	2020-03-04 10:43:22.000000000 +0000
++++ dracut-050.tpg/51-dracut-rescue-postinst.sh	2020-03-12 10:47:08.318049947 +0000
+@@ -16,7 +16,7 @@
+ [[ $MACHINE_ID ]] || exit 1
+ [[ -f $KERNEL_IMAGE ]] || exit 1
+ 
+-INITRDFILE="/boot/initramfs-0-rescue-${MACHINE_ID}.img"
++INITRDFILE="/boot/initrd-0-rescue-${MACHINE_ID}.img"
+ NEW_KERNEL_IMAGE="${KERNEL_IMAGE%/*}/vmlinuz-0-rescue-${MACHINE_ID}"
+ 
+ [[ -f $INITRDFILE ]] && [[ -f $NEW_KERNEL_IMAGE ]] && exit 0
+diff -Naur dracut-050/51-dracut-rescue.install dracut-050.tpg/51-dracut-rescue.install
+--- dracut-050/51-dracut-rescue.install	2020-03-04 10:43:22.000000000 +0000
++++ dracut-050.tpg/51-dracut-rescue.install	2020-03-12 10:47:29.139050064 +0000
+@@ -68,7 +68,7 @@
+     BOOT_DIR_ABS="/boot"
+     LOADER_ENTRY="$BLS_DIR/${MACHINE_ID}-0-rescue.conf"
+     KERNEL="vmlinuz-0-rescue-${MACHINE_ID}"
+-    INITRD="initramfs-0-rescue-${MACHINE_ID}.img"
++    INITRD="initrd-0-rescue-${MACHINE_ID}.img"
+ fi
+ 
+ ret=0
+diff -Naur dracut-050/dracut-initramfs-restore.sh dracut-050.tpg/dracut-initramfs-restore.sh
+--- dracut-050/dracut-initramfs-restore.sh	2020-03-04 10:43:22.000000000 +0000
++++ dracut-050.tpg/dracut-initramfs-restore.sh	2020-03-12 10:44:13.935048964 +0000
 @@ -19,7 +19,7 @@
  if [[ $MACHINE_ID ]] && [[ -d /boot/${MACHINE_ID} || -L /boot/${MACHINE_ID} ]] ; then
      IMG="/boot/${MACHINE_ID}/${KERNEL_VERSION}/initrd"
@@ -10,22 +46,27 @@ diff -Naur dracut-047/dracut-initramfs-restore.sh dracut-047.tpg/dracut-initramf
  
  cd /run/initramfs
  
-diff -Naur dracut-047/dracut.sh dracut-047.tpg/dracut.sh
---- dracut-047/dracut.sh	2018-02-19 09:00:33.000000000 +0000
-+++ dracut-047.tpg/dracut.sh	2018-02-23 20:13:46.650419000 +0000
-@@ -778,7 +778,7 @@
-         outfile="$efidir/Linux/linux-$kernel${MACHINE_ID:+-${MACHINE_ID}}${BUILD_ID:+-${BUILD_ID}}.efi"
+diff -Naur dracut-050/dracut.sh dracut-050.tpg/dracut.sh
+--- dracut-050/dracut.sh	2020-03-04 10:43:22.000000000 +0000
++++ dracut-050.tpg/dracut.sh	2020-03-12 10:45:17.215049321 +0000
+@@ -823,11 +823,11 @@
+         outfile="$dracutsysrootdir$efidir/Linux/linux-$kernel${MACHINE_ID:+-${MACHINE_ID}}${BUILD_ID:+-${BUILD_ID}}.efi"
      else
-         if [[ -e "/boot/vmlinuz-$kernel" ]]; then
+         if [[ -e "$dracutsysrootdir/boot/vmlinuz-$kernel" ]]; then
 -            outfile="/boot/initramfs-$kernel.img"
 +            outfile="/boot/initrd-$kernel.img"
-         elif [[ $MACHINE_ID ]] && ( [[ -d /boot/${MACHINE_ID} ]] || [[ -L /boot/${MACHINE_ID} ]] ); then
-             outfile="/boot/${MACHINE_ID}/$kernel/initrd"
+         elif [[ $MACHINE_ID ]] && ( [[ -d $dracutsysrootdir/boot/${MACHINE_ID} ]] || [[ -L $dracutsysrootdir/boot/${MACHINE_ID} ]] ); then
+             outfile="$dracutsysrootdir/boot/${MACHINE_ID}/$kernel/initrd"
          else
-diff -Naur dracut-047/lsinitrd.sh dracut-047.tpg/lsinitrd.sh
---- dracut-047/lsinitrd.sh	2018-02-19 09:00:33.000000000 +0000
-+++ dracut-047.tpg/lsinitrd.sh	2018-02-23 20:14:10.893465000 +0000
-@@ -99,7 +99,7 @@
+-            outfile="$dracutsysrootdir/boot/initramfs-$kernel.img"
++            outfile="$dracutsysrootdir/boot/initrd-$kernel.img"
+         fi
+     fi
+ fi
+diff -Naur dracut-050/lsinitrd.sh dracut-050.tpg/lsinitrd.sh
+--- dracut-050/lsinitrd.sh	2020-03-04 10:43:22.000000000 +0000
++++ dracut-050.tpg/lsinitrd.sh	2020-03-12 10:45:41.827049459 +0000
+@@ -102,7 +102,7 @@
          && [[ -d /boot/${MACHINE_ID} || -L /boot/${MACHINE_ID} ]] ; then
          image="/boot/${MACHINE_ID}/${KERNEL_VERSION}/initrd"
      else
