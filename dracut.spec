@@ -3,7 +3,6 @@
 # directory.
 %global __requires_exclude pkg-config
 
-
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	050
@@ -180,7 +179,6 @@ fi
 
 %files
 %doc README.generic README.modules README.kernel HACKING TODO AUTHORS
-%doc README.urpmi
 %dir %{_datadir}/dracut
 %dir %{_var}/lib/dracut
 %dir %{_var}/lib/dracut/overlay
