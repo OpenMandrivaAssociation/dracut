@@ -141,7 +141,6 @@ mv %{buildroot}%{_bindir}/* %{buildroot}%{_sbindir}/
 
 ln -s %{_sbindir}/dracut %{buildroot}%{_bindir}/dracut
 ln -s %{_sbindir}/dracut %{buildroot}/sbin/dracut
-ln -s %{_prefix}/lib/dracut/dracut-install %{buildroot}%{_sbindir}/dracut-install
 
 mkdir -p %{buildroot}%{_localstatedir}/log
 touch %{buildroot}%{_localstatedir}/log/dracut.log
@@ -196,7 +195,6 @@ fi
 %{_bindir}/dracut
 %{_bindir}/initrd-backup.sh
 %{_sbindir}/dracut-catimages
-%{_sbindir}/dracut-install
 %{_sbindir}/lsinitrd
 %{_sbindir}/mkinitrd
 %{_unitdir}/*.service
