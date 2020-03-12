@@ -215,7 +215,7 @@ fi
 %{_datadir}/bash-completion/completions/lsinitrd
 %{_mandir}/man1/lsinitrd.1.*
 %{_mandir}/man5/dracut.conf.5*
-%{_mandir}/man7/dracut.bootup.7.xz
+%{_mandir}/man7/dracut.bootup.7*
 %{_mandir}/man7/dracut.kernel.7*
 %{_mandir}/man7/dracut.cmdline.7*
 %{_mandir}/man7/dracut.modules.7*
