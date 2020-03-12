@@ -43,7 +43,6 @@ Patch1018:	dracut-044-bsdcpio-compat.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
-%if 0
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
@@ -87,7 +86,6 @@ Obsoletes:	mkinitrd < 6.0.93-32
 Provides:	mkinitrd = 6.0.93-32
 Provides:	mkinitrd-command
 Obsoletes:	nash < 6.0.93-32
-%endif
 
 %description
 Dracut contains tools to create a bootable initramfs for 2.6 Linux kernels.
