@@ -6,7 +6,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	050
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -171,10 +171,15 @@ done
 %post
 # (tpg) run initrd rebuild only on dracut update
 if [ $1 -ge 2 ] && [ -e /boot/vmlinuz-$(uname -r) ]; then
+    [ -e ]
     /sbin/depmod -a "$(uname -r)"
     /sbin/dracut -f --kver "$(uname -r)"
 fi
 %endif
+
+%triggerin -- %{name} < 050-3
+# (tpg) remove wrong symlink
+rm -rf %{_sbindir}/dracut-install ||:
 
 %files
 %doc README.generic README.modules README.kernel HACKING TODO AUTHORS
