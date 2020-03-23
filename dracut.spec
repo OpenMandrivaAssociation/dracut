@@ -6,7 +6,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	050
-Release:	3
+Release:	4
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -54,7 +54,7 @@ BuildRequires:	pkgconfig(libkmod)
 Suggests:	plymouth
 Requires:	udev
 Requires:	util-linux
-Requires:	kmod
+Requires:	kmod >= 27-3
 Requires:	e2fsprogs
 Requires:	f2fs-tools
 Requires:	cpio
@@ -171,7 +171,6 @@ done
 %post
 # (tpg) run initrd rebuild only on dracut update
 if [ $1 -ge 2 ] && [ -e /boot/vmlinuz-$(uname -r) ]; then
-    [ -e ]
     /sbin/depmod -a "$(uname -r)"
     /sbin/dracut -f --kver "$(uname -r)"
 fi

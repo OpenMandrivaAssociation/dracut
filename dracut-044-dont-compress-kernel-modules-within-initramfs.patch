@@ -11,7 +11,7 @@ diff -Naur dracut-048/dracut-init.sh dracut-048.tpg/dracut-init.sh
 +        case ${mod} in
 +            *.ko.gz) gunzip ${mod} ;;
 +            *.ko.xz) unxz -T0 ${mod} ;;
-+            *.ko.zst) unzstd ${mod} --rm -f ;;
++            *.ko.zst) unzstd ${mod} -q --rm -f ;;
 +        esac
 +    done
 +
