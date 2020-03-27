@@ -6,7 +6,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	050
-Release:	4
+Release:	5
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -118,7 +118,8 @@ install -c -m 755 %{SOURCE17} modules.d/01xorgblacklist/xorgblacklist.sh
 %install
 %make_install
 
-install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/dracut.conf.d
+install -m 644 %{SOURCE3} %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d
+mkdir -p %{buildroot}%{_sysconfdir}/dracut.conf.d
 
 echo "DRACUT_VERSION=%{version}-%{release}" > %{buildroot}%{_prefix}/lib/dracut/dracut-version.sh
 
@@ -188,10 +189,11 @@ rm -rf %{_sbindir}/dracut-install ||:
 %dir %{_prefix}/lib/dracut/modules.d
 %dir %{_prefix}/lib/kernel/install.d
 %dir %{_sysconfdir}/dracut.conf.d
+%dir %{_prefix}/lib/dracut/dracut.conf.d
 %config %{_sysconfdir}/dracut.conf
 %config %{_sysconfdir}/logrotate.d/dracut
 %attr(0644,root,root) %ghost %config(missingok,noreplace) %{_localstatedir}/log/dracut.log
-%{_sysconfdir}/dracut.conf.d/50-dracut-distro.conf
+%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
 /sbin/dracut
 /sbin/mkinitrd
 /sbin/lsinitrd
@@ -222,6 +224,6 @@ rm -rf %{_sbindir}/dracut-install ||:
 %{_mandir}/man7/dracut.cmdline.7*
 %{_mandir}/man7/dracut.modules.7*
 %{_mandir}/man8/dracut*.8*
-%{_mandir}/man8//mkinitrd*.8*
+%{_mandir}/man8/mkinitrd*.8*
 %dir %{_datadir}/pkgconfig
 %{_datadir}/pkgconfig/dracut.pc
