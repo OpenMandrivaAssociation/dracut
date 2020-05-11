@@ -1,0 +1,23 @@
+diff -Naur dracut-050/modules.d/06rngd/module-setup.sh dracut-050.tpg/modules.d/06rngd/module-setup.sh
+--- dracut-050/modules.d/06rngd/module-setup.sh	2020-03-04 10:43:22.000000000 +0000
++++ dracut-050.tpg/modules.d/06rngd/module-setup.sh	2020-05-11 12:56:59.524007423 +0000
+@@ -33,6 +33,8 @@
+ install() {
+     inst rngd
+     inst_simple "${moddir}/rngd.service" "${systemdsystemunitdir}/rngd.service"
++    # make sure dependant libs are installed too
++    inst_libdir_file opensc-pkcs11.so
+ 
+     systemctl -q --root "$initdir" add-wants sysinit.target rngd.service
+ }
+diff -Naur dracut-050/modules.d/06rngd/rngd.service dracut-050.tpg/modules.d/06rngd/rngd.service
+--- dracut-050/modules.d/06rngd/rngd.service	2020-03-04 10:43:22.000000000 +0000
++++ dracut-050.tpg/modules.d/06rngd/rngd.service	2020-05-11 12:56:01.936007099 +0000
+@@ -2,6 +2,7 @@
+ Description=Hardware RNG Entropy Gatherer Daemon
+ DefaultDependencies=no
+ Before=systemd-udevd.service
++ConditionVirtualization=!container
+ 
+ [Service]
+ ExecStart=/usr/sbin/rngd -f

@@ -6,7 +6,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	050
-Release:	6
+Release:	7
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -39,6 +39,8 @@ Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
 # indicator has to be the first argument
 Patch1018:	dracut-044-bsdcpio-compat.patch
 #Patch1020:	dracut-045-fix-dash-syntax.patch
+# (tpg) fix rngd module, PR sent to upstream
+Patch1030:	dracut-050-fix-rngd.patch
 
 ### GIT PATCHES GOES HERE  ###
 ###
