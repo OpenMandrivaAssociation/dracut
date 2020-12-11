@@ -6,7 +6,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	050
-Release:	8
+Release:	9
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -43,7 +43,19 @@ Patch1018:	dracut-044-bsdcpio-compat.patch
 Patch1030:	dracut-050-fix-rngd.patch
 
 ### GIT PATCHES GOES HERE  ###
+Patch2000:	0000-As-of-v246-of-systemd-syslog-and-syslog-console-swit.patch
+Patch2001:	0000-Makefile-really-make-externally-defined-CFLAGS-work.patch
+Patch2002:	0000-i18n-Always-install-etc-vconsole.conf.patch
+Patch2003:	0000-systemd-skip-dependency-add-for-non-existent-units.patch
+Patch2004:	0000-install-also-install-post-weak-dependencies-of-kerne.patch
+Patch2005:	0000-dracut.sh-fix-early-microcode-detection-logic.patch
+Patch2006:	0000-mount-root.sh-fix-writing-fstab-file-with-missing-fs.patch
+Patch2007:	0000-Allow-DRACUT_INSTALL-to-be-not-an-absolute-path.patch
+Patch2008:	0000-dracut-install-ignore-bogus-preload-libs.patch
+Patch2009:	0000-dracut-install-fix-edge-case-regression-with-weak-mo.patch
+Patch2010:	0000-dracut-install-Globbing-support-for-resolving-firmwa.patch
 ###
+
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc

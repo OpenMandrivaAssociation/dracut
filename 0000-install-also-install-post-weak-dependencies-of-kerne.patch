@@ -1,0 +1,49 @@
+From 6dafdda4a6bdb8721133e4267553c5d86564f9e8 Mon Sep 17 00:00:00 2001
+From: Lukas Nykryn <lnykryn@redhat.com>
+Date: Thu, 2 Jul 2020 09:08:03 +0200
+Subject: [PATCH] install: also install post weak dependencies of kernel
+ modules
+
+---
+ install/dracut-install.c | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
+
+diff --git a/install/dracut-install.c b/install/dracut-install.c
+index 3d64ed7a..9fbd72cd 100644
+--- a/install/dracut-install.c
++++ b/install/dracut-install.c
+@@ -1482,9 +1482,13 @@ static int install_dependent_modules(struct kmod_list *modlist)
+ 			ret = install_dependent_modules(modlist);
+ 			if (ret == 0) {
+ 				ret = kmod_module_get_softdeps(mod, &modpre, &modpost);
+-				if (ret == 0)
+-					ret = install_dependent_modules(modpre);
+-			}
++                                if (ret == 0) {                        
++                                        int r;
++                                        ret = install_dependent_modules(modpre);    
++                                        r = install_dependent_modules(modpost);
++                                        ret = ret ? : r;
++                                }
++                        }
+                 } else {
+                         log_error("dracut_install '%s' '%s' ERROR", path, &path[kerneldirlen]);
+                 }
+@@ -1545,8 +1549,12 @@ static int install_module(struct kmod_module *mod)
+ 
+         if (ret == 0) {
+                 ret = kmod_module_get_softdeps(mod, &modpre, &modpost);
+-                if (ret == 0)
+-                        ret = install_dependent_modules(modpre);
++                if (ret == 0) {                        
++                        int r;
++                        ret = install_dependent_modules(modpre);    
++                        r = install_dependent_modules(modpost);
++                        ret = ret ? : r;
++                }
+         }
+ 
+         return ret;
+-- 
+2.29.2
+

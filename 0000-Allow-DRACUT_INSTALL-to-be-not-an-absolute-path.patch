@@ -1,0 +1,58 @@
+From f84ad9e062519c43264f1a512227621b3bf1853b Mon Sep 17 00:00:00 2001
+From: Mikhail Novosyolov <m.novosyolov@rosalinux.ru>
+Date: Fri, 27 Mar 2020 16:16:07 +0300
+Subject: [PATCH] Allow $DRACUT_INSTALL to be not an absolute path
+
+/usr/sbin/dracut-install is a symlink:
+$ file /usr/sbin/dracut-install
+/usr/sbin/dracut-install: symbolic link to ../lib/dracut/dracut-install
+
+It resulted to "dracut-install not found" error:
+
++++ for p in $DRACUT_PATH
++++ [[ -L /sbin/dracut-install ]]
++++ [[ -x /sbin/dracut-install ]]
++++ for p in $DRACUT_PATH
++++ [[ -L /bin/dracut-install ]]
++++ [[ -x /bin/dracut-install ]]
++++ for p in $DRACUT_PATH
++++ [[ -L /usr/sbin/dracut-install ]]
++++ printf '%s\n' dracut-install
++++ return 0
+++ DRACUT_INSTALL=dracut-install
+++ [[ -n dracut-install ]]
+++ [[ -n dracut-install ]]
+++ DRINSTALLPARTS=0
+++ for i in $DRACUT_INSTALL
+++ DRINSTALLPARTS=1
+++ [[ 1 = 1 ]]
+++ [[ -x dracut-install ]]
+++ dfatal 'dracut-install not found!'
+++ set +x
+dracut: dracut-install not found!
+
+[ -x <not a path to file> ] is not correct and will always be false.
+But actually it is available. Let's just allow it to be not an absolute path.
+Maybe some other places can be improved to avoid DRACUT_INSTALL being not an absolute path.
+
+Signed-off-by: Mikhail Novosyolov <m.novosyolov@rosalinux.ru>
+---
+ dracut-init.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dracut-init.sh b/dracut-init.sh
+index a8348b79..837267aa 100644
+--- a/dracut-init.sh
++++ b/dracut-init.sh
+@@ -183,7 +183,7 @@ for i in $DRACUT_INSTALL ; do
+     DRINSTALLPARTS=$(($DRINSTALLPARTS+1))
+ done
+ 
+-if [[ $DRINSTALLPARTS = 1 ]] && ! [[ -x $DRACUT_INSTALL ]]; then
++if [[ $DRINSTALLPARTS = 1 ]] && ! command -v "$DRACUT_INSTALL" > /dev/null 2>&1 ; then
+     dfatal "dracut-install not found!"
+     exit 10
+ fi
+-- 
+2.29.2
+
