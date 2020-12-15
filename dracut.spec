@@ -5,13 +5,13 @@
 
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	050
-Release:	9
+Version:	051
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
 # http://git.kernel.org/cgit/boot/dracut/dracut.git/
-Source0:	https://github.com/dracutdevs/dracut/archive/%{name}-%{version}.tar.gz
+Source0:	https://mirrors.edge.kernel.org/pub/linux/utils/boot/dracut/dracut-%{version}.tar.xz
 Source3:	50-dracut-distro.conf
 # (tpg) simple script to provide a backup for current working initrd file
 Source4:	initrd-backup.sh
@@ -29,9 +29,7 @@ Patch1003:	dracut-007-aufs-mount.patch
 Patch0004:	dracut-045-aarch64-ld-linux-workaround.patch
 Patch1006:	dracut-037-modprobe-loop.patch
 Patch1010:	dracut-037-busybox-fallback-to-busybox.static-if-no-busybox.patch
-Patch1011:	dracut-037-use-busybox--list.patch
 Patch1012:	dracut-044-dont-compress-kernel-modules-within-initramfs.patch
-Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
 
 # (tpg) workaround for bug https://issues.openmandriva.org/show_bug.cgi?id=669
 #Patch1017:	dracut-037-fix-missing-locale-settings.patch
@@ -39,22 +37,6 @@ Patch1015:	dracut-037-use-initrd-in-stead-of-initramfs-filename.patch
 # indicator has to be the first argument
 Patch1018:	dracut-044-bsdcpio-compat.patch
 #Patch1020:	dracut-045-fix-dash-syntax.patch
-# (tpg) fix rngd module, PR sent to upstream
-Patch1030:	dracut-050-fix-rngd.patch
-
-### GIT PATCHES GOES HERE  ###
-Patch2000:	0000-As-of-v246-of-systemd-syslog-and-syslog-console-swit.patch
-Patch2001:	0000-Makefile-really-make-externally-defined-CFLAGS-work.patch
-Patch2002:	0000-i18n-Always-install-etc-vconsole.conf.patch
-Patch2003:	0000-systemd-skip-dependency-add-for-non-existent-units.patch
-Patch2004:	0000-install-also-install-post-weak-dependencies-of-kerne.patch
-Patch2005:	0000-dracut.sh-fix-early-microcode-detection-logic.patch
-Patch2006:	0000-mount-root.sh-fix-writing-fstab-file-with-missing-fs.patch
-Patch2007:	0000-Allow-DRACUT_INSTALL-to-be-not-an-absolute-path.patch
-Patch2008:	0000-dracut-install-ignore-bogus-preload-libs.patch
-Patch2009:	0000-dracut-install-fix-edge-case-regression-with-weak-mo.patch
-Patch2010:	0000-dracut-install-Globbing-support-for-resolving-firmwa.patch
-###
 
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
@@ -109,6 +91,8 @@ NFS, iSCSI, NBD, FCoE with the dracut-network package.
 
 %prep
 %autosetup -p1
+find . -type f |xargs sed -i -e 's,initramfs-,initrd-,g'
+find . -type f |xargs sed -i -e 's,dracut-initrd-restore,dracut-initramfs-restore,g'
 
 # We don't want to strip dracut-install, that's debuginfo's job
 sed -i -e 's,\$(strip),,g' install/Makefile
@@ -126,8 +110,11 @@ install -c -m 755 %{SOURCE17} modules.d/01xorgblacklist/xorgblacklist.sh
 	--systemdsystemunitdir=%{_unitdir} \
 	--bashcompletiondir=$(pkg-config --variable=completionsdir bash-completion) \
 	--libdir=%{_prefix}/lib
-
-%make_build CC=%{__cc}
+# Setting DRACUT_VERSION and DRACUT_FULL_VERSION prevents
+# the Makefile from generating a bogus version tag from
+# "git describe" (which isn't there when building from
+# a tarball)
+%make_build CC=%{__cc} DRACUT_VERSION=%{version} DRACUT_FULL_VERSION=%{version}
 
 %install
 %make_install

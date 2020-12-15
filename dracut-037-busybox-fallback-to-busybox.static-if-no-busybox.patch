@@ -1,7 +1,7 @@
-diff -Naur dracut-037/modules.d/05busybox/module-setup.sh dracut-037.tpg/modules.d/05busybox/module-setup.sh
---- dracut-037/modules.d/05busybox/module-setup.sh	2014-03-19 16:16:08.000000000 +0000
-+++ dracut-037.tpg/modules.d/05busybox/module-setup.sh	2014-04-08 22:37:59.876049761 +0000
-@@ -4,7 +4,7 @@
+diff -up dracut-051/modules.d/05busybox/module-setup.sh.6~ dracut-051/modules.d/05busybox/module-setup.sh
+--- dracut-051/modules.d/05busybox/module-setup.sh.6~	2020-12-14 15:34:35.000000000 +0100
++++ dracut-051/modules.d/05busybox/module-setup.sh	2020-12-14 20:36:49.077959481 +0100
+@@ -2,7 +2,7 @@
  
  # called by dracut
  check() {
@@ -10,12 +10,12 @@ diff -Naur dracut-037/modules.d/05busybox/module-setup.sh dracut-037.tpg/modules
  
      return 255
  }
-@@ -17,7 +17,7 @@
- # called by dracut
+@@ -16,7 +16,7 @@ depends() {
  install() {
-     local _i _progs _path _busybox
+     local _i _path _busybox
+     local _progs=()
 -    _busybox=$(type -P busybox)
-+    _busybox=$(type -P busybox || type -P busybox.static )
++    _busybox=$(type -P busybox || type -P busybox.static)
      inst $_busybox /usr/bin/busybox
-     for _i in $($_busybox | sed -ne '1,/Currently/!{s/,//g; s/busybox//g; p}')
-     do
+     for _i in $($_busybox --list); do
+         [[ ${_i} == busybox ]] && continue
