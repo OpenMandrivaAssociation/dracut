@@ -148,11 +148,6 @@ mv %{buildroot}%{_bindir}/* %{buildroot}%{_sbindir}/
 ln -s %{_sbindir}/dracut %{buildroot}%{_bindir}/dracut
 ln -s %{_sbindir}/dracut %{buildroot}/sbin/dracut
 
-mkdir -p %{buildroot}%{_localstatedir}/log
-touch %{buildroot}%{_localstatedir}/log/dracut.log
-mkdir -p %{buildroot}%{_sysconfdir}/logrotate.d
-install -m 0644 dracut.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/dracut
-
 # rpmlint madness
 chmod 755 %{buildroot}%{_prefix}/lib/dracut/modules.d/99aufs-mount/install
 
@@ -193,8 +188,6 @@ fi
 %dir %{_sysconfdir}/dracut.conf.d
 %dir %{_prefix}/lib/dracut/dracut.conf.d
 %config %{_sysconfdir}/dracut.conf
-%config %{_sysconfdir}/logrotate.d/dracut
-%attr(0644,root,root) %ghost %config(missingok,noreplace) %{_localstatedir}/log/dracut.log
 %{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
 /sbin/dracut
 /sbin/mkinitrd
