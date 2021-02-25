@@ -179,7 +179,7 @@ if [ $1 -gt 1 ] && [ -e /boot/vmlinuz-$(uname -r) ] && [ -x /sbin/depmod ] && [ 
 fi
 
 %files
-%doc README.generic README.modules README.kernel HACKING TODO AUTHORS
+%doc README.generic README.kernel AUTHORS HACKING.md NEWS.md
 %dir %{_datadir}/dracut
 %dir %{_var}/lib/dracut
 %dir %{_var}/lib/dracut/overlay
