@@ -19,14 +19,10 @@ Source4:	initrd-backup.sh
 Source15:	xorgblacklist-module-setup.sh
 Source16:	xorgblacklist-pre.sh
 Source17:	xorgblacklist.sh
-# (bor) Restore original Mandriva behaviour of adding bootchart if RPM is installed.
-Patch1001:	dracut-037-undisable_bootchart.patch
 # (bor) compatibility with mkinitrd
 Patch1002:	dracut-010-mkinitrd.patch
 # (bor) Add support for KEYTABLE to dynamically determine whether to install UNICODE or non-UNICODE keymap version.
 Patch1003:	dracut-007-aufs-mount.patch
-# Create a ld-linux-aarch64.so.1 symlink in /lib
-Patch0004:	dracut-045-aarch64-ld-linux-workaround.patch
 Patch1006:	dracut-037-modprobe-loop.patch
 Patch1010:	dracut-037-busybox-fallback-to-busybox.static-if-no-busybox.patch
 Patch1012:	dracut-044-dont-compress-kernel-modules-within-initramfs.patch
@@ -177,18 +173,15 @@ for i in 00bootchart 00dash 05busybox 95dasd 95zfcp 95znet 50gensplash; do
     rm -rf %{buildroot}%{_prefix}/lib/dracut/modules.d/$i
 done
 
-%ifarch %{ix86} %{x86_64}
-%post
-# (tpg) run initrd rebuild only on dracut update
-if [ $1 -ge 2 ] && [ -e /boot/vmlinuz-$(uname -r) ]; then
-    /sbin/depmod -a "$(uname -r)"
-    /sbin/dracut -f --kver "$(uname -r)"
-fi
-%endif
-
 %triggerin -- %{name} < 050-3
 # (tpg) remove wrong symlink
 rm -rf %{_sbindir}/dracut-install ||:
+
+%triggerpostun -- %{name} < %{version}
+if [ $1 -gt 1 ] && [ -e /boot/vmlinuz-$(uname -r) ] && [ -x /sbin/depmod ] && [ -x /sbin/dracut ]; then
+    /sbin/depmod -a "$(uname -r)"
+    /sbin/dracut -f --kver "$(uname -r)"
+fi
 
 %files
 %doc README.generic README.modules README.kernel HACKING TODO AUTHORS

@@ -1,6 +1,6 @@
-diff -up dracut-051/modules.d/05busybox/module-setup.sh.6~ dracut-051/modules.d/05busybox/module-setup.sh
---- dracut-051/modules.d/05busybox/module-setup.sh.6~	2020-12-14 15:34:35.000000000 +0100
-+++ dracut-051/modules.d/05busybox/module-setup.sh	2020-12-14 20:36:49.077959481 +0100
+diff -Naur dracut-053/modules.d/05busybox/module-setup.sh dracut-053.tpg/modules.d/05busybox/module-setup.sh
+--- dracut-053/modules.d/05busybox/module-setup.sh	2021-02-23 15:11:01.000000000 +0000
++++ dracut-053.tpg/modules.d/05busybox/module-setup.sh	2021-02-25 09:48:10.624000000 +0000
 @@ -2,7 +2,7 @@
  
  # called by dracut
@@ -10,11 +10,11 @@ diff -up dracut-051/modules.d/05busybox/module-setup.sh.6~ dracut-051/modules.d/
  
      return 255
  }
-@@ -16,7 +16,7 @@ depends() {
+@@ -16,7 +16,7 @@
  install() {
      local _i _path _busybox
      local _progs=()
--    _busybox=$(type -P busybox)
+-    _busybox=$(find_binary busybox)
 +    _busybox=$(type -P busybox || type -P busybox.static)
      inst $_busybox /usr/bin/busybox
      for _i in $($_busybox --list); do
