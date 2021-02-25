@@ -10,7 +10,7 @@ diff -Naur dracut-053/dracut.sh dracut-053.tpg/dracut.sh
 -                    ${cpio_owner:+-R "$cpio_owner"} -H newc -o --quiet > "${DRACUT_TMPDIR}/initramfs.img"
 +            find . -print0 | sed -e 's,\./,,g' | sort -z \
 +                | cpio -o ${CPIO_REPRODUCIBLE:+--reproducible} --null \
-+                    ${cpio_owner:+-R "%cpio_owner"} -H newc --quiet > "${DRACUT_TMPDIR}/initramfs.img
++                    ${cpio_owner:+-R "%cpio_owner"} -H newc --quiet > "${DRACUT_TMPDIR}/initramfs.img"
          ); then
          dfatal "dracut: creation of $outfile failed"
          exit 1
