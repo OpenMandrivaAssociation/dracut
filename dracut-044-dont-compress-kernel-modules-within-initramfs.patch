@@ -1,7 +1,7 @@
-diff -Naur dracut-048/dracut-init.sh dracut-048.tpg/dracut-init.sh
---- dracut-048/dracut-init.sh	2018-07-06 08:37:51.000000000 +0000
-+++ dracut-048.tpg/dracut-init.sh	2018-07-12 13:14:11.908773703 +0000
-@@ -957,6 +957,16 @@
+diff -Naur dracut-053/dracut-init.sh dracut-053.tpg/dracut-init.sh
+--- dracut-053/dracut-init.sh	2021-02-23 15:11:01.000000000 +0000
++++ dracut-053.tpg/dracut-init.sh	2021-02-25 09:50:58.758000000 +0000
+@@ -986,6 +986,16 @@
          [[ -e $srcmods/$_f ]] && inst_simple "$srcmods/$_f" "/lib/modules/$kernel/$_f"
      done
  
@@ -17,4 +17,4 @@ diff -Naur dracut-048/dracut-init.sh dracut-048.tpg/dracut-init.sh
 +
      # generate module dependencies for the initrd
      if [[ -d $initdir/lib/modules/$kernel ]] && \
-         ! depmod -a -b "$initdir" $kernel; then
+         ! depmod -a -b "$initdir" "$kernel"; then
