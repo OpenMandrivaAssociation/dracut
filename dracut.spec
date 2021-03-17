@@ -6,7 +6,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	053
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -116,14 +116,17 @@ install -c -m 755 %{SOURCE17} modules.d/01xorgblacklist/xorgblacklist.sh
 %make_install
 
 install -m 644 %{SOURCE3} %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d
+
 %ifnarch %{ix86} %{x86_64}
 # Microcode loading is x86 specific
 sed -i -e 's,^early_microcode,# early_microcode,' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
 %endif
+
 %ifarch %{aarch64}
 # aarch64 bootloaders generally don't support zstd compressed initramfs
-sed -i -e 's,zstd,gzip,g' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
+sed -i -e 's,^compress=.*$,compress="gzip",' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
 %endif
+
 mkdir -p %{buildroot}%{_sysconfdir}/dracut.conf.d
 
 echo "DRACUT_VERSION=%{version}-%{release}" > %{buildroot}%{_prefix}/lib/dracut/dracut-version.sh
