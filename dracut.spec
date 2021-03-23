@@ -6,7 +6,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	053
-Release:	3
+Release:	4
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -37,39 +37,38 @@ Patch1018:	dracut-044-bsdcpio-compat.patch
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
-BuildRequires:	dash
 BuildRequires:	bash
 BuildRequires:	asciidoc
 BuildRequires:	systemd-macros
 BuildRequires:	bash-completion
 BuildRequires:	pkgconfig(libkmod)
-Suggests:	plymouth
-Requires:	udev
-Requires:	util-linux
-Requires:	kmod >= 27-3
-Requires:	e2fsprogs
-Requires:	f2fs-tools
+Requires:	bash
+Requires:	coreutils
 Requires:	cpio
+Requires:	filesystem
 Requires:	findutils
 Requires:	grep
-Requires:	coreutils
-Requires:	bash
-Requires:	kbd
-Requires:	tar
+Requires:	kmod >= 27-3
+Requires:	sed
+%ifarch %{armx}
+Requires:	gzip
+%else
+Recommends:	xz
 Recommends:	gzip
 Recommends:	bzip2
-Requires:	file
-Requires:	bridge-utils
+Recommends:	gzip
 Requires:	zstd
-Requires:	dmraid
-Recommends:	xz
-Requires(post):	systemd >= 228
-Requires(post):	filesystem
-Requires(post):	coreutils
-Requires(post):	rpm-helper
-%ifarch %{ix86} %{x86_64}
-Requires(post):	kernel
 %endif
+Requires:	util-linux
+Requires:	systemd >= 228
+Requires:	procps-ng
+Requires:	kbd
+Requires:	file
+%ifarch %{ix86} %{x86_64}
+Requires:	kernel
+Suggests:	plymouth
+%endif
+
 Conflicts:	mkinitrd < 6.0.93-10
 Conflicts:	nash < 6.0.93-10
 Obsoletes:	dracut < 013
@@ -125,6 +124,8 @@ sed -i -e 's,^early_microcode,# early_microcode,' %{buildroot}%{_prefix}/lib/dra
 %ifarch %{aarch64}
 # aarch64 bootloaders generally don't support zstd compressed initramfs
 sed -i -e 's,^compress=.*$,compress="gzip",' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
+# do not add weird drivers for this arch
+sed -i -e '/^add_drivers/d' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
 %endif
 
 mkdir -p %{buildroot}%{_sysconfdir}/dracut.conf.d
