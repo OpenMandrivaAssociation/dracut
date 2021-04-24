@@ -190,6 +190,7 @@ fi
 %dir %{_prefix}/lib/dracut/modules.d
 %dir %{_prefix}/lib/kernel/install.d
 %dir %{_sysconfdir}/dracut.conf.d
+%dir %{_prefix}/lib/dracut
 %dir %{_prefix}/lib/dracut/dracut.conf.d
 %config %{_sysconfdir}/dracut.conf
 %{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
