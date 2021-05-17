@@ -5,8 +5,8 @@
 
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	053
-Release:	4
+Version:	054
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -66,7 +66,7 @@ Requires:	kbd
 Requires:	file
 %ifarch %{ix86} %{x86_64}
 Requires:	kernel
-Suggests:	plymouth
+Recommends:	plymouth
 %endif
 
 Conflicts:	mkinitrd < 6.0.93-10
