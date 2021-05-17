@@ -13,33 +13,24 @@ URL:		https://dracut.wiki.kernel.org/
 # http://git.kernel.org/cgit/boot/dracut/dracut.git/
 Source0:	https://mirrors.edge.kernel.org/pub/linux/utils/boot/dracut/dracut-%{version}.tar.xz
 Source3:	50-dracut-distro.conf
-# (tpg) simple script to provide a backup for current working initrd file
-Source4:	initrd-backup.sh
 # (bero) xorg.blacklist support
 Source15:	xorgblacklist-module-setup.sh
 Source16:	xorgblacklist-pre.sh
 Source17:	xorgblacklist.sh
-# (bor) compatibility with mkinitrd
-Patch1002:	dracut-010-mkinitrd.patch
-# (bor) Add support for KEYTABLE to dynamically determine whether to install UNICODE or non-UNICODE keymap version.
-Patch1003:	dracut-007-aufs-mount.patch
 Patch1006:	dracut-037-modprobe-loop.patch
-Patch1010:	dracut-037-busybox-fallback-to-busybox.static-if-no-busybox.patch
-Patch1012:	dracut-044-dont-compress-kernel-modules-within-initramfs.patch
+# (tpg) disable it for now, as zstd is compresing kernel modules these days
+#Patch1012:	dracut-044-dont-compress-kernel-modules-within-initramfs.patch
 
-# (tpg) workaround for bug https://issues.openmandriva.org/show_bug.cgi?id=669
-#Patch1017:	dracut-037-fix-missing-locale-settings.patch
 # Make cpio invocations more compatible with bsdcpio -- the mode
 # indicator has to be the first argument
 Patch1018:	dracut-044-bsdcpio-compat.patch
-#Patch1020:	dracut-045-fix-dash-syntax.patch
 
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
 BuildRequires:	bash
 BuildRequires:	asciidoc
-BuildRequires:	systemd-macros
+BuildRequires:	systemd-rpm-macros
 BuildRequires:	bash-completion
 BuildRequires:	pkgconfig(libkmod)
 Requires:	bash
@@ -51,6 +42,7 @@ Requires:	grep
 Requires:	kmod >= 27-3
 Requires:	sed
 %ifarch %{armx}
+# (tpg) arm bootloaders generally support gzip compression
 Requires:	gzip
 %else
 Recommends:	xz
@@ -69,14 +61,6 @@ Requires:	kernel
 Recommends:	plymouth
 %endif
 
-Conflicts:	mkinitrd < 6.0.93-10
-Conflicts:	nash < 6.0.93-10
-Obsoletes:	dracut < 013
-Obsoletes:	mkinitrd < 6.0.93-32
-Provides:	mkinitrd = 6.0.93-32
-Provides:	mkinitrd-command
-Obsoletes:	nash < 6.0.93-32
-
 %description
 Dracut contains tools to create a bootable initramfs for 2.6 Linux kernels.
 Unlike existing implementations, dracut does hard-code as little as possible
@@ -89,9 +73,6 @@ NFS, iSCSI, NBD, FCoE with the dracut-network package.
 find . -type f |xargs sed -i -e 's,initramfs-,initrd-,g'
 find . -type f |xargs sed -i -e 's,dracut-initrd-restore,dracut-initramfs-restore,g'
 
-# We don't want to strip dracut-install, that's debuginfo's job
-sed -i -e 's,\$(strip),,g' install/Makefile
-
 # And xorg.blacklist support
 mkdir modules.d/01xorgblacklist
 install -c -m 755 %{SOURCE15} modules.d/01xorgblacklist/module-setup.sh
@@ -99,8 +80,6 @@ install -c -m 755 %{SOURCE16} modules.d/01xorgblacklist/xorgblacklist-pre.sh
 install -c -m 755 %{SOURCE17} modules.d/01xorgblacklist/xorgblacklist.sh
 
 %build
-%serverbuild_hardened
-
 %configure \
 	--systemdsystemunitdir=%{_unitdir} \
 	--bashcompletiondir=$(pkg-config --variable=completionsdir bash-completion) \
@@ -122,7 +101,7 @@ sed -i -e 's,^early_microcode,# early_microcode,' %{buildroot}%{_prefix}/lib/dra
 %endif
 
 %ifarch %{aarch64}
-# aarch64 bootloaders generally don't support zstd compressed initramfs
+# aarch64 bootloaders generally support gzip compression
 sed -i -e 's,^compress=.*$,compress="gzip",' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
 # do not add weird drivers for this arch
 sed -i -e '/^add_drivers/d' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
@@ -152,20 +131,11 @@ mv %{buildroot}%{_bindir}/* %{buildroot}%{_sbindir}/
 ln -s %{_sbindir}/dracut %{buildroot}%{_bindir}/dracut
 ln -s %{_sbindir}/dracut %{buildroot}/sbin/dracut
 
-# rpmlint madness
-chmod 755 %{buildroot}%{_prefix}/lib/dracut/modules.d/99aufs-mount/install
-
 # (tpg) don't follow this usr madness
 # systemctl sits in /bin, and it symlinks to /usr/bin
 sed -i -e 's#/usr/bin/systemctl#/bin/systemctl#g' %{buildroot}%{_prefix}/lib/dracut/modules.d/98dracut-systemd/*.service
 # (tpg) use real path for udevadm
 sed -i -e 's#/usr/bin/udevadm#/sbin/udevadm#g' %{buildroot}%{_prefix}/lib/dracut/modules.d/98dracut-systemd/*.service
-
-install -m755 %{SOURCE4} %{buildroot}%{_bindir}/initrd-backup.sh
-
-# (tpg) compat symlinks to old mkinitrd
-ln -sf  %{_sbindir}/mkinitrd %{buildroot}/sbin/mkinitrd
-ln -sf  %{_sbindir}/lsinitrd %{buildroot}/sbin/lsinitrd
 
 # (tpg) remove not needed modules
 for i in 00bootchart 00dash 05busybox 95dasd 95zfcp 95znet 50gensplash; do
@@ -183,47 +153,42 @@ if [ $1 -gt 1 ] && [ -e /boot/vmlinuz-$(uname -r) ] && [ -x /sbin/depmod ] && [ 
 fi
 
 %files
-%doc README.generic README.kernel AUTHORS HACKING.md NEWS.md
-%dir %{_datadir}/dracut
-%dir %{_var}/lib/dracut
-%dir %{_var}/lib/dracut/overlay
-%dir %{_prefix}/lib/dracut/modules.d
+%doc AUTHORS NEWS.md README.md
+%dir %{_datadir}/%{name}
+%dir %{_var}/lib/%{name}
+%dir %{_var}/lib/%{name}/overlay
+%dir %{_prefix}/lib/%{name}/modules.d
 %dir %{_prefix}/lib/kernel/install.d
-%dir %{_sysconfdir}/dracut.conf.d
-%dir %{_prefix}/lib/dracut
-%dir %{_prefix}/lib/dracut/dracut.conf.d
-%config %{_sysconfdir}/dracut.conf
-%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
-/sbin/dracut
-/sbin/mkinitrd
-/sbin/lsinitrd
-%{_sbindir}/dracut
-%{_bindir}/dracut
-%{_bindir}/initrd-backup.sh
-%{_sbindir}/dracut-catimages
+%dir %{_sysconfdir}/%{name}.conf.d
+%dir %{_prefix}/lib/%{name}
+%dir %{_prefix}/lib/%{name}/%{name}.conf.d
+%config %{_sysconfdir}/%{name}.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/50-%{name}-distro.conf
+/sbin/%{name}
+%{_sbindir}/%{name}
+%{_bindir}/%{name}
+%{_sbindir}/%{name}-catimages
 %{_sbindir}/lsinitrd
-%{_sbindir}/mkinitrd
 %{_unitdir}/*.service
 %{_unitdir}/*/*.service
-%{_prefix}/lib/kernel/install.d/5*-dracut*.install
-%{_prefix}/lib/dracut/dracut-init.sh
-%{_prefix}/lib/dracut/skipcpio
-%{_prefix}/lib/dracut/dracut-install
-%{_prefix}/lib/dracut/dracut-version.sh
-%{_prefix}/lib/dracut/dracut-functions.sh
-%{_prefix}/lib/dracut/dracut-functions
-%{_prefix}/lib/dracut/modules.d/*
-%{_prefix}/lib/dracut/dracut-initramfs-restore
-%{_prefix}/lib/dracut/dracut-logger.sh
-%{_datadir}/bash-completion/completions/dracut
+%{_prefix}/lib/kernel/install.d/5*-%{name}*.install
+%{_prefix}/lib/%{name}/%{name}-util
+%{_prefix}/lib/%{name}/%{name}-init.sh
+%{_prefix}/lib/%{name}/skipcpio
+%{_prefix}/lib/%{name}/%{name}-install
+%{_prefix}/lib/%{name}/%{name}-version.sh
+%{_prefix}/lib/%{name}/%{name}-functions.sh
+%{_prefix}/lib/%{name}/%{name}-functions
+%{_prefix}/lib/%{name}/modules.d/*
+%{_prefix}/lib/%{name}/%{name}-initramfs-restore
+%{_prefix}/lib/%{name}/%{name}-logger.sh
+%{_datadir}/bash-completion/completions/%{name}
 %{_datadir}/bash-completion/completions/lsinitrd
 %{_mandir}/man1/lsinitrd.1.*
-%{_mandir}/man5/dracut.conf.5*
-%{_mandir}/man7/dracut.bootup.7*
-%{_mandir}/man7/dracut.kernel.7*
-%{_mandir}/man7/dracut.cmdline.7*
-%{_mandir}/man7/dracut.modules.7*
-%{_mandir}/man8/dracut*.8*
-%{_mandir}/man8/mkinitrd*.8*
-%dir %{_datadir}/pkgconfig
-%{_datadir}/pkgconfig/dracut.pc
+%{_mandir}/man5/%{name}.conf.5*
+%{_mandir}/man7/%{name}.bootup.7*
+%{_mandir}/man7/%{name}.kernel.7*
+%{_mandir}/man7/%{name}.cmdline.7*
+%{_mandir}/man7/%{name}.modules.7*
+%{_mandir}/man8/%{name}*.8*
+%{_datadir}/pkgconfig/%{name}.pc
