@@ -5,8 +5,8 @@
 
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	054
-Release:	2
+Version:	055
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -24,7 +24,7 @@ Patch1006:	dracut-037-modprobe-loop.patch
 # Make cpio invocations more compatible with bsdcpio -- the mode
 # indicator has to be the first argument
 Patch1018:	dracut-044-bsdcpio-compat.patch
-Patch1019:	https://patch-diff.githubusercontent.com/raw/dracutdevs/dracut/pull/1514.patch
+
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
