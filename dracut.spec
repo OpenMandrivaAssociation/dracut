@@ -6,7 +6,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	055
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -184,11 +184,11 @@ fi
 %{_prefix}/lib/%{name}/%{name}-logger.sh
 %{_datadir}/bash-completion/completions/%{name}
 %{_datadir}/bash-completion/completions/lsinitrd
-%{_mandir}/man1/lsinitrd.1.*
-%{_mandir}/man5/%{name}.conf.5*
-%{_mandir}/man7/%{name}.bootup.7*
-%{_mandir}/man7/%{name}.kernel.7*
-%{_mandir}/man7/%{name}.cmdline.7*
-%{_mandir}/man7/%{name}.modules.7*
-%{_mandir}/man8/%{name}*.8*
+%doc %{_mandir}/man1/lsinitrd.1.*
+%doc %{_mandir}/man5/%{name}.conf.5*
+%doc %{_mandir}/man7/%{name}.bootup.7*
+%doc %{_mandir}/man7/%{name}.kernel.7*
+%doc %{_mandir}/man7/%{name}.cmdline.7*
+%doc %{_mandir}/man7/%{name}.modules.7*
+%doc %{_mandir}/man8/%{name}*.8*
 %{_datadir}/pkgconfig/%{name}.pc
