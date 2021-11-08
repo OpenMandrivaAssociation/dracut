@@ -6,7 +6,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	055
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -105,14 +105,13 @@ sed -i -e 's,^early_microcode,# early_microcode,' %{buildroot}%{_prefix}/lib/dra
 sed -i -e 's,^compress=.*$,compress="gzip",' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
 # do not add weird drivers for this arch
 sed -i -e '/^add_drivers/d' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
+# disable early microcode as it is not supported
+sed -i -e '/^early_microcode="yes"/early_microcode="no"/g' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
 %endif
 
 mkdir -p %{buildroot}%{_sysconfdir}/dracut.conf.d
 
 echo "DRACUT_VERSION=%{version}-%{release}" > %{buildroot}%{_prefix}/lib/dracut/dracut-version.sh
-
-sed -i -e 's@PLYMOUTH_LOGO_FILE=.*@PLYMOUTH_LOGO_FILE="/boot/grub2/themes/OpenMandriva/icons/openmandriva.png"@' \
-    %{buildroot}%{_prefix}/lib/dracut/modules.d/??plymouth/plymouth-populate-initrd.sh
 
 # bluca remove patch backup files
 find %{buildroot} -type f -name '*.orig' -exec rm {} \;
@@ -135,7 +134,7 @@ ln -s %{_sbindir}/dracut %{buildroot}/sbin/dracut
 # systemctl sits in /bin, and it symlinks to /usr/bin
 sed -i -e 's#/usr/bin/systemctl#/bin/systemctl#g' %{buildroot}%{_prefix}/lib/dracut/modules.d/98dracut-systemd/*.service
 # (tpg) use real path for udevadm
-sed -i -e 's#/usr/bin/udevadm#/sbin/udevadm#g' %{buildroot}%{_prefix}/lib/dracut/modules.d/98dracut-systemd/*.service
+sed -i -e 's#/usr/bin/udevadm#/bin/udevadm#g' %{buildroot}%{_prefix}/lib/dracut/modules.d/98dracut-systemd/*.service
 
 # (tpg) remove not needed modules
 for i in 00bootchart 00dash 05busybox 95dasd 95zfcp 95znet 50gensplash; do
@@ -147,9 +146,9 @@ done
 rm -rf %{_sbindir}/dracut-install ||:
 
 %triggerpostun -- %{name} < %{version}
-if [ $1 -gt 1 ] && [ -e /boot/vmlinuz-$(uname -r) ] && [ -x /sbin/depmod ] && [ -x /sbin/dracut ]; then
+if [ $1 -gt 1 ] && [ -e /boot/vmlinuz-$(uname -r) ] && [ -e /sbin/depmod ] && [ -x %{_sbindir}/dracut ]; then
     /sbin/depmod -a "$(uname -r)"
-    /sbin/dracut -f --kver "$(uname -r)"
+    %{_sbindir}/dracut -f --kver "$(uname -r)"
 fi
 
 %files
