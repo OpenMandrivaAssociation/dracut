@@ -6,7 +6,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	055
-Release:	4
+Release:	5
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -101,16 +101,15 @@ install -m 644 %{SOURCE3} %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d
 
 %ifnarch %{ix86} %{x86_64}
 # Microcode loading is x86 specific
-sed -i -e 's,^early_microcode,# early_microcode,' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
+sed -i -e '/^early_microcode="yes"/early_microcode="no"/' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
 %endif
 
 %ifarch %{aarch64}
 # aarch64 bootloaders generally support gzip compression
 sed -i -e 's,^compress=.*$,compress="gzip",' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
-# do not add weird drivers for this arch
-sed -i -e '/^add_drivers/d' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
-# disable early microcode as it is not supported
-sed -i -e '/^early_microcode="yes"/early_microcode="no"/g' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
+# no need to carry x86 legacy cruft in add_drivers for aarch64 -- but
+# keeping evdev and friends there is probably useful
+sed -i -e 's/pata_acpi ata_generic //' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
 %endif
 
 mkdir -p %{buildroot}%{_sysconfdir}/dracut.conf.d
