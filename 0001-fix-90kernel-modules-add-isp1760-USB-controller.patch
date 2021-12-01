@@ -1,0 +1,32 @@
+From 15398458685d376fef56b1bf6fe09ae7c68324c1 Mon Sep 17 00:00:00 2001
+From: Peter Robinson <pbrobinson@gmail.com>
+Date: Sat, 16 Oct 2021 10:41:24 +0100
+Subject: [PATCH] fix(90kernel-modules): add isp1760 USB controller
+
+Like the dwc/chipidea controllers the isp1760 can act in either
+host or gadget mode so it ends up in it's own directory. Add this
+driver into the initrd as it's part of some arm platforms and
+is needed to be able to boot off USB storage.
+
+Fixes issue #1619
+
+Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
+---
+ modules.d/90kernel-modules/module-setup.sh | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/modules.d/90kernel-modules/module-setup.sh b/modules.d/90kernel-modules/module-setup.sh
+index a1aba71b..68358bb5 100755
+--- a/modules.d/90kernel-modules/module-setup.sh
++++ b/modules.d/90kernel-modules/module-setup.sh
+@@ -96,6 +96,7 @@ installkernel() {
+                 "=drivers/usb/dwc2" \
+                 "=drivers/usb/dwc3" \
+                 "=drivers/usb/host" \
++                "=drivers/usb/isp1760" \
+                 "=drivers/usb/misc" \
+                 "=drivers/usb/musb" \
+                 "=drivers/usb/phy" \
+-- 
+2.32.0
+

@@ -29,6 +29,18 @@ Patch1006:	dracut-037-modprobe-loop.patch
 # indicator has to be the first argument
 Patch1018:	dracut-044-bsdcpio-compat.patch
 
+# From Fedora (NOTE: Some of the patches they apply are
+# broken. Don't blindly merge new patches from them,
+# in particular not the one unnecessarily disabling
+# bluetooth keyboards)
+Patch2000:	https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-network-manager-support-teaming-under-NM-systemd.patch
+Patch2001:	https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-network-manager-pull-in-network.target-in-nm-ini.patch
+Patch2002:	https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-network-manager-don-t-pull-in-systemd-udev-settl.patch
+Patch2003:	https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-90kernel-modules-add-Type-C-USB-drivers-for-gene.patch
+Patch2004:	https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-kernel-modules-add-blk_mq_alloc_disk-and-blk_cle.patch
+Patch2005:	https://github.com/dracutdevs/dracut/pull/1611.patch#/0001-fix-network-manager-disable-tty-if-no-console.patch
+Patch2006:	https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-90kernel-modules-add-isp1760-USB-controller.patch
+
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc

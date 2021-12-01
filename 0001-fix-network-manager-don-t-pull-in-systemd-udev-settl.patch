@@ -1,0 +1,39 @@
+From a0f12fb6a09b09f35ab28753d7c4461c10a8b562 Mon Sep 17 00:00:00 2001
+From: Dusty Mabe <dusty@dustymabe.com>
+Date: Tue, 29 Jun 2021 15:11:00 -0400
+Subject: [PATCH] fix(network-manager): don't pull in systemd-udev-settle
+
+We get a nice warning about it being deprecated:
+
+```
+systemd-udev-settle.service is deprecated. Please fix nm-initrd.service not to pull it in.
+```
+
+The service is deprecated because its purpose was to wait for the
+discovery of all hardware, but it didn't guarantee that (see the
+systemd-udev-settle man page).
+
+NM now runs as an independent service and can deal with devices showing
+up at any point, but it does need udev to be started. For now just
+Want/After systemd-udev-trigger.
+---
+ modules.d/35network-manager/nm-initrd.service | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/modules.d/35network-manager/nm-initrd.service b/modules.d/35network-manager/nm-initrd.service
+index 5f9b9043..b9806de0 100644
+--- a/modules.d/35network-manager/nm-initrd.service
++++ b/modules.d/35network-manager/nm-initrd.service
+@@ -1,7 +1,7 @@
+ [Unit]
+ DefaultDependencies=no
+-Wants=systemd-udev-settle.service
+-After=systemd-udev-settle.service
++Wants=systemd-udev-trigger.service
++After=systemd-udev-trigger.service
+ After=dracut-cmdline.service
+ Wants=network.target
+ Before=network.target
+-- 
+2.31.1
+
