@@ -1,27 +1,27 @@
-diff -Naur dracut-054/dracut.sh dracut-054.tpg/dracut.sh
---- dracut-054/dracut.sh	2021-05-14 13:21:11.000000000 +0000
-+++ dracut-054.tpg/dracut.sh	2021-05-17 17:25:42.149601566 +0000
-@@ -2315,9 +2315,9 @@
+diff -Naur dracut-056/dracut.sh dracut-056.tpg/dracut.sh
+--- dracut-056/dracut.sh	2022-02-18 11:32:53.000000000 +0000
++++ dracut-056.tpg/dracut.sh	2022-02-18 18:41:55.114217195 +0000
+@@ -2358,9 +2358,9 @@
+         if ! (
+             umask 077
+             cd "$early_cpio_dir/d"
+-            find . -print0 | sort -z \
+-                | cpio ${CPIO_REPRODUCIBLE:+--reproducible} --null \
+-                    ${cpio_owner:+-R "$cpio_owner"} -H newc -o --quiet > "${DRACUT_TMPDIR}/initramfs.img"
++            find . -print0 | sed -e 's,\./,,g' | sort -z \
++                | cpio -o ${CPIO_REPRODUCIBLE:+--reproducible} --null \
++                    ${cpio_owner:+-R "%cpio_owner"} -H newc --quiet > "${DRACUT_TMPDIR}/initramfs.img"
+         ); then
+             dfatal "dracut: creation of $outfile failed"
+             exit 1
+@@ -2464,8 +2464,8 @@
      if ! (
          umask 077
-         cd "$early_cpio_dir/d"
+         cd "$initdir"
 -        find . -print0 | sort -z \
--            | cpio ${CPIO_REPRODUCIBLE:+--reproducible} --null \
--                ${cpio_owner:+-R "$cpio_owner"} -H newc -o --quiet > "${DRACUT_TMPDIR}/initramfs.img"
+-            | cpio ${CPIO_REPRODUCIBLE:+--reproducible} --null ${cpio_owner:+-R "$cpio_owner"} -H newc -o --quiet \
 +        find . -print0 | sed -e 's,\./,,g' | sort -z \
-+            | cpio -o ${CPIO_REPRODUCIBLE:+--reproducible} --null \
-+                ${cpio_owner:+-R "%cpio_owner"} -H newc --quiet > "${DRACUT_TMPDIR}/initramfs.img"
++            | cpio -o ${CPIO_REPRODUCIBLE:+--reproducible} --null ${cpio_owner:+-R "$cpio_owner"} -H newc --quiet \
+             | $compress >> "${DRACUT_TMPDIR}/initramfs.img"
      ); then
          dfatal "dracut: creation of $outfile failed"
-         exit 1
-@@ -2374,8 +2374,8 @@
- if ! (
-     umask 077
-     cd "$initdir"
--    find . -print0 | sort -z \
--        | cpio ${CPIO_REPRODUCIBLE:+--reproducible} --null ${cpio_owner:+-R "$cpio_owner"} -H newc -o --quiet \
-+    find . -print0 | sed -e 's,\./,,g' | sort -z \
-+        | cpio -o ${CPIO_REPRODUCIBLE:+--reproducible} --null ${cpio_owner:+-R "$cpio_owner"} -H newc --quiet \
-         | $compress >> "${DRACUT_TMPDIR}/initramfs.img"
- ); then
-     dfatal "dracut: creation of $outfile failed"

@@ -5,13 +5,13 @@
 
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	055
-Release:	5
+Version:	056
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
 # http://git.kernel.org/cgit/boot/dracut/dracut.git/
-Source0:	https://mirrors.edge.kernel.org/pub/linux/utils/boot/dracut/dracut-%{version}.tar.xz
+Source0:	https://mirrors.edge.kernel.org/pub/linux/utils/boot/dracut/%{name}-%{version}.tar.xz
 Source3:	50-dracut-distro.conf
 # (bero) xorg.blacklist support
 Source15:	xorgblacklist-module-setup.sh
@@ -29,27 +29,15 @@ Patch1006:	dracut-037-modprobe-loop.patch
 # indicator has to be the first argument
 Patch1018:	dracut-044-bsdcpio-compat.patch
 
-# From Fedora (NOTE: Some of the patches they apply are
-# broken. Don't blindly merge new patches from them,
-# in particular not the one unnecessarily disabling
-# bluetooth keyboards)
-Patch2000:	https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-network-manager-support-teaming-under-NM-systemd.patch
-Patch2001:	https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-network-manager-pull-in-network.target-in-nm-ini.patch
-Patch2002:	https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-network-manager-don-t-pull-in-systemd-udev-settl.patch
-Patch2003:	https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-90kernel-modules-add-Type-C-USB-drivers-for-gene.patch
-Patch2004:	https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-kernel-modules-add-blk_mq_alloc_disk-and-blk_cle.patch
-Patch2005:	https://github.com/dracutdevs/dracut/pull/1611.patch#/0001-fix-network-manager-disable-tty-if-no-console.patch
-Patch2006:	https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-90kernel-modules-add-isp1760-USB-controller.patch
-
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
-BuildRequires:	bash
+BuildRequires:	/bin/sh
 BuildRequires:	asciidoc
 BuildRequires:	systemd-rpm-macros
 BuildRequires:	bash-completion
 BuildRequires:	pkgconfig(libkmod)
-Requires:	bash
+Requires:	/bin/sh
 Requires:	coreutils
 Requires:	cpio
 Requires:	filesystem
@@ -64,7 +52,6 @@ Requires:	gzip
 Recommends:	xz
 Recommends:	gzip
 Recommends:	bzip2
-Recommends:	gzip
 Requires:	zstd
 %endif
 Requires:	util-linux
@@ -86,6 +73,7 @@ NFS, iSCSI, NBD, FCoE with the dracut-network package.
 
 %prep
 %autosetup -p1
+
 find . -type f |xargs sed -i -e 's,initramfs-,initrd-,g'
 find . -type f |xargs sed -i -e 's,dracut-initrd-restore,dracut-initramfs-restore,g'
 
@@ -100,6 +88,7 @@ install -c -m 755 %{SOURCE17} modules.d/01xorgblacklist/xorgblacklist.sh
 	--systemdsystemunitdir=%{_unitdir} \
 	--bashcompletiondir=$(pkg-config --variable=completionsdir bash-completion) \
 	--libdir=%{_prefix}/lib
+
 # Setting DRACUT_VERSION and DRACUT_FULL_VERSION prevents
 # the Makefile from generating a bogus version tag from
 # "git describe" (which isn't there when building from
