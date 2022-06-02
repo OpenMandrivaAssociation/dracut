@@ -6,7 +6,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	056
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -59,8 +59,8 @@ Requires:	systemd >= 228
 Requires:	procps-ng
 Requires:	kbd
 Requires:	file
-%ifarch %{ix86} %{x86_64}
-Requires:	kernel
+%ifarch %{ix86} %{x86_64} aarch64
+Recommends:	kernel
 Recommends:	plymouth
 %endif
 
@@ -127,12 +127,10 @@ chmod +x %{buildroot}%{_prefix}/lib/dracut/modules.d/*/*.sh
 mkdir -p %{buildroot}%{_var}/lib/dracut/overlay
 install -m 755 -d %{buildroot}%{_datadir}/dracut
 
-mkdir -p %{buildroot}%{_sbindir}
-mkdir -p %{buildroot}/sbin
-mv %{buildroot}%{_bindir}/* %{buildroot}%{_sbindir}/
-
-ln -s %{_sbindir}/dracut %{buildroot}%{_bindir}/dracut
-ln -s %{_sbindir}/dracut %{buildroot}/sbin/dracut
+mkdir -p %{buildroot}/sbin/dracut
+mkdir -p %{buildroot}%{_sbindir}/dracut
+ln -s %{_bindir}/dracut %{buildroot}%{_sbindir}/dracut
+ln -s %{_bindir}/dracut %{buildroot}/sbin/dracut
 
 # (tpg) don't follow this usr madness
 # systemctl sits in /bin, and it symlinks to /usr/bin
@@ -150,9 +148,9 @@ done
 rm -rf %{_sbindir}/dracut-install ||:
 
 %triggerpostun -- %{name} < %{version}
-if [ $1 -gt 1 ] && [ -e /boot/vmlinuz-$(uname -r) ] && [ -e /sbin/depmod ] && [ -x %{_sbindir}/dracut ]; then
-    /sbin/depmod -a "$(uname -r)"
-    %{_sbindir}/dracut -f --kver "$(uname -r)"
+if [ $1 -gt 1 ] && [ -e /boot/vmlinuz-$(uname -r) ] && [ -e %{_sbindir}/depmod ] && [ -x %{_bindir}/dracut ]; then
+    %{_sbindir}/depmod -a "$(uname -r)"
+    %{_bindir}/dracut -f --kver "$(uname -r)"
 fi
 
 %files
@@ -169,9 +167,7 @@ fi
 %{_prefix}/lib/%{name}/%{name}.conf.d/50-%{name}-distro.conf
 /sbin/%{name}
 %{_sbindir}/%{name}
-%{_bindir}/%{name}
-%{_sbindir}/%{name}-catimages
-%{_sbindir}/lsinitrd
+%{_bindir}/*
 %{_unitdir}/*.service
 %{_unitdir}/*/*.service
 %{_prefix}/lib/kernel/install.d/5*-%{name}*.install
