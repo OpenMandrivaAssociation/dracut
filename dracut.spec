@@ -6,7 +6,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	056
-Release:	3
+Release:	4
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -127,8 +127,7 @@ chmod +x %{buildroot}%{_prefix}/lib/dracut/modules.d/*/*.sh
 mkdir -p %{buildroot}%{_var}/lib/dracut/overlay
 install -m 755 -d %{buildroot}%{_datadir}/dracut
 
-mkdir -p %{buildroot}/sbin/dracut
-mkdir -p %{buildroot}%{_sbindir}/dracut
+mkdir -p %{buildroot}/{sbin,%{_sbindir}}
 ln -s %{_bindir}/dracut %{buildroot}%{_sbindir}/dracut
 ln -s %{_bindir}/dracut %{buildroot}/sbin/dracut
 
