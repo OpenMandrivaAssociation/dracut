@@ -6,7 +6,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	056
-Release:	4
+Release:	5
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -32,12 +32,10 @@ Patch1018:	dracut-044-bsdcpio-compat.patch
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
-BuildRequires:	/bin/sh
 BuildRequires:	asciidoc
 BuildRequires:	systemd-rpm-macros
 BuildRequires:	bash-completion
 BuildRequires:	pkgconfig(libkmod)
-Requires:	/bin/sh
 Requires:	coreutils
 Requires:	cpio
 Requires:	filesystem
@@ -59,7 +57,7 @@ Requires:	systemd >= 228
 Requires:	procps-ng
 Requires:	kbd
 Requires:	file
-%ifarch %{ix86} %{x86_64} aarch64
+%ifarch %{ix86} %{x86_64} %{aarch64}
 Recommends:	kernel
 Recommends:	plymouth
 %endif
@@ -127,24 +125,10 @@ chmod +x %{buildroot}%{_prefix}/lib/dracut/modules.d/*/*.sh
 mkdir -p %{buildroot}%{_var}/lib/dracut/overlay
 install -m 755 -d %{buildroot}%{_datadir}/dracut
 
-mkdir -p %{buildroot}/{sbin,%{_sbindir}}
-ln -s %{_bindir}/dracut %{buildroot}%{_sbindir}/dracut
-ln -s %{_bindir}/dracut %{buildroot}/sbin/dracut
-
-# (tpg) don't follow this usr madness
-# systemctl sits in /bin, and it symlinks to /usr/bin
-sed -i -e 's#/usr/bin/systemctl#/bin/systemctl#g' %{buildroot}%{_prefix}/lib/dracut/modules.d/98dracut-systemd/*.service
-# (tpg) use real path for udevadm
-sed -i -e 's#/usr/bin/udevadm#/bin/udevadm#g' %{buildroot}%{_prefix}/lib/dracut/modules.d/98dracut-systemd/*.service
-
 # (tpg) remove not needed modules
 for i in 00bootchart 00dash 05busybox 95dasd 95zfcp 95znet 50gensplash; do
     rm -rf %{buildroot}%{_prefix}/lib/dracut/modules.d/$i
 done
-
-%triggerin -- %{name} < 050-3
-# (tpg) remove wrong symlink
-rm -rf %{_sbindir}/dracut-install ||:
 
 %triggerpostun -- %{name} < %{version}
 if [ $1 -gt 1 ] && [ -e /boot/vmlinuz-$(uname -r) ] && [ -e %{_sbindir}/depmod ] && [ -x %{_bindir}/dracut ]; then
@@ -164,8 +148,6 @@ fi
 %dir %{_prefix}/lib/%{name}/%{name}.conf.d
 %config %{_sysconfdir}/%{name}.conf
 %{_prefix}/lib/%{name}/%{name}.conf.d/50-%{name}-distro.conf
-/sbin/%{name}
-%{_sbindir}/%{name}
 %{_bindir}/*
 %{_unitdir}/*.service
 %{_unitdir}/*/*.service
