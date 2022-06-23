@@ -5,13 +5,13 @@
 
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	056
-Release:	5
+Version:	057
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
 # http://git.kernel.org/cgit/boot/dracut/dracut.git/
-Source0:	https://mirrors.edge.kernel.org/pub/linux/utils/boot/dracut/%{name}-%{version}.tar.xz
+Source0:	https://mirrors.edge.kernel.org/pub/linux/utils/boot/dracut/%{name}-%{version}.tar.gz
 Source3:	50-dracut-distro.conf
 # (bero) xorg.blacklist support
 Source15:	xorgblacklist-module-setup.sh
@@ -45,7 +45,7 @@ Requires:	kmod >= 27-3
 Requires:	sed
 %ifarch %{armx}
 # (tpg) arm bootloaders generally support gzip compression
-Requires:	gzip
+Requires:	pigz
 %else
 Recommends:	xz
 Recommends:	gzip
