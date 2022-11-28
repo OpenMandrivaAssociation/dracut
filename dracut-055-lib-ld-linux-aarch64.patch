@@ -25,10 +25,10 @@ diff -up dracut-055/src/install/dracut-install.c.omv~ dracut-055/src/install/dra
 +	  )) {
 +		char *symlinksrc=strdup(src);
 +		char *symlinksrcno64=strstr(symlinksrc, "/lib64");
-+		strcpy(symlinksrcno64+4, symlinksrcno64+6);
++		memmove(symlinksrcno64+4, symlinksrcno64+6, strlen(symlinksrcno64)-5);
 +		char *symlinklib=strdup(lib);
 +		char *symlinklibno64=strstr(symlinklib, "/lib64");
-+		if(symlinklibno64) strcpy(symlinklibno64+4, symlinklibno64+6);
++		if(symlinklibno64) memmove(symlinklibno64+4, symlinklibno64+6, strlen(symlinklibno64)-5);
 +		library_install(symlinksrcno64, symlinklibno64);
 +		free(symlinksrc);
 +		free(symlinklib);
