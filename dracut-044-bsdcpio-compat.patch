@@ -1,7 +1,7 @@
-diff -Naur dracut-056/dracut.sh dracut-056.tpg/dracut.sh
---- dracut-056/dracut.sh	2022-02-18 11:32:53.000000000 +0000
-+++ dracut-056.tpg/dracut.sh	2022-02-18 18:41:55.114217195 +0000
-@@ -2358,9 +2358,9 @@
+diff -Naur dracut-059/dracut.sh dracut-059.tpg/dracut.sh
+--- dracut-059/dracut.sh	2022-12-24 16:49:27.000000000 +0000
++++ dracut-059.tpg/dracut.sh	2023-01-03 16:05:07.900913186 +0000
+@@ -2477,9 +2477,9 @@
          if ! (
              umask 077
              cd "$early_cpio_dir/d"
@@ -12,9 +12,9 @@ diff -Naur dracut-056/dracut.sh dracut-056.tpg/dracut.sh
 +                | cpio -o ${CPIO_REPRODUCIBLE:+--reproducible} --null \
 +                    ${cpio_owner:+-R "%cpio_owner"} -H newc --quiet > "${DRACUT_TMPDIR}/initramfs.img"
          ); then
-             dfatal "dracut: creation of $outfile failed"
+             dfatal "Creation of $outfile failed"
              exit 1
-@@ -2464,8 +2464,8 @@
+@@ -2583,8 +2583,8 @@
      if ! (
          umask 077
          cd "$initdir"
@@ -24,4 +24,4 @@ diff -Naur dracut-056/dracut.sh dracut-056.tpg/dracut.sh
 +            | cpio -o ${CPIO_REPRODUCIBLE:+--reproducible} --null ${cpio_owner:+-R "$cpio_owner"} -H newc --quiet \
              | $compress >> "${DRACUT_TMPDIR}/initramfs.img"
      ); then
-         dfatal "dracut: creation of $outfile failed"
+         dfatal "Creation of $outfile failed"

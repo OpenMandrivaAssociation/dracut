@@ -1,3 +1,5 @@
+%global optflags %{optflags} -Oz
+
 # We ship a .pc file but don't want to have a dep on pkg-config. We
 # strip the automatically generated dep here and instead co-own the
 # directory.
@@ -5,8 +7,8 @@
 
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	057
-Release:	2
+Version:	059
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
