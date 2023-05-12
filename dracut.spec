@@ -8,7 +8,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	059
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -23,6 +23,7 @@ Source17:	xorgblacklist.sh
 # being reachable in /lib even though the more
 # obvious place is /lib64
 Patch0:		dracut-055-lib-ld-linux-aarch64.patch
+Patch1:		dracut-059-try-to-fix-lvm.patch
 Patch1006:	dracut-037-modprobe-loop.patch
 # (tpg) disable it for now, as zstd is compresing kernel modules these days
 #Patch1012:	dracut-044-dont-compress-kernel-modules-within-initramfs.patch
