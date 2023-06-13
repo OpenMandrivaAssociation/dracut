@@ -5,7 +5,7 @@ diff -up dracut-059/modules.d/90lvm/module-setup.sh.omv~ dracut-059/modules.d/90
      inst_script "$moddir/lvm_scan.sh" /sbin/lvm_scan
      inst_hook cmdline 30 "$moddir/parse-lvm.sh"
  
-+    inst_libdir_file "libdevmapper-event.so*"
++    inst_libdir_file "libdevmapper-event*.so*"
 +
      if [[ $hostonly ]] && find_binary lvs &> /dev/null; then
          for dev in "${!host_fs_types[@]}"; do
