@@ -8,7 +8,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	059
-Release:	4
+Release:	5
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
@@ -19,19 +19,6 @@ Source3:	50-dracut-distro.conf
 Source15:	xorgblacklist-module-setup.sh
 Source16:	xorgblacklist-pre.sh
 Source17:	xorgblacklist.sh
-# Make sure ld-linux-aarch64.so.1 and friends end up
-# being reachable in /lib even though the more
-# obvious place is /lib64
-Patch0:		dracut-055-lib-ld-linux-aarch64.patch
-Patch1:		dracut-059-try-to-fix-lvm.patch
-Patch1006:	dracut-037-modprobe-loop.patch
-# (tpg) disable it for now, as zstd is compresing kernel modules these days
-#Patch1012:	dracut-044-dont-compress-kernel-modules-within-initramfs.patch
-
-# Make cpio invocations more compatible with bsdcpio -- the mode
-# indicator has to be the first argument
-Patch1018:	dracut-044-bsdcpio-compat.patch
-
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
@@ -64,6 +51,42 @@ Requires:	file
 Recommends:	kernel
 Recommends:	plymouth
 %endif
+
+%patchlist
+# Make sure ld-linux-aarch64.so.1 and friends end up
+# being reachable in /lib even though the more
+# obvious place is /lib64
+dracut-055-lib-ld-linux-aarch64.patch
+dracut-059-try-to-fix-lvm.patch
+dracut-037-modprobe-loop.patch
+# (tpg) disable it for now, as zstd is compresing kernel modules these days
+#Patch1012:	dracut-044-dont-compress-kernel-modules-within-initramfs.patch
+
+# Make cpio invocations more compatible with bsdcpio -- the mode
+# indicator has to be the first argument
+dracut-044-bsdcpio-compat.patch
+
+# Fedora patches -- good to keep in sync, they are the upstream
+# maintainers of dracut, but they rarely share what's needed
+# to keep it working with upstream repositories...
+# #include <redhat/sucks.h>
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/1521-Never-enable-the-bluetooth-module-by-default.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/1825-Skip-creating-initrd-when-initrd-is-provided.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/2218-add-module-driver-support-for-macbook-keyboards.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/2233-dmsquash-live-restore-compatibility.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/2237-kmoddir-fix-trailing-forwardslash-handling.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/2134-revert-avoid-restarting-NetworkManager.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/2224-network-include-default-mac-none-link.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/2290-remove-dependency-on-multipathd-socket.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/2377-fix-kernel-modules-add-interconnect-drivers.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/2184-add-nvmeof-module.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-dracut.sh-use-dynamically-uefi-s-sections-offset.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-make-iso-scan-trigger-udev-events.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-wait-12-hours-before-halt-on-media-check-fail.patch
+https://github.com/dracutdevs/dracut/commit/bee1c4824a8cd47ce6c01892a548bdc07b1fa678.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-systemd-pcrphase-rename-systemd-pcrphase-binary-.patch
+https://github.com/dracutdevs/dracut/pull/2527.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/2481-remove-microcode-check-based-on-CONFIG_MICROCODE_.patch
 
 %description
 Dracut contains tools to create a bootable initramfs for 2.6 Linux kernels.

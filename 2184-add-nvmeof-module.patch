@@ -1,0 +1,629 @@
+From 43e9997521d6c10ec8dae340dc117dd6cbd73a2a Mon Sep 17 00:00:00 2001
+From: Martin Wilck <mwilck@suse.com>
+Date: Fri, 16 Sep 2022 21:36:52 +0200
+Subject: [PATCH] (Cherry-picked commits:
+ 9664e98b5db603567d42d4d0c6e6ea1bd3d5bf24
+ b3ff3f3fbce6878a754332cd4a05374e5e1156c8
+ a3cf4ec92202df43adf368c7fdd12e35d304a0e4
+ 03921ec09e95ea49f89ae307dcca4e2e3d1bc6d6
+ e93e46520dd89a7357a15441ab6b141ff9ff9aeb
+ 556ef46aa96650d72b2fd850a09fa04dff64bbb8
+ a93968b07567a654d18b8ef2144337d803186eca
+ a65fab69662d3adf52eb968411f59ebc5a173f7c
+ cf8986af7d9a3ce73f330de23d5312f924acea34
+ 7c28e1148c086d8504caab6e70a1bcfda1bbf0b9
+ b03dc850e4630c3b727f71b853a1be588507a59e
+ 0a4d7f9aece172f0f9a9286c94308b7e1ef8d500)
+
+fix(nvmf): nvme list-subsys prints the address using commas as separator
+
+nvme-cli 1.x printed the address using spaces as separator, but nvme-cli 2.x
+prints the address using commas as separator (exact output from sysfs). E.g.,
+output from `cat /sys/class/nvme/nvme0/address`:
+
+traddr=nn-0x201700a09890f5bf:pn-0x201900a09890f5bf,host_traddr=nn-0x200000109b579ef5:pn-0x100000109b579ef5
+
+Also, I suppress rd.nvmf.discover= cmdline option if all fields are empty.
+
+fix(nvmf): don't try to validate network connections in cmdline hook
+
+The cmdline hook runs before any network interfaces have been brought
+up. There's no point in trying to validate the connections at this
+stage.
+
+fix(nvmf): no need to load the nvme module
+
+The module "nvme" is not required for NVMeoF.
+
+fix(nvmf): don't create did-setup file
+
+did-setup files are meant to indicate that an interface setup
+was successful. Don't do it here.
+
+fix(nvmf): don't use "finished" queue for autoconnect
+
+The "finished" initqueue is for testing if everything is alright,
+not for triggering any actions.
+
+fix(nvmf): make sure "rd.nvmf.discover=fc,auto" takes precedence
+
+The command line may contain several rd.nvmf.discover options.
+The "fc,auto" option should take precedence.
+
+fix(nvmf): avoid calling "exit" in a cmdline hook
+
+"exit" should never be executed in dracut hooks, because the
+hooks are sourced by the main script.
+
+fix(nvmf): run cmdline hook before parse-ip-opts.sh
+
+This way we can set "rd.neednet" and have it seen by parse-ip-options.sh
+
+feat(nvmf): set rd.neednet=1 if tcp records encountered
+
+This is currently always the case for NBFT records.
+We can do this now, as we run before parse-ip-options.sh
+
+fix(nvmf): install 8021q module unconditionally
+
+In NBFT setups, VLAN can be configured in the firmware.
+Add the 8021q module in hostonly mode even if VLAN is currently
+not used to be prepared for such configuration change.
+
+fix(nvmf): support /etc/nvme/config.json
+
+Since nvme-cli 2.0, configuration of subsystems to connect to is
+stored under `/etc/nvme` in either `discovery.conf` or `config.json`.
+Attempt discovery also if the latter exists, but not the former.
+Also, install "config.json" if it's present on the root FS.
+
+As before, "rd.nvmf.discover=fc,auto" will force either file to be ignored,
+and NBFT-defined targets take precedence if found.
+
+feat(nvmf): add code for parsing the NBFT
+
+Add code to parse the Nvme-oF Boot Firmware Table (NBFT) according
+to the NVM Express Boot Specification 1.0 [1]. The implementation in
+dracut follows a similar general approach as iBFT support in the
+iscsi module.
+
+NBFT support requires two steps:
+
+(1) Setting up the network and routing according to the
+    HFI ("Host Fabric Interface") records in the NBFT,
+(2) Establishing the actual NVMe-oF connection.
+
+(1) is accomplished by reading the NBFT using JSON output from
+the "nvme nbft show" command, and transforming it into command
+line options ("ip=", "rd.neednet", etc.) understood by dracut's
+network module and its backends. The resulting network setup code
+is backend-agnostic. It has been tested with the "network-legacy"
+and "network-manager" network backend modules. The network setup
+code supports IPv4 and IPv6 with static, RA, or DHCP configurations,
+802.1q VLANs, and simple routing / gateway setup.
+
+(2) is done using the "nvme connect-all" command [2] in the netroot handler,
+which is invoked by networking backends when an interface gets fully
+configured. This patch adds support for "netboot=nbft". The "nbftroot"
+handler calls nvmf-autoconnect.sh, which contains the actual connect
+logic. nvmf-autoconnect.sh itself is preserved, because there are
+other NVMe-oF setups like NVMe over FC which don't depend on the
+network.
+
+The various ways to configure NVMe-oF are prioritized like this:
+
+ 1 FC autoconnect from kernel commandline (rd.nvmf.discover=fc,auto)
+ 2 NBFT, if present
+ 3 discovery.conf or config.json, if present, and cmdline.d parameters,
+   if present (rd.nvmf.discovery=...)
+ 4 FC autoconnect (without kernel command line)
+
+The reason for this priorization is that in the initial RAM fs, we try
+to activate only those connections that are necessary to mount the root
+file system. This avoids confusion, possible contradicting or ambiguous
+configuration, and timeouts from unavailable targets.
+
+A retry logic is implemented for enabling the NVMe-oF connections,
+using the "settled" initqueue, the netroot handler, and eventually, the
+"timeout" initqueue. This is similar to the retry logic of the iscsi module.
+In the "timeout" case, connection to all possible NVMe-oF subsystems
+is attempted.
+
+Two new command line parameters are introduced to make it possible to
+change the priorities above:
+
+ - "rd.nvmf.nonbft" causes the NBFT to be ignored,
+ - "rd.nvmf.nostatic" causes any statically configured NVMe-oF targets
+   (config.json, discovery.conf, and cmdline.d) to be ignored.
+
+These parameters may be helpful to skip attempts to set up broken
+configurations.
+
+At initramfs build time, the nvmf module is now enabled if an NBFT
+table is detected in the system.
+
+[1] https://nvmexpress.org/wp-content/uploads/NVM-Express-Boot-Specification-2022.11.15-Ratified.pdf
+[2] NBFT support in nvme-cli requires the latest upstream code (> v2.4).
+
+Signed-off-by: Martin Wilck <mwilck@suse.com>
+Co-authored-by: John Meneghini <jmeneghi@redhat.com>
+Co-authored-by: Charles Rose <charles.rose@dell.com>
+---
+ man/dracut.cmdline.7.asc                      |   9 +
+ modules.d/95nvmf/module-setup.sh              |  36 ++-
+ modules.d/95nvmf/nbftroot.sh                  |   5 +
+ modules.d/95nvmf/nvmf-autoconnect.sh          |  55 +++-
+ .../95nvmf/parse-nvmf-boot-connections.sh     | 237 ++++++++++++++++--
+ create mode 100755 modules.d/95nvmf/nbftroot.sh
+
+diff --git a/man/dracut.cmdline.7.asc b/man/dracut.cmdline.7.asc
+index 93861c56..47a6b6c7 100644
+--- a/man/dracut.cmdline.7.asc
++++ b/man/dracut.cmdline.7.asc
+@@ -898,6 +898,15 @@ NVMf
+ **rd.nonvmf**::
+     Disable NVMf
+ 
++**rd.nvmf.nonbft**::
++    Disable connecting to targets from the NVMe Boot Firmware Table. Without
++    this parameter, NBFT connections will take precedence over _rd.nvmf.discover_.
++
++**rd.nvmf.nostatic**::
++    Disable connecting to targets that have been statically configured when
++    the initramfs was built. Targets specified with rd.nvmf.discover on the
++    kernel command line will still be tried.
++
+ **rd.nvmf.hostnqn=**__<hostNQN>__::
+     NVMe host NQN to use
+ 
+diff --git a/modules.d/95nvmf/module-setup.sh b/modules.d/95nvmf/module-setup.sh
+index 476b7f7..1dd2ca5 100755
+--- a/modules.d/95nvmf/module-setup.sh
++++ b/modules.d/95nvmf/module-setup.sh
+@@ -2,7 +2,7 @@
+ 
+ # called by dracut
+ check() {
+-    require_binaries nvme || return 1
++    require_binaries nvme jq || return 1
+     [ -f /etc/nvme/hostnqn ] || return 255
+     [ -f /etc/nvme/hostid ] || return 255
+ 
+@@ -18,24 +18,34 @@ check() {
+         for d in device/nvme*; do
+             [ -L "$d" ] || continue
+             if readlink "$d" | grep -q nvme-fabrics; then
+-                read -r trtype < "$d"/transport
++                trtype=$(cat "$d"/transport)
+                 break
+             fi
+         done
+         [[ $trtype == "fc" ]] || [[ $trtype == "tcp" ]] || [[ $trtype == "rdma" ]]
+     }
+ 
++    has_nbft() {
++        local f found=
++        for f in /sys/firmware/acpi/tables/NBFT*; do
++            [ -f "$f" ] || continue
++            found=1
++            break
++        done
++        [[ $found ]]
++    }
++
+     [[ $hostonly ]] || [[ $mount_needs ]] && {
+         pushd . > /dev/null
+         for_each_host_dev_and_slaves is_nvmf
+         local _is_nvmf=$?
+         popd > /dev/null || exit
+         [[ $_is_nvmf == 0 ]] || return 255
+-        if [ ! -f /sys/class/fc/fc_udev_device/nvme_discovery ]; then
+-            if [ ! -f /etc/nvme/discovery.conf ]; then
+-                echo "No discovery arguments present"
+-                return 255
+-            fi
++        if [ ! -f /sys/class/fc/fc_udev_device/nvme_discovery ] \
++            && [ ! -f /etc/nvme/discovery.conf ] \
++            && [ ! -f /etc/nvme/config.json ] && ! has_nbft; then
++            echo "No discovery arguments present"
++            return 255
+         fi
+     }
+     return 0
+@@ -50,7 +60,7 @@ depends() {
+ # called by dracut
+ installkernel() {
+     instmods nvme_fc lpfc qla2xxx
+-    hostonly="" instmods nvme_tcp nvme_fabrics
++    hostonly="" instmods nvme_tcp nvme_fabrics 8021q
+ }
+ 
+ # called by dracut
+@@ -75,7 +85,7 @@ cmdline() {
+         for d in device/nvme*; do
+             [ -L "$d" ] || continue
+             if readlink "$d" | grep -q nvme-fabrics; then
+-                read -r trtype < "$d"/transport
++                trtype=$(cat "$d"/transport)
+                 break
+             fi
+         done
+@@ -98,11 +108,11 @@ cmdline() {
+     }
+ 
+     if [ -f /etc/nvme/hostnqn ]; then
+-        read -r _hostnqn < /etc/nvme/hostnqn
++        _hostnqn=$(cat /etc/nvme/hostnqn)
+         echo -n " rd.nvmf.hostnqn=${_hostnqn}"
+     fi
+     if [ -f /etc/nvme/hostid ]; then
+-        read -r _hostid < /etc/nvme/hostid
++        _hostid=$(cat /etc/nvme/hostid)
+         echo -n " rd.nvmf.hostid=${_hostid}"
+     fi
+ 
+@@ -126,10 +136,12 @@ install() {
+     inst_multiple ip sed
+ 
+     inst_script "${moddir}/nvmf-autoconnect.sh" /sbin/nvmf-autoconnect.sh
++    inst_script "${moddir}/nbftroot.sh" /sbin/nbftroot
+ 
+-    inst_multiple nvme
++    inst_multiple nvme jq
+     inst_hook cmdline 92 "$moddir/parse-nvmf-boot-connections.sh"
+     inst_simple "/etc/nvme/discovery.conf"
++    inst_simple "/etc/nvme/config.json"
+     inst_rules /usr/lib/udev/rules.d/71-nvmf-iopolicy-netapp.rules
+     inst_rules "$moddir/95-nvmf-initqueue.rules"
+     dracut_need_initqueue
+diff --git a/modules.d/95nvmf/nbftroot.sh b/modules.d/95nvmf/nbftroot.sh
+new file mode 100755
+index 0000000..0f33499
+--- /dev/null
++++ b/modules.d/95nvmf/nbftroot.sh
+@@ -0,0 +1,5 @@
++#! /bin/sh
++# This script is called from /sbin/netroot
++
++/sbin/nvmf-autoconnect.sh online
++exit 0
+diff --git a/modules.d/95nvmf/nvmf-autoconnect.sh b/modules.d/95nvmf/nvmf-autoconnect.sh
+index c8f676a..35ee948 100755
+--- a/modules.d/95nvmf/nvmf-autoconnect.sh
++++ b/modules.d/95nvmf/nvmf-autoconnect.sh
+@@ -1,5 +1,54 @@
+-#!/bin/bash
++#!/bin/sh
++# Argument $1 is "settled", "online", or "timeout", indicating
++# the queue from which the script is called.
++# In the "timeout" case, try everything.
++# Otherwise, try options according to the priorities below.
+ 
+-[ -f /sys/class/fc/fc_udev_device/nvme_discovery ] || exit 1
+-echo add > /sys/class/fc/fc_udev_device/nvme_discovery
++[ "$RD_DEBUG" != yes ] || set -x
++
++if [ "$1" = timeout ]; then
++    [ ! -f /sys/class/fc/fc_udev_device/nvme_discovery ] \
++        || echo add > /sys/class/fc/fc_udev_device/nvme_discovery
++    /usr/sbin/nvme connect-all
++    exit 0
++fi
++
++NVMF_HOSTNQN_OK=
++[ ! -f "/etc/nvme/hostnqn" ] || [ ! -f "/etc/nvme/hostid" ] || NVMF_HOSTNQN_OK=1
++
++# Only nvme-cli 2.5 or newer supports the options --nbft and --no-nbft
++# for the connect-all command.
++# Make sure we don't use unsupported options with earlier versions.
++NBFT_SUPPORTED=
++# shellcheck disable=SC2016
++/usr/sbin/nvme connect-all --help 2>&1 | sed -n '/[[:space:]]--nbft[[:space:]]/q1;$q0' \
++    || NBFT_SUPPORTED=1
++
++if [ -e /tmp/nvmf-fc-auto ] && [ "$NVMF_HOSTNQN_OK" ] \
++    && [ -f /sys/class/fc/fc_udev_device/nvme_discovery ]; then
++    # prio 1: cmdline override "rd.nvmf.discovery=fc,auto"
++    echo add > /sys/class/fc/fc_udev_device/nvme_discovery
++    exit 0
++fi
++if [ "$NBFT_SUPPORTED" ] && [ -e /tmp/valid_nbft_entry_found ]; then
++    # prio 2: NBFT
++    /usr/sbin/nvme connect-all --nbft
++    exit 0
++fi
++if [ -f /etc/nvme/discovery.conf ] || [ -f /etc/nvme/config.json ] \
++    && [ "$NVMF_HOSTNQN_OK" ]; then
++    # prio 3: configuration from initrd and/or kernel command line
++    # We can get here even if "rd.nvmf.nonbft" was given, thus use --no-nbft
++    if [ "$NBFT_SUPPORTED" ]; then
++        /usr/sbin/nvme connect-all --no-nbft
++    else
++        /usr/sbin/nvme connect-all
++    fi
++    exit 0
++fi
++if [ "$NVMF_HOSTNQN_OK" ] \
++    && [ -f /sys/class/fc/fc_udev_device/nvme_discovery ]; then
++    # prio 4: no discovery entries, try NVMeoFC autoconnect
++    echo add > /sys/class/fc/fc_udev_device/nvme_discovery
++fi
+ exit 0
+diff --git a/modules.d/95nvmf/parse-nvmf-boot-connections.sh b/modules.d/95nvmf/parse-nvmf-boot-connections.sh
+index 6b26f76..6601837 100755
+--- a/modules.d/95nvmf/parse-nvmf-boot-connections.sh
++++ b/modules.d/95nvmf/parse-nvmf-boot-connections.sh
+@@ -17,13 +17,225 @@
+ # specify any discover parameters for FC.
+ #
+ 
+-type is_ip > /dev/null 2>&1 || . /lib/net-lib.sh
++command -v getarg > /dev/null || . /lib/dracut-lib.sh
++command -v is_ip > /dev/null || . /lib/net-lib.sh
++
++## Sample NBFT output from nvme show-nbft -H -s -d -o json
++# [
++#   {
++#     "filename":"/sys/firmware/acpi/tables/NBFT",
++#     "host":{
++#       "nqn":"nqn.2014-08.org.nvmexpress:uuid:d6f07002-7eb5-4841-a185-400e296afae4",
++#       "id":"111919da-21ea-cc4e-bafe-216d8372dd31",
++#       "host_id_configured":0,
++#       "host_nqn_configured":0,
++#       "primary_admin_host_flag":"not indicated"
++#     },
++#     "subsystem":[
++#       {
++#         "index":1,
++#         "num_hfis":1,
++#         "hfis":[
++#           1
++#         ],
++#         "transport":"tcp",
++#         "transport_address":"192.168.100.216",
++#         "transport_svcid":"4420",
++#         "subsys_port_id":0,
++#         "nsid":1,
++#         "nid_type":"uuid",
++#         "nid":"424d1c8a-8ef9-4681-b2fc-8c343bd8fa69",
++#         "subsys_nqn":"timberland-01",
++#         "controller_id":0,
++#         "asqsz":0,
++#         "pdu_header_digest_required":0,
++#         "data_digest_required":0
++#       }
++#     ],
++#     "hfi":[
++#       {
++#         "index":1,
++#         "transport":"tcp",
++#         "pcidev":"0:0:2.0",
++#         "mac_addr":"52:54:00:4f:97:e9",
++#         "vlan":0,
++#         "ip_origin":63,
++#         "ipaddr":"192.168.100.217",
++#         "subnet_mask_prefix":24,
++#         "gateway_ipaddr":"0.0.0.0",
++#         "route_metric":0,
++#         "primary_dns_ipaddr":"0.0.0.0",
++#         "secondary_dns_ipaddr":"0.0.0.0",
++#         "dhcp_server_ipaddr":"",
++#         "this_hfi_is_default_route":1
++#       }
++#     ],
++#     "discovery":[
++#     ]
++#   }
++# ]
++#
++# If the IP address is derived from DHCP, it sets the field
++# "hfi.dhcp_server_ipaddr" to a non-emtpy value.
++#
++#
++
++nbft_run_jq() {
++    local st
++    local opts="-e"
++
++    while [ $# -gt 0 ]; do
++        case $1 in
++            -*)
++                opts="$opts $1"
++                ;;
++            *)
++                break
++                ;;
++        esac
++        shift
++    done
++    # Not quoting is intentional here. We won't get glob expressions passed.
++    # shellcheck disable=SC2086
++    jq $opts "$1" << EOF
++$2
++EOF
++    st=$?
++    if [ $st -ne 0 ]; then
++        warn "NBFT: jq error while processing \"$1\""
++        return $st
++    else
++        return 0
++    fi
++}
++
++nbft_check_empty_address() {
++    # suppress meaningless or empty IP addresses
++    # "null" is returned by jq if no match found for expression
++    case $1 in
++        null | "::" | "0.0.0.0") ;;
++        *)
++            echo "$1"
++            ;;
++    esac
++}
++
++nbft_parse_hfi() {
++    # false positive of shellcheck - no expansion in variable assignments
++    # shellcheck disable=2086
++    local hfi_json=$1
++    local mac iface ipaddr prefix vlan gateway dns1 dns2 hostname adrfam dhcp
++
++    mac=$(nbft_run_jq -r .mac_addr "$hfi_json") || return 1
++    iface=$(set_ifname nbft "$mac")
++
++    vlan=$(nbft_run_jq .vlan "$hfi_json") || vlan=0
++    # treat VLAN zero as "no vlan"
++    [ "$vlan" -ne 0 ] || vlan=
++
++    [ ! -e /tmp/net."${iface}${vlan:+.$vlan}".has_ibft_config ] || return 0
++
++    dhcp=$(nbft_run_jq -r .dhcp_server_ipaddr "$hfi_json")
++    # We need to check $? here as the above is an assignment
++    # shellcheck disable=2181
++    if [ $? -eq 0 ] && [ "$dhcp" ] && [ "$dhcp" != null ]; then
++        case $dhcp in
++            *:*)
++                echo ip="$iface${vlan:+.$vlan}:dhcp6"
++                ;;
++            *.*.*.*)
++                echo ip="$iface${vlan:+.$vlan}:dhcp"
++                ;;
++            *)
++                warn "Invalid value for dhcp_server_ipaddr: $dhcp"
++                return 1
++                ;;
++        esac
++    else
++        ipaddr=$(nbft_run_jq -r .ipaddr "$hfi_json") || return 1
++
++        case $ipaddr in
++            *.*.*.*)
++                adrfam=ipv4
++                ;;
++            *:*)
++                adrfam=ipv6
++                ;;
++            *)
++                warn "invalid address: $ipaddr"
++                return 1
++                ;;
++        esac
++        prefix=$(nbft_run_jq -r .subnet_mask_prefix "$hfi_json")
++        # Need to check $? here as he above is an assignment
++        # shellcheck disable=2181
++        if [ $? -ne 0 ] && [ "$adrfam" = ipv6 ]; then
++            prefix=128
++        fi
++        # Use brackets for IPv6
++        if [ "$adrfam" = ipv6 ]; then
++            ipaddr="[$ipaddr]"
++        fi
++
++        gateway=$(nbft_check_empty_address \
++            "$(nbft_run_jq -r .gateway_ipaddr "$hfi_json")")
++        dns1=$(nbft_check_empty_address \
++            "$(nbft_run_jq -r .primary_dns_ipaddr "$hfi_json")")
++        dns2=$(nbft_check_empty_address \
++            "$(nbft_run_jq -r .secondary_dns_ipaddr "$hfi_json")")
++        hostname=$(nbft_run_jq -r .host_name "$hfi_json" 2> /dev/null) || hostname=
++
++        echo "ip=$ipaddr::$gateway:$prefix:$hostname:$iface${vlan:+.$vlan}:none${dns1:+:$dns1}${dns2:+:$dns2}"
++    fi
++
++    if [ "$vlan" ]; then
++        echo "vlan=$iface.$vlan:$iface"
++        echo "$mac" > "/tmp/net.$iface.$vlan.has_ibft_config"
++    else
++        echo "$mac" > "/tmp/net.$iface.has_ibft_config"
++    fi
++    : > /tmp/valid_nbft_entry_found
++}
++
++nbft_parse() {
++    local nbft_json n_nbft all_hfi_json n_hfi
++    local j=0 i
++
++    nbft_json=$(nvme nbft show -H -o json) || return 0
++    n_nbft=$(nbft_run_jq ". | length" "$nbft_json") || return 0
++
++    while [ "$j" -lt "$n_nbft" ]; do
++        all_hfi_json=$(nbft_run_jq ".[$j].hfi" "$nbft_json") || continue
++        n_hfi=$(nbft_run_jq ". | length" "$all_hfi_json") || continue
++        i=0
++
++        while [ "$i" -lt "$n_hfi" ]; do
++            nbft_parse_hfi "$(nbft_run_jq ".[$i]" "$all_hfi_json")"
++            i=$((i + 1))
++        done
++        j=$((j + 1))
++    done >> /etc/cmdline.d/40-nbft.conf
++}
+ 
+ if getargbool 0 rd.nonvmf; then
+     warn "rd.nonvmf=0: skipping nvmf"
+     return 0
+ fi
+ 
++if getargbool 0 rd.nvmf.nostatic; then
++    rm -f /etc/cmdline.d/95nvmf-args.conf
++    rm -f /etc/nvme/discovery.conf /etc/nvme/config.json
++fi
++
++if ! getargbool 0 rd.nvmf.nonbft; then
++    for _x in /sys/firmware/acpi/tables/NBFT*; do
++        if [ -f "$_x" ]; then
++            nbft_parse
++            break
++        fi
++    done
++fi
++
+ initqueue --onetime modprobe --all -b -q nvme_tcp nvme_core nvme_fabrics
+ 
+ parse_nvmf_discover() {
+@@ -66,7 +278,7 @@ parse_nvmf_discover() {
+         : > /tmp/nvmf_needs_network
+     elif [ "$trtype" = "fc" ]; then
+         if [ "$traddr" = "auto" ]; then
+-            rm /etc/nvme/discovery.conf
++            rm -f /etc/nvme/discovery.conf /etc/nvme/config.json
+             return 1
+         fi
+         if [ "$hosttraddr" = "none" ]; then
+@@ -94,26 +306,21 @@ if [ -n "$nvmf_hostid" ]; then
+     echo "$nvmf_hostid" > /etc/nvme/hostid
+ fi
+ 
+-NVMF_FC_AUTO=
++rm -f /tmp/nvmf-fc-auto
+ for d in $(getargs rd.nvmf.discover -d nvmf.discover=); do
+     parse_nvmf_discover "$d" || {
+-        NVMF_FC_AUTO=1
++        : > /tmp/nvmf-fc-auto
+         break
+     }
+ done
+ 
+-if [ -e /tmp/nvmf_needs_network ]; then
++if [ -e /tmp/nvmf_needs_network ] || [ -e /tmp/valid_nbft_entry_found ]; then
+     echo "rd.neednet=1" > /etc/cmdline.d/nvmf-neednet.conf
++    # netroot is a global variable that is present in all "sourced" scripts
++    # shellcheck disable=SC2034
++    netroot=nbft
+     rm -f /tmp/nvmf_needs_network
+ fi
+ 
+-# Host NQN and host id are mandatory for NVMe-oF
+-if [ -f "/etc/nvme/hostnqn" ] && [ -f "/etc/nvme/hostid" ]; then
+-
+-    # If no nvme command line arguments present, try autodiscovery
+-    if [ $NVMF_FC_AUTO ] || [ ! -f "/etc/nvme/discovery.conf" ]; then
+-        /sbin/initqueue --settled --onetime --unique --name nvme-fc-autoconnect /sbin/nvmf-autoconnect.sh
+-    else
+-        /sbin/initqueue --settled --onetime --unique --name nvme-discover /usr/sbin/nvme connect-all
+-    fi
+-fi
++/sbin/initqueue --settled --onetime --name nvmf-connect-settled /sbin/nvmf-autoconnect.sh settled
++/sbin/initqueue --timeout --onetime --name nvmf-connect-timeout /sbin/nvmf-autoconnect.sh timeout
+-- 
+2.39.1
+
