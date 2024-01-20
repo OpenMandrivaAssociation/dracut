@@ -117,7 +117,7 @@ install -c -m 755 %{SOURCE17} modules.d/01xorgblacklist/xorgblacklist.sh
 # the Makefile from generating a bogus version tag from
 # "git describe" (which isn't there when building from
 # a tarball)
-%make_build CC=%{__cc} DRACUT_VERSION=%{version} DRACUT_FULL_VERSION=%{version}
+%make_build CC="%{__cc}" DRACUT_VERSION=%{version} DRACUT_FULL_VERSION=%{version}
 
 %install
 %make_install
