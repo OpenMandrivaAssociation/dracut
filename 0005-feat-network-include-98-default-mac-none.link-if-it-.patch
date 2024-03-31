@@ -1,7 +1,8 @@
-From f6810b69ae722096184eaaf282e12a2caa6928b9 Mon Sep 17 00:00:00 2001
+From aa45d7d857b39e0f2824b94902aa9197bee9a479 Mon Sep 17 00:00:00 2001
 From: Dusty Mabe <dusty@dustymabe.com>
 Date: Tue, 21 Feb 2023 22:21:35 -0500
-Subject: [PATCH] feat(network): include 98-default-mac-none.link if it exists
+Subject: [PATCH 05/10] feat(network): include 98-default-mac-none.link if it
+ exists
 
 In Fedora Linux there was a new 98-default-mac-none.link file added
 to set the MACAddressPolicy=none for bond/bridge/team devices. We'd
@@ -9,6 +10,8 @@ like for this policy to apply in the initramfs as well. See
 
 - https://fedoraproject.org/wiki/Changes/MAC_Address_Policy_none
 - https://src.fedoraproject.org/rpms/systemd/pull-request/100#
+
+(Cherry-picked commit f6810b69ae722096184eaaf282e12a2caa6928b9 from PR#2224)
 ---
  modules.d/01systemd-networkd/module-setup.sh | 1 +
  modules.d/35network-legacy/module-setup.sh   | 6 ++++--
@@ -16,10 +19,10 @@ like for this policy to apply in the initramfs as well. See
  3 files changed, 9 insertions(+), 4 deletions(-)
 
 diff --git a/modules.d/01systemd-networkd/module-setup.sh b/modules.d/01systemd-networkd/module-setup.sh
-index 27d90101..46033549 100755
+index 7bbf83c0..f82aa933 100755
 --- a/modules.d/01systemd-networkd/module-setup.sh
 +++ b/modules.d/01systemd-networkd/module-setup.sh
-@@ -44,6 +44,7 @@ install() {
+@@ -47,6 +47,7 @@ install() {
          "$systemdnetwork"/80-container-vz.network \
          "$systemdnetwork"/80-vm-vt.network \
          "$systemdnetwork"/80-wifi-adhoc.network \
@@ -46,7 +49,7 @@ index 868ea8fc..a42f5797 100755
      fi
  
 diff --git a/modules.d/35network-manager/module-setup.sh b/modules.d/35network-manager/module-setup.sh
-index c5d568f0..6e6cd6cf 100755
+index d9a244a3..1e3010a3 100755
 --- a/modules.d/35network-manager/module-setup.sh
 +++ b/modules.d/35network-manager/module-setup.sh
 @@ -51,8 +51,10 @@ install() {
@@ -63,5 +66,5 @@ index c5d568f0..6e6cd6cf 100755
  
          $SYSTEMCTL -q --root "$initdir" enable nm-initrd.service
 -- 
-2.39.2
+2.42.0
 

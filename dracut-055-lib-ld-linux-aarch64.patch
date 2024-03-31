@@ -1,8 +1,8 @@
-diff -up dracut-055/src/install/dracut-install.c.omv~ dracut-055/src/install/dracut-install.c
---- dracut-055/src/install/dracut-install.c.omv~	2021-11-30 02:23:15.723208834 +0100
-+++ dracut-055/src/install/dracut-install.c	2021-11-30 02:41:08.635594873 +0100
-@@ -364,6 +364,35 @@ static int library_install(const char *s
-                 log_debug("Lib install: '%s'", p);
+diff -up dracut-856e7acdb1462803c2517c8d64afb2e34c73c735/src/install/dracut-install.c.1~ dracut-856e7acdb1462803c2517c8d64afb2e34c73c735/src/install/dracut-install.c
+--- dracut-856e7acdb1462803c2517c8d64afb2e34c73c735/src/install/dracut-install.c.1~	2024-03-31 21:54:21.357464873 +0200
++++ dracut-856e7acdb1462803c2517c8d64afb2e34c73c735/src/install/dracut-install.c	2024-03-31 21:57:24.395447121 +0200
+@@ -383,6 +383,35 @@ static int library_install(const char *s
+                 log_debug("Lib install: '%s'", lib);
          ret += r;
  
 +	/* Due to hardcodes in compilers, some library files, such as
@@ -35,5 +35,5 @@ diff -up dracut-055/src/install/dracut-install.c.omv~ dracut-055/src/install/dra
 +	}
 +
          /* also install lib.so for lib.so.* files */
-         q = strstr(p, ".so.");
+         q = strstr(lib, ".so.");
          if (q) {

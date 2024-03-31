@@ -7,13 +7,21 @@
 
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	059
-Release:	5
+Version:	060
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		https://dracut.wiki.kernel.org/
+# Used to be at
 # http://git.kernel.org/cgit/boot/dracut/dracut.git/
-Source0:	https://mirrors.edge.kernel.org/pub/linux/utils/boot/dracut/%{name}-%{version}.tar.gz
+# https://mirrors.edge.kernel.org/pub/linux/utils/boot/dracut
+# but apparently development moved without an announcement to
+# https://github.com/dracutdevs/dracut
+# Of course they've also stopped tagging releases, so now the way to
+# track a release is to check when NEWS.md is updated. R. I. P. Sanity.
+# 856e7acd... is 060
+%define githash 856e7acdb1462803c2517c8d64afb2e34c73c735
+Source0:	https://github.com/dracutdevs/dracut/archive/%{githash}.tar.gz
 Source3:	50-dracut-distro.conf
 # (bero) xorg.blacklist support
 Source15:	xorgblacklist-module-setup.sh
@@ -53,6 +61,32 @@ Recommends:	plymouth
 %endif
 
 %patchlist
+# From upstream
+https://github.com/dracutdevs/dracut/commit/1c762c0da6ed2bb6fa44d5e0968605cc4d45361c.patch
+https://github.com/dracutdevs/dracut/commit/bddffedae038ceca263a904e40513a6e92f1b558.patch
+https://github.com/dracutdevs/dracut/commit/1586af098fb17f7565d1699953e4e4b536304089.patch
+https://github.com/dracutdevs/dracut/commit/4d594210d6ef4f04a9dbadacea73e9461ded352d.patch
+https://github.com/dracutdevs/dracut/commit/4971f443726360216a4ef3ba8baea258a1cd0f3b.patch
+https://github.com/dracutdevs/dracut/commit/de8ac6300d115a05d467dbb6b9a7c2599a2d306f.patch
+https://github.com/dracutdevs/dracut/commit/4980bad34775da715a2639b736cba5e65a8a2604.patch
+https://github.com/dracutdevs/dracut/commit/5d2bda46f4e75e85445ee4d3bd3f68bf966287b9.patch
+
+# Fedora patches -- good to keep in sync, they are the upstream
+# maintainers of dracut, but they rarely share what's needed
+# to keep it working with upstream repositories...
+# #include <redhat/sucks.h>
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-feat-kernel-install-do-nothing-when-KERNEL_INSTALL_I.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0002-fix-systemd-pcrphase-rename-systemd-pcrphase-binary-.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0003-fix-resume-add-new-systemd-hibernate-resume.service.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0004-fix-wait-12-hours-before-halt-on-media-check-fail.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0005-feat-network-include-98-default-mac-none.link-if-it-.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0006-feat-kernel-modules-add-Qualcomm-IPC-router-to-enabl.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0007-fix-kernel-install-do-not-generate-an-initrd-when-on.patch
+# We already pull in the equivalent of 0008-fix-pkcs11-delete-trailing-dot-on-libcryptsetup-toke.patch from upstream
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0009-fix-pcsc-add-disable-polkit-to-pcscd.service.patch
+https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0010-fix-pcsc-add-opensc-load-module-file.patch
+
+# OM patches
 # Make sure ld-linux-aarch64.so.1 and friends end up
 # being reachable in /lib even though the more
 # obvious place is /lib64
@@ -66,28 +100,6 @@ dracut-037-modprobe-loop.patch
 # indicator has to be the first argument
 dracut-044-bsdcpio-compat.patch
 
-# Fedora patches -- good to keep in sync, they are the upstream
-# maintainers of dracut, but they rarely share what's needed
-# to keep it working with upstream repositories...
-# #include <redhat/sucks.h>
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/1521-Never-enable-the-bluetooth-module-by-default.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/1825-Skip-creating-initrd-when-initrd-is-provided.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/2218-add-module-driver-support-for-macbook-keyboards.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/2233-dmsquash-live-restore-compatibility.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/2237-kmoddir-fix-trailing-forwardslash-handling.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/2134-revert-avoid-restarting-NetworkManager.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/2224-network-include-default-mac-none-link.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/2290-remove-dependency-on-multipathd-socket.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/2377-fix-kernel-modules-add-interconnect-drivers.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/2184-add-nvmeof-module.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-dracut.sh-use-dynamically-uefi-s-sections-offset.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-make-iso-scan-trigger-udev-events.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-wait-12-hours-before-halt-on-media-check-fail.patch
-https://github.com/dracutdevs/dracut/commit/bee1c4824a8cd47ce6c01892a548bdc07b1fa678.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-fix-systemd-pcrphase-rename-systemd-pcrphase-binary-.patch
-https://github.com/dracutdevs/dracut/pull/2527.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/2481-remove-microcode-check-based-on-CONFIG_MICROCODE_.patch
-
 %description
 Dracut contains tools to create a bootable initramfs for 2.6 Linux kernels.
 Unlike existing implementations, dracut does hard-code as little as possible
@@ -96,7 +108,7 @@ event-based udev. Having root on MD, DM, LVM2, LUKS is supported as well as
 NFS, iSCSI, NBD, FCoE with the dracut-network package.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n dracut-%{githash}
 
 find . -type f |xargs sed -i -e 's,initramfs-,initrd-,g'
 find . -type f |xargs sed -i -e 's,dracut-initrd-restore,dracut-initramfs-restore,g'

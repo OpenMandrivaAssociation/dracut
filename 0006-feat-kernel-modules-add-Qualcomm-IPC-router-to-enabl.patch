@@ -1,0 +1,52 @@
+From f38de6b6ad07edf5c534ae7a38b3fa48f5ef6153 Mon Sep 17 00:00:00 2001
+From: Jeremy Linton <jeremy.linton@arm.com>
+Date: Fri, 6 Oct 2023 10:33:22 -0500
+Subject: [PATCH 06/10] feat(kernel-modules): add Qualcomm IPC router to enable
+ USB
+
+The x13s, and possibly other Qualcomm based devices need the QC
+IPC router driver in order to enable USB. Without it, its not
+possible to boot from USB-C attached disks.
+
+IPC in this case is Inter _Processor_ Communication and forms
+the message bus used to communicate between differing processing
+elements in a given system/SoC running and managing various
+hardware devices. This means that while it appears this driver
+should be in the dracut network modules that is incorrect
+because its not for enabling host networking in the initrd,
+but rather for communicating with other hardware blocks.
+
+Those other blocks aren't limited to modems, but any SMD (shared
+memory device), which on QC based machines includes the audio DSPs,
+RPM (resource power manager) and of course the application
+processor cores linux is running on.
+
+References:
+https://osmocom.org/projects/quectel-modems/wiki/Qualcomm_Linux_SMD
+https://android.googlesource.com/kernel/msm/+/android-7.1.0_r0.2/Documentation/arm/msm/msm_ipc_router.txt
+https://github.com/dracutdevs/dracut/pull/2531
+
+Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+
+(Cherry-picked commit a8015f7dfc682100434e3ee051bf9472a8e6cad4 from PR#2531)
+---
+ modules.d/90kernel-modules/module-setup.sh | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/modules.d/90kernel-modules/module-setup.sh b/modules.d/90kernel-modules/module-setup.sh
+index e2175125..75afecc8 100755
+--- a/modules.d/90kernel-modules/module-setup.sh
++++ b/modules.d/90kernel-modules/module-setup.sh
+@@ -95,7 +95,8 @@ installkernel() {
+                 "=drivers/usb/misc" \
+                 "=drivers/usb/musb" \
+                 "=drivers/usb/phy" \
+-                "=drivers/scsi/hisi_sas"
++                "=drivers/scsi/hisi_sas" \
++                "=net/qrtr"
+         fi
+ 
+         awk -F: '/^\// {print $1}' "$srcmods/modules.dep" 2> /dev/null | instmods
+-- 
+2.42.0
+

@@ -1,0 +1,23 @@
+From 1c762c0da6ed2bb6fa44d5e0968605cc4d45361c Mon Sep 17 00:00:00 2001
+From: innovara <fombuena@outlook.com>
+Date: Fri, 27 Oct 2023 11:53:49 +0100
+Subject: [PATCH] fix(pkcs11): delete trailing dot on
+ libcryptsetup-token-systemd-pkcs11.so
+
+libcryptsetup-token-systemd-pkcs11.so.* doesn't match the file libcryptsetup-token-systemd-pkcs11.so
+---
+ modules.d/91pkcs11/module-setup.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/modules.d/91pkcs11/module-setup.sh b/modules.d/91pkcs11/module-setup.sh
+index 547631db66..5675efb580 100755
+--- a/modules.d/91pkcs11/module-setup.sh
++++ b/modules.d/91pkcs11/module-setup.sh
+@@ -30,6 +30,6 @@ install() {
+         {"tls/$_arch/",tls/,"$_arch/",}"libffi.so.*" \
+         {"tls/$_arch/",tls/,"$_arch/",}"libp11-kit.so.*" \
+         {"tls/$_arch/",tls/,"$_arch/",}"libcryptsetup.so.*" \
+-        {"tls/$_arch/",tls/,"$_arch/",}"/cryptsetup/libcryptsetup-token-systemd-pkcs11.so.*"
++        {"tls/$_arch/",tls/,"$_arch/",}"/cryptsetup/libcryptsetup-token-systemd-pkcs11.so*"
+ 
+ }

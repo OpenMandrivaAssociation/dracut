@@ -1,0 +1,45 @@
+From 4980bad34775da715a2639b736cba5e65a8a2604 Mon Sep 17 00:00:00 2001
+From: Antonio Alvarez Feijoo <antonio.feijoo@suse.com>
+Date: Thu, 7 Dec 2023 12:08:17 +0100
+Subject: [PATCH] fix(configure): misleading error if C compiler is not
+ installed
+
+While preparing a new system for development, `./configure` reaches a point
+where it fails with:
+
+```
+$ ./configure
+dracut needs fts development files.
+```
+
+After installing the fts library, `./configure` keeps throwing the same error:
+
+```
+$ rpm -qf /usr/include/fts.h
+glibc-devel-2.38-6.1.x86_64
+$ ./configure
+dracut needs fts development files.
+```
+
+The problem is `${CC} $CFLAGS $LDFLAGS conftest.c` can also fail if the compiler
+referenced by `$CC` is not installed.
+---
+ configure | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/configure b/configure
+index 91af417098..8d1971b79a 100755
+--- a/configure
++++ b/configure
+@@ -60,6 +60,11 @@ if ! ${PKG_CONFIG} --exists --print-errors " libkmod >= 23 "; then
+     exit 1
+ fi
+ 
++if ! command -v "${CC}" > /dev/null; then
++    echo "dracut needs a C compiler (${CC} not found)." >&2
++    exit 1
++fi
++
+ cat << EOF > conftest.c
+ #include <fts.h>
+ int main() {

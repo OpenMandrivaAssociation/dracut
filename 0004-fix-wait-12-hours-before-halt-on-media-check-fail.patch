@@ -1,7 +1,7 @@
-From a1b346121da44908b2685d8ef1b5e68b57829b2b Mon Sep 17 00:00:00 2001
+From 5beddfca4192a28898904610a54d1cbc58d5856b Mon Sep 17 00:00:00 2001
 From: Adam Williamson <awilliam@redhat.com>
 Date: Sun, 29 Oct 2023 21:19:36 -0700
-Subject: [PATCH] fix: wait 12 hours before halt on media check fail
+Subject: [PATCH 04/10] fix: wait 12 hours before halt on media check fail
 
 If a modesetting driver has been loaded by the time the media
 check happens, halting the system (as we currently do immediately
@@ -16,6 +16,8 @@ It also tweaks the text of the failure message not to call it a
 https://bugzilla.redhat.com/show_bug.cgi?id=2246410
 
 Signed-off-by: Adam Williamson <awilliam@redhat.com>
+
+(Cherry-picked a1b346121da44908b2685d8ef1b5e68b57829b2b from PR#2545)
 ---
  modules.d/90dmsquash-live/dmsquash-live-root.sh | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
@@ -36,5 +38,5 @@ index e8083394..3fccda5f 100755
      fi
      type plymouth > /dev/null 2>&1 && plymouth --show-splash
 -- 
-2.41.0
+2.42.0
 

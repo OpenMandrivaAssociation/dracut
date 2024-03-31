@@ -1,0 +1,29 @@
+From 8069d40c0e180cd74d4e897c007096523ecce459 Mon Sep 17 00:00:00 2001
+From: Manuel Fombuena <mfombuena@innovara.co.uk>
+Date: Fri, 3 Nov 2023 09:04:53 +0000
+Subject: [PATCH 10/10] fix(pcsc): add opensc load module file
+
+On Fedora, and possibly others, this file loads opensc-pkcs11.so which you need to interact with the smart card to unlock a LUKS encrypted volume.
+
+(Cherry-picked commit 6da61a2c0e38da4e6e880e1bb7f47d55d2c54c65 from PR#2547)
+---
+ modules.d/91pcsc/module-setup.sh | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/modules.d/91pcsc/module-setup.sh b/modules.d/91pcsc/module-setup.sh
+index 6f8b2c88..26b463d4 100755
+--- a/modules.d/91pcsc/module-setup.sh
++++ b/modules.d/91pcsc/module-setup.sh
+@@ -29,7 +29,8 @@ install() {
+     inst_simple "$moddir/pcscd.socket" "${systemdsystemunitdir}"/pcscd.socket
+ 
+     inst_multiple -o \
+-        pcscd
++        pcscd \
++        /usr/share/p11-kit/modules/opensc.module
+ 
+     # Enable systemd type unit(s)
+     for i in \
+-- 
+2.42.0
+

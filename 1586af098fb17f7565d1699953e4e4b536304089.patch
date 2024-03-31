@@ -1,0 +1,33 @@
+From 1586af098fb17f7565d1699953e4e4b536304089 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Daniel=20P=2E=20Berrang=C3=A9?= <berrange@redhat.com>
+Date: Tue, 17 Oct 2023 17:42:13 +0100
+Subject: [PATCH] fix(systemd-repart): correct undefined $libdir
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Nothing in dracut appears to define the '$libdir' environment
+variable when module scripts are being run. As a result when
+the 01-systemd-repart module script runs, it fails to copy any
+of the config files into the initrd. Replace it with '/usr/lib'
+which reflects where systemd-repart expects its global config
+files.
+
+Signed-off-by: Daniel P. Berrangé <berrange@redhat.com>
+---
+ modules.d/01systemd-repart/module-setup.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/modules.d/01systemd-repart/module-setup.sh b/modules.d/01systemd-repart/module-setup.sh
+index ed1ddcfd27..19b7e734f5 100755
+--- a/modules.d/01systemd-repart/module-setup.sh
++++ b/modules.d/01systemd-repart/module-setup.sh
+@@ -25,7 +25,7 @@ depends() {
+ install() {
+ 
+     inst_multiple -o \
+-        "$libdir/repart.d/*.conf" \
++        "/usr/lib/repart.d/*.conf" \
+         "$systemdsystemunitdir"/systemd-repart.service \
+         "$systemdsystemunitdir"/initrd-root-fs.target.wants/systemd-repart.service \
+         systemd-repart
