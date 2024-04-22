@@ -7,22 +7,13 @@
 
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	060
+Version:	101
 Release:	1
 Group:		System/Base
 License:	GPLv2+
-URL:		https://dracut.wiki.kernel.org/
-# Used to be at
-# http://git.kernel.org/cgit/boot/dracut/dracut.git/
-# https://mirrors.edge.kernel.org/pub/linux/utils/boot/dracut
-# but apparently development moved without an announcement to
-# https://github.com/dracutdevs/dracut
-# Of course they've also stopped tagging releases, so now the way to
-# track a release is to check when NEWS.md is updated. R. I. P. Sanity.
-# 856e7acd... is 060
-%define githash 856e7acdb1462803c2517c8d64afb2e34c73c735
-Source0:	https://github.com/dracutdevs/dracut/archive/%{githash}.tar.gz
+Source0:	https://github.com/dracut-ng/dracut-ng/archive/refs/tags/%{version}.tar.gz
 Source3:	50-dracut-distro.conf
+Source4:	51-dracut-distro-nonet.conf
 # (bero) xorg.blacklist support
 Source15:	xorgblacklist-module-setup.sh
 Source16:	xorgblacklist-pre.sh
@@ -61,30 +52,10 @@ Recommends:	plymouth
 %endif
 
 %patchlist
-# From upstream
-https://github.com/dracutdevs/dracut/commit/1c762c0da6ed2bb6fa44d5e0968605cc4d45361c.patch
-https://github.com/dracutdevs/dracut/commit/bddffedae038ceca263a904e40513a6e92f1b558.patch
-https://github.com/dracutdevs/dracut/commit/1586af098fb17f7565d1699953e4e4b536304089.patch
-https://github.com/dracutdevs/dracut/commit/4d594210d6ef4f04a9dbadacea73e9461ded352d.patch
-https://github.com/dracutdevs/dracut/commit/4971f443726360216a4ef3ba8baea258a1cd0f3b.patch
-https://github.com/dracutdevs/dracut/commit/de8ac6300d115a05d467dbb6b9a7c2599a2d306f.patch
-https://github.com/dracutdevs/dracut/commit/4980bad34775da715a2639b736cba5e65a8a2604.patch
-https://github.com/dracutdevs/dracut/commit/5d2bda46f4e75e85445ee4d3bd3f68bf966287b9.patch
-
-# Fedora patches -- good to keep in sync, they are the upstream
-# maintainers of dracut, but they rarely share what's needed
-# to keep it working with upstream repositories...
-# #include <redhat/sucks.h>
+# From Fedora
+# The ones we aren't pulling in are already in upstream
 https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-feat-kernel-install-do-nothing-when-KERNEL_INSTALL_I.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0002-fix-systemd-pcrphase-rename-systemd-pcrphase-binary-.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0003-fix-resume-add-new-systemd-hibernate-resume.service.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0004-fix-wait-12-hours-before-halt-on-media-check-fail.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0005-feat-network-include-98-default-mac-none.link-if-it-.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0006-feat-kernel-modules-add-Qualcomm-IPC-router-to-enabl.patch
 https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0007-fix-kernel-install-do-not-generate-an-initrd-when-on.patch
-# We already pull in the equivalent of 0008-fix-pkcs11-delete-trailing-dot-on-libcryptsetup-toke.patch from upstream
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0009-fix-pcsc-add-disable-polkit-to-pcscd.service.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0010-fix-pcsc-add-opensc-load-module-file.patch
 
 # OM patches
 # Make sure ld-linux-aarch64.so.1 and friends end up
@@ -108,7 +79,7 @@ event-based udev. Having root on MD, DM, LVM2, LUKS is supported as well as
 NFS, iSCSI, NBD, FCoE with the dracut-network package.
 
 %prep
-%autosetup -p1 -n dracut-%{githash}
+%autosetup -p1 -n dracut-ng-%{version}
 
 find . -type f |xargs sed -i -e 's,initramfs-,initrd-,g'
 find . -type f |xargs sed -i -e 's,dracut-initrd-restore,dracut-initramfs-restore,g'
@@ -134,19 +105,20 @@ install -c -m 755 %{SOURCE17} modules.d/01xorgblacklist/xorgblacklist.sh
 %install
 %make_install
 
-install -m 644 %{SOURCE3} %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d
+install -m 644 %{S:3} %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d
+install -m 644 %{S:4} %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d
 
 %ifnarch %{ix86} %{x86_64}
 # Microcode loading is x86 specific
 sed -i -e '/^early_microcode="yes"/early_microcode="no"/' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
+# no need to carry x86 legacy cruft in add_drivers for anything else -- but
+# keeping evdev and friends there is probably useful
+sed -i -e 's/pata_acpi ata_generic //' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
 %endif
 
 %ifarch %{aarch64}
-# aarch64 bootloaders generally support gzip compression
+# aarch64 bootloaders generally support (only) gzip compression
 sed -i -e 's,^compress=.*$,compress="gzip",' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
-# no need to carry x86 legacy cruft in add_drivers for aarch64 -- but
-# keeping evdev and friends there is probably useful
-sed -i -e 's/pata_acpi ata_generic //' %{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/50-dracut-distro.conf
 %endif
 
 mkdir -p %{buildroot}%{_sysconfdir}/dracut.conf.d
@@ -186,6 +158,7 @@ fi
 %dir %{_prefix}/lib/%{name}/%{name}.conf.d
 %config %{_sysconfdir}/%{name}.conf
 %{_prefix}/lib/%{name}/%{name}.conf.d/50-%{name}-distro.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/51-%{name}-distro-nonet.conf
 %{_bindir}/*
 %{_unitdir}/*.service
 %{_unitdir}/*/*.service
