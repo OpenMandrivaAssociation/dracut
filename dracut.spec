@@ -71,6 +71,10 @@ dracut-037-modprobe-loop.patch
 # indicator has to be the first argument
 dracut-044-bsdcpio-compat.patch
 
+# Fix compiler detection when crosscompiling:
+# `command clang -target .....` obviously won't work
+dracut-ng-101-compiler-detection.patch
+
 %description
 Dracut contains tools to create a bootable initramfs for 2.6 Linux kernels.
 Unlike existing implementations, dracut does hard-code as little as possible

@@ -1,0 +1,12 @@
+diff -up dracut-ng-101/configure.omv~ dracut-ng-101/configure
+--- dracut-ng-101/configure.omv~	2024-04-28 13:35:04.605476293 +0100
++++ dracut-ng-101/configure	2024-04-28 13:36:20.515607754 +0100
+@@ -60,7 +60,7 @@ if ! ${PKG_CONFIG} --exists --print-erro
+     exit 1
+ fi
+ 
+-if ! command -v "${CC}" > /dev/null; then
++if ! ${CC} -c -o /dev/null /dev/null &> /dev/null; then
+     echo "dracut needs a C compiler (${CC} not found)." >&2
+     exit 1
+ fi
