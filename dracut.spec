@@ -7,7 +7,7 @@
 
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	101
+Version:	102
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -52,12 +52,6 @@ Recommends:	plymouth
 %endif
 
 %patchlist
-# From Fedora
-# The ones we aren't pulling in are already in upstream
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0001-feat-kernel-install-do-nothing-when-KERNEL_INSTALL_I.patch
-https://src.fedoraproject.org/rpms/dracut/raw/rawhide/f/0007-fix-kernel-install-do-not-generate-an-initrd-when-on.patch
-
-# OM patches
 # Make sure ld-linux-aarch64.so.1 and friends end up
 # being reachable in /lib even though the more
 # obvious place is /lib64
@@ -66,14 +60,6 @@ dracut-059-try-to-fix-lvm.patch
 dracut-037-modprobe-loop.patch
 # (tpg) disable it for now, as zstd is compresing kernel modules these days
 #Patch1012:	dracut-044-dont-compress-kernel-modules-within-initramfs.patch
-
-# Make cpio invocations more compatible with bsdcpio -- the mode
-# indicator has to be the first argument
-dracut-044-bsdcpio-compat.patch
-
-# Fix compiler detection when crosscompiling:
-# `command clang -target .....` obviously won't work
-dracut-ng-101-compiler-detection.patch
 
 %description
 Dracut contains tools to create a bootable initramfs for 2.6 Linux kernels.
