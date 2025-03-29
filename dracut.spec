@@ -7,7 +7,7 @@
 
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	103
+Version:	106
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -129,6 +129,9 @@ install -m 755 -d %{buildroot}%{_datadir}/dracut
 for i in 00bootchart 00dash 05busybox 95dasd 95zfcp 95znet 50gensplash; do
     rm -rf %{buildroot}%{_prefix}/lib/dracut/modules.d/$i
 done
+rm -rf %{buildroot}%{_prefix}/lib/dracut/test \
+	%{buildroot}%{_prefix}/lib/dracut/dracut.conf.d/test* \
+	%{buildroot}%{_prefix}/lib/dracut/modules.d/80test*
 
 %triggerpostun -- %{name} < %{version}
 if [ $1 -gt 1 ] && [ -e /boot/vmlinuz-$(uname -r) ] && [ -e %{_sbindir}/depmod ] && [ -x %{_bindir}/dracut ]; then
@@ -149,10 +152,21 @@ fi
 %config %{_sysconfdir}/%{name}.conf
 %{_prefix}/lib/%{name}/%{name}.conf.d/50-%{name}-distro.conf
 %{_prefix}/lib/%{name}/%{name}.conf.d/51-%{name}-distro-nonet.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/fedora.conf.example
+%{_prefix}/lib/%{name}/%{name}.conf.d/fips/50-fips.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/generic/50-generic.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/hostonly/50-hostonly.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/ima/50-ima.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/no-network/50-no-network.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/no-xattr/50-no-xattr.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/rescue/50-rescue.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/suse.conf.example
+%{_prefix}/lib/%{name}/%{name}.conf.d/uki-virt/50-uki-virt.conf
 %{_bindir}/*
 %{_unitdir}/*.service
 %{_unitdir}/*/*.service
 %{_prefix}/lib/kernel/install.d/5*-%{name}*.install
+%{_prefix}/lib/%{name}/%{name}-cpio
 %{_prefix}/lib/%{name}/%{name}-util
 %{_prefix}/lib/%{name}/%{name}-init.sh
 %{_prefix}/lib/%{name}/skipcpio
