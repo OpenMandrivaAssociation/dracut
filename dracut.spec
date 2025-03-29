@@ -18,6 +18,7 @@ Source4:	51-dracut-distro-nonet.conf
 Source15:	xorgblacklist-module-setup.sh
 Source16:	xorgblacklist-pre.sh
 Source17:	xorgblacklist.sh
+BuildRequires:	cargo
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
