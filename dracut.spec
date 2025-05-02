@@ -7,7 +7,7 @@
 
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	106
+Version:	107
 Release:	1
 Group:		System/Base
 License:	GPLv2+
