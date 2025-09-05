@@ -7,7 +7,7 @@
 
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	107
+Version:	108
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -151,18 +151,17 @@ fi
 %dir %{_prefix}/lib/%{name}
 %dir %{_prefix}/lib/%{name}/%{name}.conf.d
 %config %{_sysconfdir}/%{name}.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/10-hostonly.conf
 %{_prefix}/lib/%{name}/%{name}.conf.d/50-%{name}-distro.conf
 %{_prefix}/lib/%{name}/%{name}.conf.d/51-%{name}-distro-nonet.conf
-%{_prefix}/lib/%{name}/%{name}.conf.d/fedora.conf.example
-%{_prefix}/lib/%{name}/%{name}.conf.d/fips/50-fips.conf
-%{_prefix}/lib/%{name}/%{name}.conf.d/generic/50-generic.conf
-%{_prefix}/lib/%{name}/%{name}.conf.d/hostonly/50-hostonly.conf
-%{_prefix}/lib/%{name}/%{name}.conf.d/ima/50-ima.conf
-%{_prefix}/lib/%{name}/%{name}.conf.d/no-network/50-no-network.conf
-%{_prefix}/lib/%{name}/%{name}.conf.d/no-xattr/50-no-xattr.conf
-%{_prefix}/lib/%{name}/%{name}.conf.d/rescue/50-rescue.conf
-%{_prefix}/lib/%{name}/%{name}.conf.d/suse.conf.example
-%{_prefix}/lib/%{name}/%{name}.conf.d/uki-virt/50-uki-virt.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/fips/10-fips.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/generic/11-generic.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/hostonly/10-hostonly.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/ima/10-ima.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/no-network/10-no-network.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/no-xattr/10-no-xattr.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/rescue/10-rescue.conf
+%{_prefix}/lib/%{name}/%{name}.conf.d/uki-virt/10-uki-virt.conf
 %{_bindir}/*
 %{_unitdir}/*.service
 %{_unitdir}/*/*.service

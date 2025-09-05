@@ -1,6 +1,6 @@
-diff -Naur dracut-054/modules.d/90dmsquash-live/dmsquash-live-genrules.sh dracut-054.tpg/modules.d/90dmsquash-live/dmsquash-live-genrules.sh
---- dracut-054/modules.d/90dmsquash-live/dmsquash-live-genrules.sh	2021-05-14 13:21:11.000000000 +0000
-+++ dracut-054.tpg/modules.d/90dmsquash-live/dmsquash-live-genrules.sh	2021-05-17 17:14:13.183337544 +0000
+diff -Naur dracut-054/modules.d/70dmsquash-live/dmsquash-live-genrules.sh dracut-054.tpg/modules.d/70dmsquash-live/dmsquash-live-genrules.sh
+--- dracut-054/modules.d/70dmsquash-live/dmsquash-live-genrules.sh	2021-05-14 13:21:11.000000000 +0000
++++ dracut-054.tpg/modules.d/70dmsquash-live/dmsquash-live-genrules.sh	2021-05-17 17:14:13.183337544 +0000
 @@ -11,6 +11,7 @@
          wait_for_dev -n "${root#live:}"
          ;;
@@ -9,9 +9,9 @@ diff -Naur dracut-054/modules.d/90dmsquash-live/dmsquash-live-genrules.sh dracut
          if [ -f "${root#live:}" ]; then
              /sbin/initqueue --settled --onetime --unique /sbin/dmsquash-live-root "${root#live:}"
          fi
-diff -Naur dracut-054/modules.d/90dmsquash-live/dmsquash-liveiso-genrules.sh dracut-054.tpg/modules.d/90dmsquash-live/dmsquash-liveiso-genrules.sh
---- dracut-054/modules.d/90dmsquash-live/dmsquash-liveiso-genrules.sh	2021-05-14 13:21:11.000000000 +0000
-+++ dracut-054.tpg/modules.d/90dmsquash-live/dmsquash-liveiso-genrules.sh	2021-05-17 17:14:53.153123497 +0000
+diff -Naur dracut-054/modules.d/70dmsquash-live/dmsquash-liveiso-genrules.sh dracut-054.tpg/modules.d/70dmsquash-live/dmsquash-liveiso-genrules.sh
+--- dracut-054/modules.d/70dmsquash-live/dmsquash-liveiso-genrules.sh	2021-05-14 13:21:11.000000000 +0000
++++ dracut-054.tpg/modules.d/70dmsquash-live/dmsquash-liveiso-genrules.sh	2021-05-17 17:14:53.153123497 +0000
 @@ -1,5 +1,7 @@
  #!/bin/sh
  
