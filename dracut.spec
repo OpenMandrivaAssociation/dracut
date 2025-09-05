@@ -22,7 +22,7 @@ BuildRequires:	cargo
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
-BuildRequires:	asciidoc
+BuildRequires:	asciidoctor
 BuildRequires:	systemd-rpm-macros
 BuildRequires:	bash-completion
 BuildRequires:	pkgconfig(libkmod)
