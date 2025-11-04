@@ -7,7 +7,7 @@
 
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	108
+Version:	109
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -151,7 +151,6 @@ fi
 %dir %{_prefix}/lib/%{name}
 %dir %{_prefix}/lib/%{name}/%{name}.conf.d
 %config %{_sysconfdir}/%{name}.conf
-%{_prefix}/lib/%{name}/%{name}.conf.d/10-hostonly.conf
 %{_prefix}/lib/%{name}/%{name}.conf.d/50-%{name}-distro.conf
 %{_prefix}/lib/%{name}/%{name}.conf.d/51-%{name}-distro-nonet.conf
 %{_prefix}/lib/%{name}/%{name}.conf.d/fips/10-fips.conf
