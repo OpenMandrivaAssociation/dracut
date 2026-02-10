@@ -1,39 +1,40 @@
-diff -up dracut-856e7acdb1462803c2517c8d64afb2e34c73c735/src/install/dracut-install.c.1~ dracut-856e7acdb1462803c2517c8d64afb2e34c73c735/src/install/dracut-install.c
---- dracut-856e7acdb1462803c2517c8d64afb2e34c73c735/src/install/dracut-install.c.1~	2024-03-31 21:54:21.357464873 +0200
-+++ dracut-856e7acdb1462803c2517c8d64afb2e34c73c735/src/install/dracut-install.c	2024-03-31 21:57:24.395447121 +0200
-@@ -383,6 +383,35 @@ static int library_install(const char *s
+diff -up dracut-ng-110/src/install/dracut-install.c.1~ dracut-ng-110/src/install/dracut-install.c
+--- dracut-ng-110/src/install/dracut-install.c.1~	2026-02-09 01:32:47.000000000 +0100
++++ dracut-ng-110/src/install/dracut-install.c	2026-02-10 01:21:06.997605561 +0100
+@@ -479,6 +479,36 @@ static int library_install(const char *s
                  log_debug("Lib install: '%s'", lib);
          ret += r;
  
-+	/* Due to hardcodes in compilers, some library files, such as
-+	   ld-linux-aarch64.so.1
-+	   ld-linux-aarch64_be.so.1
-+	   ld-linux-aarch64_ilp32.so.1
-+	   ld-linux-aarch64_be_ilp32.so.1
-+	   ld-linux-riscv64.so.1
-+	   ld-musl-riscv64.so.1
-+	   ...
-+	   need to be copied or symlinked to /lib even though /lib64 would
-+	   be a more consistent place (and is where the files likely live)
++       /* Due to hardcodes in compilers, some library files, such as
++          ld-linux-aarch64.so.1
++          ld-linux-aarch64_be.so.1
++          ld-linux-aarch64_ilp32.so.1
++          ld-linux-aarch64_be_ilp32.so.1
++          ld-linux-riscv64.so.1
++          ld-musl-riscv64.so.1
++          ...
++          need to be copied or symlinked to /lib even though /lib64 would
++          be a more consistent place (and is where the files likely live)
 +
-+	   Let's be tolerant here, there may be other
-+	   ld-xyz-*.so.* combinations...
-+	 */
-+	if(strstr(src, "/lib64") && strstr(lib, "ld-") &&
-+	   (strstr(lib, "-aarch64") ||
-+	    strstr(lib, "-riscv64")
-+	  )) {
-+		char *symlinksrc=strdup(src);
-+		char *symlinksrcno64=strstr(symlinksrc, "/lib64");
-+		memmove(symlinksrcno64+4, symlinksrcno64+6, strlen(symlinksrcno64)-5);
-+		char *symlinklib=strdup(lib);
-+		char *symlinklibno64=strstr(symlinklib, "/lib64");
-+		if(symlinklibno64) memmove(symlinklibno64+4, symlinklibno64+6, strlen(symlinklibno64)-5);
-+		library_install(symlinksrcno64, symlinklibno64);
-+		free(symlinksrc);
-+		free(symlinklib);
-+	}
++          Let's be tolerant here, there may be other
++          ld-xyz-*.so.* combinations...
++        */
++        if(strstr(src, "/lib64") && strstr(lib, "ld-") &&
++           (strstr(lib, "-aarch64") ||
++            strstr(lib, "-riscv64") ||
++            strstr(lib, "-loongarch64")
++          )) {
++                char *symlinksrc=strdup(src);
++                char *symlinksrcno64=strstr(symlinksrc, "/lib64");
++                memmove(symlinksrcno64+4, symlinksrcno64+6, strlen(symlinksrcno64)-5);
++                char *symlinklib=strdup(lib);
++                char *symlinklibno64=strstr(symlinklib, "/lib64");
++                if(symlinklibno64) memmove(symlinklibno64+4, symlinklibno64+6, strlen(symlinklibno64)-5);
++                library_install(symlinksrcno64, symlinklibno64);
++                free(symlinksrc);
++                free(symlinklib);
++        }
 +
          /* also install lib.so for lib.so.* files */
-         q = strstr(lib, ".so.");
-         if (q) {
+         lib_so_offset = strstr(lib, ".so.");
+         if (lib_so_offset) {

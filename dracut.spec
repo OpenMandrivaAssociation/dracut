@@ -7,7 +7,7 @@
 
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	109
+Version:	110
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -163,16 +163,13 @@ fi
 %{_prefix}/lib/%{name}/%{name}.conf.d/hostonly/10-hostonly.conf
 %{_prefix}/lib/%{name}/%{name}.conf.d/ima/10-ima.conf
 %{_prefix}/lib/%{name}/%{name}.conf.d/no-network/10-no-network.conf
-%{_prefix}/lib/%{name}/%{name}.conf.d/no-xattr/10-no-xattr.conf
 %{_prefix}/lib/%{name}/%{name}.conf.d/rescue/10-rescue.conf
-%{_prefix}/lib/%{name}/%{name}.conf.d/uki-virt/10-uki-virt.conf
 %{_bindir}/*
 %{_unitdir}/*.service
 %{_unitdir}/*/*.service
 %{_prefix}/lib/kernel/install.d/5*-%{name}*.install
 %{_prefix}/lib/%{name}/%{name}-cpio
 %{_prefix}/lib/%{name}/%{name}-util
-%{_prefix}/lib/%{name}/%{name}-init.sh
 %{_prefix}/lib/%{name}/skipcpio
 %{_prefix}/lib/%{name}/%{name}-install
 %{_prefix}/lib/%{name}/%{name}-version.sh
