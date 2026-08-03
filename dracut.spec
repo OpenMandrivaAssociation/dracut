@@ -7,8 +7,8 @@
 
 Summary:	Next generation initrd image generator
 Name:		dracut
-Version:	111
-Release:	2
+Version:	112
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 Source0:	https://github.com/dracut-ng/dracut/archive/refs/tags/%{version}.tar.gz
@@ -20,7 +20,6 @@ Source16:	xorgblacklist-pre.sh
 Source17:	xorgblacklist.sh
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	libtool-base
 BuildRequires:	slibtool
 BuildRequires:	make
 BuildRequires:	cargo
@@ -76,7 +75,7 @@ event-based udev. Having root on MD, DM, LVM2, LUKS is supported as well as
 NFS, iSCSI, NBD, FCoE with the dracut-network package.
 
 %prep
-%autosetup -p1 -n dracut-ng-%{version}
+%autosetup -p1
 
 find . -type f |xargs sed -i -e 's,initramfs-,initrd-,g'
 find . -type f |xargs sed -i -e 's,dracut-initrd-restore,dracut-initramfs-restore,g'
