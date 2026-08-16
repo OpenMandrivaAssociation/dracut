@@ -8,7 +8,7 @@
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	112
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 Source0:	https://github.com/dracut-ng/dracut/archive/refs/tags/%{version}.tar.gz
@@ -31,6 +31,10 @@ BuildRequires:	systemd-rpm-macros
 BuildRequires:	bash-completion
 BuildRequires:	pkgconfig(libkmod)
 BuildRequires:	pkgconfig(libsystemd)
+# llvm-objdump reads NEEDED entries on any ELF, including cross-built binaries
+BuildRequires:	/usr/bin/llvm-objdump
+# find-debuginfo runs gdb-add-index, which execs gdb
+BuildRequires:	gdb
 Requires:	coreutils
 Requires:	cpio
 Requires:	filesystem
@@ -146,7 +150,7 @@ if [ $1 -gt 1 ] && [ -e /boot/vmlinuz-$(uname -r) ] && [ -e %{_sbindir}/depmod ]
 fi
 
 %check
-if ! ldd %{buildroot}%{_prefix}/lib/%{name}/dracut-install 2>&1 |grep -q 'libsystemd'; then
+if ! llvm-objdump -p %{buildroot}%{_prefix}/lib/%{name}/dracut-install | grep -q 'NEEDED.*libsystemd'; then
 	echo "dracut-install not linked to libsystemd -> JSON parsing won't work"
 	exit 1
 fi
