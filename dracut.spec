@@ -5,10 +5,15 @@
 # directory.
 %global __requires_exclude pkg-config
 
+%if %{cross_compiling}
+# Host gdb-add-index cannot index RISC-V DWARF.
+%undefine _include_gdb_index
+%endif
+
 Summary:	Next generation initrd image generator
 Name:		dracut
 Version:	112
-Release:	3
+Release:	4
 Group:		System/Base
 License:	GPLv2+
 Source0:	https://github.com/dracut-ng/dracut/archive/refs/tags/%{version}.tar.gz
@@ -22,7 +27,6 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	slibtool
 BuildRequires:	make
-BuildRequires:	cargo
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	xsltproc
@@ -94,7 +98,8 @@ install -c -m 755 %{SOURCE17} modules.d/01xorgblacklist/xorgblacklist.sh
 %configure \
 	--systemdsystemunitdir=%{_unitdir} \
 	--bashcompletiondir=$(pkg-config --variable=completionsdir bash-completion) \
-	--libdir=%{_prefix}/lib
+	--libdir=%{_prefix}/lib \
+	--disable-dracut-cpio
 
 # Setting DRACUT_VERSION and DRACUT_FULL_VERSION prevents
 # the Makefile from generating a bogus version tag from
@@ -178,7 +183,6 @@ fi
 %{_unitdir}/*.service
 %{_unitdir}/*/*.service
 %{_prefix}/lib/kernel/install.d/5*-%{name}*.install
-%{_prefix}/lib/%{name}/%{name}-cpio
 %{_prefix}/lib/%{name}/%{name}-util
 %{_prefix}/lib/%{name}/skipcpio
 %{_prefix}/lib/%{name}/%{name}-install
